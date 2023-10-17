@@ -2,16 +2,17 @@ import styled from "@emotion/styled";
 
 export const Wrapper = styled.div`
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 `;
 export const Logo = styled.img`
-  width: 200px;
+  max-width: 200px;
   padding: 20px 0 20px 40px;
 `;
 export const MenuWrapper = styled.div`
-  padding: 20px 0 20px 40px;
+  padding: 20px 20px 20px 40px;
 `;
 export const TabWrapper = styled.div``;
 export const Tab = styled.ul`
