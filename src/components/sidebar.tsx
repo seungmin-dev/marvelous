@@ -26,23 +26,29 @@ export default function Sidebar() {
             {SidebarContent.map((sidebar, i) =>
               sidebar.id < 4 ? (
                 <S.Item key={i}>
-                  <S.MenuIcon>{sidebar.icon}</S.MenuIcon>
-                  <S.MenuTitle>{sidebar.label}</S.MenuTitle>
+                  <a href={sidebar.path}>
+                    <S.MenuIcon>{sidebar.icon}</S.MenuIcon>
+                    <S.MenuTitle>{sidebar.label}</S.MenuTitle>
+                  </a>
                 </S.Item>
               ) : null
             )}
           </S.Tab>
           <S.Tab>
             {HashtagContent.map((hashtag, i) => (
-              <S.Item key={i}>{hashtag.label}</S.Item>
+              <S.Item key={i}>
+                <a href={hashtag.path}>{hashtag.label}</a>
+              </S.Item>
             ))}
           </S.Tab>
           <S.Tab>
             {SidebarContent.map((sidebar, i) =>
               sidebar.id > 3 ? (
                 <S.Item key={i}>
-                  <S.MenuIcon>{sidebar.icon}</S.MenuIcon>
-                  <S.MenuTitle>{sidebar.label}</S.MenuTitle>
+                  <a href={sidebar.path}>
+                    <S.MenuIcon>{sidebar.icon}</S.MenuIcon>
+                    <S.MenuTitle>{sidebar.label}</S.MenuTitle>
+                  </a>
                 </S.Item>
               ) : null
             )}
