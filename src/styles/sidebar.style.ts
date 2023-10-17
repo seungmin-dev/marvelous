@@ -28,12 +28,18 @@ export const Item = styled.li`
   display: flex;
   gap: 5px;
 `;
+export const ItemLink = styled.a`
+  color: ${(props: ItemProps) => (props.isActive ? "#ef151e" : "black")};
+`;
 export const MenuIcon = styled.span`
   margin-right: 10px;
   width: 20px;
   text-align: center;
 `;
 export const MenuTitle = styled.span``;
+interface ItemProps {
+  isActive: boolean;
+}
 export const ProfileWrapper = styled.div`
   padding: 20px 0;
   display: flex;

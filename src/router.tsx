@@ -15,6 +15,9 @@ import {
   faGear,
   faBookmark,
 } from "@fortawesome/free-solid-svg-icons";
+import Notifications from "./pages/notifications";
+import Settings from "./pages/settings";
+import Bookmarks from "./pages/bookmarks";
 
 library.add(faHouse, faHashtag, faGlasses, faBell, faGear, faBookmark);
 interface RouterElement {
@@ -75,7 +78,7 @@ const routerData: RouterElement[] = [
     path: "/notifications",
     label: "Notifications",
     icon: <FontAwesomeIcon icon={faBell} />,
-    element: <Hashtags />,
+    element: <Notifications />,
     withAuth: true,
   },
   {
@@ -83,7 +86,7 @@ const routerData: RouterElement[] = [
     path: "/settings",
     label: "Settings",
     icon: <FontAwesomeIcon icon={faGear} />,
-    element: <Hashtags />,
+    element: <Settings />,
     withAuth: true,
   },
   {
@@ -91,7 +94,7 @@ const routerData: RouterElement[] = [
     path: "/bookmarks",
     label: "Bookmarks",
     icon: <FontAwesomeIcon icon={faBookmark} />,
-    element: <Hashtags />,
+    element: <Bookmarks />,
     withAuth: true,
   },
 ];

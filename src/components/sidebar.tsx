@@ -6,7 +6,7 @@ import { auth } from "../../firebase";
 
 export default function Sidebar() {
   const user = auth.currentUser;
-  const { routeTo } = useRouter();
+  const { routeTo, currentPath } = useRouter();
 
   const onClickLogout = () => {
     signOut(auth)
@@ -26,10 +26,13 @@ export default function Sidebar() {
             {SidebarContent.map((sidebar, i) =>
               sidebar.id < 4 ? (
                 <S.Item key={i}>
-                  <a href={sidebar.path}>
+                  <S.ItemLink
+                    href={sidebar.path}
+                    isActive={currentPath === sidebar.path}
+                  >
                     <S.MenuIcon>{sidebar.icon}</S.MenuIcon>
                     <S.MenuTitle>{sidebar.label}</S.MenuTitle>
-                  </a>
+                  </S.ItemLink>
                 </S.Item>
               ) : null
             )}
@@ -37,7 +40,12 @@ export default function Sidebar() {
           <S.Tab>
             {HashtagContent.map((hashtag, i) => (
               <S.Item key={i}>
-                <a href={hashtag.path}>{hashtag.label}</a>
+                <S.ItemLink
+                  href={hashtag.path}
+                  isActive={currentPath === hashtag.path}
+                >
+                  {hashtag.label}
+                </S.ItemLink>
               </S.Item>
             ))}
           </S.Tab>
@@ -45,10 +53,13 @@ export default function Sidebar() {
             {SidebarContent.map((sidebar, i) =>
               sidebar.id > 3 ? (
                 <S.Item key={i}>
-                  <a href={sidebar.path}>
+                  <S.ItemLink
+                    href={sidebar.path}
+                    isActive={currentPath === sidebar.path}
+                  >
                     <S.MenuIcon>{sidebar.icon}</S.MenuIcon>
                     <S.MenuTitle>{sidebar.label}</S.MenuTitle>
-                  </a>
+                  </S.ItemLink>
                 </S.Item>
               ) : null
             )}
