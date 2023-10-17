@@ -50,6 +50,10 @@ export const Form = styled.form`
   gap: 10px;
 `;
 
+export const FsErrorText = styled.span`
+  color: white;
+  font-weight: bold;
+`;
 export const LoginWrapper = styled.div`
   width: 100%;
   margin-top: 40px;

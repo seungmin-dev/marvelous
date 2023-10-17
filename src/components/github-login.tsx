@@ -16,5 +16,11 @@ export const GithubLogin = () => {
     }
   };
 
-  return <ButtonUI onClick={onClickLoginGithub} text="login with Github" />;
+  return (
+    <ButtonUI
+      onClick={onClickLoginGithub}
+      text="login with Github"
+      onComplete
+    />
+  );
 };
