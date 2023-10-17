@@ -48,6 +48,7 @@ export const ProfileWrapper = styled.div`
 `;
 export const ProfileImg = styled.img`
   width: 65px;
+  height: 65px;
   border-radius: 100%;
   border: 1px solid black;
 `;

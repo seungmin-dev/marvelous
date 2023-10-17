@@ -38,7 +38,7 @@ export const SignupForm = (props: ISignupFormProps) => {
         const user = userCredential.user;
         await updateProfile(user, {
           displayName: data.name,
-          photoURL: `/src/assets/symbols/logo${
+          photoURL: `/src/assets/symbols/symbol${
             Math.floor(Math.random() * 21) + 1
           }.png`,
         });
