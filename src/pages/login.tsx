@@ -42,7 +42,12 @@ export default function LoginPage() {
         data.password
       ).then(async (userCredential) => {
         const user = userCredential.user;
-        await updateProfile(user, { displayName: data.name });
+        await updateProfile(user, {
+          displayName: data.name,
+          photoURL: `/src/assets/symbols/logo${
+            Math.floor(Math.random() * 21) + 1
+          }.png`,
+        });
         routeTo("/");
       });
     } catch (error) {
