@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { UseFormRegisterReturn } from "react-hook-form";
+import type { InputUIProps } from "../../types/type";
 
 export const Input = styled.input`
   width: 300px;
@@ -11,12 +11,6 @@ export const Input = styled.input`
   }
 `;
 
-interface InputUIProps {
-  type: string;
-  text?: string;
-  placeholder: string;
-  register?: UseFormRegisterReturn;
-}
 export const InputUI = (props: InputUIProps) => {
   return (
     <Input

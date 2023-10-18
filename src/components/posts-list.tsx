@@ -1,5 +1,4 @@
 import * as S from "../styles/post-list.style";
-
 import {
   Unsubscribe,
   collection,
@@ -17,16 +16,8 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { timeAgo } from "../commons/time-ago";
+import type { Post } from "../types/type";
 
-interface Post {
-  id: string;
-  post: string;
-  photo: string[];
-  createdAt: number;
-  userId: string;
-  username: string;
-  userphoto: string;
-}
 export const PostList = () => {
   const [posts, setPosts] = useState<Post[]>([]);
 
