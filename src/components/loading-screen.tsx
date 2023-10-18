@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 const Wrapper = styled.div`
   width: 100%;
   height: 100vh;
-  background: black;
+  background: white;
   display: flex;
   justify-content: center;
   align-items: center;
