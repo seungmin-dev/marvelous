@@ -62,6 +62,7 @@ export const WriteForm = () => {
         createdAt: Date.now(),
         username: user?.displayName,
         userId: user?.uid,
+        userphoto: user?.photoURL,
       });
       textareaRef.current!.value = "";
     } catch (error) {
