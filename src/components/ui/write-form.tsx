@@ -14,6 +14,9 @@ const WriteFormWrapper = styled.div`
   width: 100%;
   height: auto;
   margin-bottom: 20px;
+  @media (max-width: 800px) {
+    display: none;
+  }
 `;
 const Form = styled.form``;
 const Textarea = styled.textarea`

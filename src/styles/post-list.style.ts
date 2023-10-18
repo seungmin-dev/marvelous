@@ -7,12 +7,18 @@ export const ListWrapper = styled.div`
   flex-direction: column;
   gap: 10px;
   overflow-y: scroll;
+  @media (max-width: 800px) {
+    height: 85vh;
+  }
 `;
 export const Post = styled.div`
   width: 100%;
   height: auto;
   padding: 20px 10px;
   border-bottom: 1px solid #bdbdbd;
+  :last-of-type {
+    border: none;
+  }
 `;
 export const PostHeader = styled.div`
   width: 100%;

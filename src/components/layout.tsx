@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import Sidebar from "./sidebar";
 import SearchBar from "./search-bar";
 import { MobileMenu } from "./mobile-menu";
+import { MobileHeader } from "./mobile-header";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -34,8 +35,11 @@ const MainWrapper = styled.div`
 `;
 const InnerWrapper = styled.div`
   width: 100%;
-  height: 100%;
+  height: 100vh;
   position: relative;
+  @media (max-width: 800px) {
+    padding: 60px 0;
+  }
 `;
 const SearchWrapper = styled.div`
   width: 25%;
@@ -55,10 +59,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <Sidebar />
       </SideWrapper>
       <MainWrapper>
-        <InnerWrapper>
-          {children}
-          <MobileMenu />
-        </InnerWrapper>
+        <MobileHeader />
+        <InnerWrapper>{children}</InnerWrapper>
+        <MobileMenu />
       </MainWrapper>
       <SearchWrapper>
         <SearchBar />
