@@ -22,10 +22,10 @@ const Item = styled.div`
   text-align: center;
 `;
 const ItemLink = styled.a`
-  color: ${(props: ItemProps) => (props.onActive ? "#ef151e" : "")};
+  color: ${(props: ItemProps) => (props.isActive ? "#ef151e" : "")};
 `;
 interface ItemProps {
-  onActive: boolean;
+  isActive: boolean;
 }
 
 export const MobileMenu = () => {
@@ -33,11 +33,11 @@ export const MobileMenu = () => {
   return (
     <Wrapper>
       {SidebarContent.map((sidebar, i) =>
-        sidebar.id !== 6 ? (
+        sidebar.id < 6 ? (
           <Item key={i}>
             <ItemLink
               href={sidebar.path}
-              onActive={currentPath === sidebar.path}
+              isActive={currentPath === sidebar.path}
             >
               {sidebar.icon}
             </ItemLink>
