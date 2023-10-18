@@ -18,6 +18,7 @@ import {
 import Notifications from "./pages/notifications";
 import Settings from "./pages/settings";
 import Bookmarks from "./pages/bookmarks";
+import Hashtaging from "./pages/hashtaging";
 
 library.add(faHouse, faHashtag, faGlasses, faBell, faGear, faBookmark);
 interface RouterElement {
@@ -97,6 +98,14 @@ const routerData: RouterElement[] = [
     element: <Bookmarks />,
     withAuth: true,
   },
+  {
+    id: 7,
+    path: "/hashtaging",
+    label: "Hashtaging",
+    icon: <FontAwesomeIcon icon={faBookmark} />,
+    element: <Hashtaging />,
+    withAuth: true,
+  },
 ];
 
 export const routers = createBrowserRouter(
@@ -137,26 +146,26 @@ export const HashtagContent: HashtagElement[] = [
   {
     id: 0,
     label: "#loki2",
-    path: "/hashtag/loki2",
+    path: "/hashtaging?loki2",
   },
   {
     id: 1,
     label: "#themarvels",
-    path: "/hashtag/themarvels",
+    path: "/hashtaging?themarvels",
   },
   {
     id: 2,
     label: "#x-men",
-    path: "/hashtag/x-men",
+    path: "/hashtaging?x-men",
   },
   {
     id: 3,
     label: "#echo",
-    path: "/hashtag/echo",
+    path: "/hashtaging?echo",
   },
   {
     id: 4,
     label: "#atsv",
-    path: "/hashtag/atsv",
+    path: "/hashtaging?atsv",
   },
 ];

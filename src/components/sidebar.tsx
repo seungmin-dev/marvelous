@@ -3,10 +3,12 @@ import { HashtagContent, SidebarContent } from "../router";
 import { signOut } from "firebase/auth";
 import { useRouter } from "./hooks/useRouter";
 import { auth } from "../../firebase";
+import { useLocation } from "react-router-dom";
 
 export default function Sidebar() {
   const user = auth.currentUser;
   const { routeTo, currentPath } = useRouter();
+  const location = useLocation();
 
   const onClickLogout = () => {
     signOut(auth)
@@ -42,7 +44,9 @@ export default function Sidebar() {
               <S.Item key={i}>
                 <S.ItemLink
                   href={hashtag.path}
-                  isActive={currentPath === hashtag.path}
+                  isActive={
+                    hashtag.path === location.pathname + location.search
+                  }
                 >
                   {hashtag.label}
                 </S.ItemLink>
@@ -51,7 +55,7 @@ export default function Sidebar() {
           </S.Tab>
           <S.Tab>
             {SidebarContent.map((sidebar, i) =>
-              sidebar.id > 3 ? (
+              sidebar.id > 3 && sidebar.id !== 7 ? (
                 <S.Item key={i}>
                   <S.ItemLink
                     href={sidebar.path}
