@@ -13,17 +13,15 @@ import { auth, db } from "../../firebase";
 import type { Post } from "../types/type";
 
 const Wrapper = styled.div`
-  /* width: 100%;
+  width: 100%;
   max-width: 800px;
   height: 100%;
   padding: 20px;
-  margin: 0 auto; */
-  width: 100%;
-  height: 100vh;
-  padding: 0 20px;
+  margin: 0 auto;
 `;
 const Title = styled.h2`
   font-size: 30px;
+  margin-bottom: 20px;
 `;
 const PostWrapper = styled.div``;
 

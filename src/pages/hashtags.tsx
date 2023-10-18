@@ -3,11 +3,14 @@ import { hashtagData } from "../commons/hashtagData";
 
 const Wrapper = styled.div`
   width: 100%;
-  height: 100vh;
-  padding: 0 20px;
+  max-width: 800px;
+  height: 100%;
+  padding: 20px;
+  margin: 0 auto;
 `;
 const Title = styled.h2`
   font-size: 30px;
+  margin-bottom: 20px;
 `;
 const HashtagWrapper = styled.div`
   width: 100%;
@@ -17,7 +20,7 @@ const HashtagWrapper = styled.div`
   gap: 10px;
   flex-wrap: wrap;
 `;
-const Hashtag = styled.span`
+const Hashtag = styled.a`
   cursor: pointer;
   padding: 10px 15px;
   font-weight: bold;
@@ -36,7 +39,7 @@ export default function Hashtags() {
       <Title>Hashtags</Title>
       <HashtagWrapper>
         {hashtagData.map((hashtag) => (
-          <Hashtag>#{hashtag}</Hashtag>
+          <Hashtag href={`/hashtaging?${hashtag}`}>#{hashtag}</Hashtag>
         ))}
       </HashtagWrapper>
     </Wrapper>
