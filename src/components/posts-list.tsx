@@ -21,6 +21,7 @@ import { timeAgo } from "../commons/time-ago";
 interface Post {
   id: string;
   post: string;
+  photo: string[];
   createdAt: number;
   userId: string;
   username: string;
@@ -38,9 +39,12 @@ export const PostList = () => {
       );
       unsubscribe = await onSnapshot(postsQuery, (snapshot) => {
         const posts = snapshot.docs.map((doc) => {
-          const { post, createdAt, userId, username, userphoto } = doc.data();
+          const { post, photo, createdAt, userId, username, userphoto } =
+            doc.data();
+
           return {
             post,
+            photo,
             createdAt,
             userId,
             username,
@@ -66,6 +70,17 @@ export const PostList = () => {
             <S.PostCreatedAt>{timeAgo(post.createdAt)}</S.PostCreatedAt>
           </S.PostHeader>
           <S.PostContent>{post.post}</S.PostContent>
+          <S.PostImgWrapper length={post.photo.length}>
+            {post.photo &&
+              post.photo.length > 0 &&
+              post.photo.map((pic, i) => (
+                <S.PostImg
+                  src={pic}
+                  isEven={(i + 1) % 2 === 0}
+                  isLast={post.photo.length === i + 1}
+                />
+              ))}
+          </S.PostImgWrapper>
           <S.PostButtonWrapper>
             <S.Icon>
               <FontAwesomeIcon icon={faComment} />

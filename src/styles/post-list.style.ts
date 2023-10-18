@@ -35,6 +35,28 @@ export const PostCreatedAt = styled.span`
 export const PostContent = styled.p`
   padding: 10px 0;
 `;
+export const PostImgWrapper = styled.div`
+  width: 100%;
+  aspect-ratio: ${(props: imgWrapperProps) =>
+    props.length !== 2 ? "1/1" : ""};
+  margin-bottom: 20px;
+`;
+export const PostImg = styled.img`
+  aspect-ratio: 1/ 1;
+  box-sizing: border-box;
+  padding: 3px;
+  object-fit: cover;
+  border-radius: 10px;
+  width: ${(props: imgProps) =>
+    props.isLast ? (props.isEven ? "50%" : "100%") : "50%"};
+`;
+interface imgWrapperProps {
+  length: number;
+}
+interface imgProps {
+  isEven: boolean;
+  isLast: boolean;
+}
 export const PostButtonWrapper = styled.div`
   width: 100%;
   padding: 10px 0;
