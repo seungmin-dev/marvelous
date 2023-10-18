@@ -1,6 +1,6 @@
 import * as S from "../../styles/post-list.style";
 import { timeAgo } from "../../commons/time-ago";
-import { PostButtons } from "../../post-buttons";
+import { PostButtons } from "../post-buttons";
 import type { Post } from "../../types/type";
 
 interface IPostUI {
@@ -29,7 +29,7 @@ export const PostUI = ({ post }: IPostUI) => {
             ))}
         </S.PostImgWrapper>
       ) : null}
-      <PostButtons id={post.id} />
+      <PostButtons postId={post.id as string} />
     </S.Post>
   );
 };

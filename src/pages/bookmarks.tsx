@@ -24,22 +24,25 @@ const Title = styled.h2`
   font-size: 30px;
   margin-bottom: 20px;
 `;
-
 const PostWrapper = styled.div`
   width: 100%;
   height: 90vh;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
   overflow-y: scroll;
-  @media (max-width: 800px) {
-    height: 85vh;
-  }
 `;
-const Post = styled.div``;
+const BlankWrapper = styled.div`
+  width: 100%;
+  height: 90vh;
+  display: flex;
+  padding-top: 30%;
+  justify-content: center;
+`;
+const Text = styled.h3`
+  text-align: center;
+  color: #bdbdbd;
+  font-size: 24px;
+`;
 
 export default function Bookmarks() {
-  const [bookmarks, setBookmarks] = useState<string[]>([]);
   const [posts, setPosts] = useState<Post[]>([]);
 
   const user = auth.currentUser;
@@ -57,12 +60,14 @@ export default function Bookmarks() {
         bookmarks: bookmarks as string,
       };
     });
-    setBookmarks([...bookmarkList[0].bookmarks]);
+    return [...bookmarkList[0].bookmarks];
+  };
 
-    const tempArr: Post[] = [];
+  const getFetch = async (bookmarks: string[]) => {
+    const tempArr = [];
 
-    for (const id in bookmarks) {
-      await fetchPosts(bookmarks[id]).then((result) => tempArr.push(result));
+    for (const i in bookmarks) {
+      await fetchPosts(bookmarks[i]).then((result) => tempArr.push(result));
     }
 
     setPosts(tempArr);
@@ -72,21 +77,29 @@ export default function Bookmarks() {
     const docRef = doc(db, "posts", id);
     const docSnap = await getDoc(docRef);
 
-    return docSnap.data();
+    const data = { ...docSnap.data(), id };
+
+    return data;
   };
 
   useEffect(() => {
-    fetchBookmarks();
+    fetchBookmarks().then((bookmarks) => getFetch(bookmarks));
   }, []);
 
   return (
     <Wrapper>
       <Title>Bookmarks</Title>
-      <PostWrapper>
-        {posts.map((post) => (
-          <PostUI post={post} />
-        ))}
-      </PostWrapper>
+      {posts ? (
+        <PostWrapper>
+          {posts.map((post) => (
+            <PostUI post={post} />
+          ))}
+        </PostWrapper>
+      ) : (
+        <BlankWrapper>
+          <Text>북마크한 글이 없어요 🧐</Text>
+        </BlankWrapper>
+      )}
     </Wrapper>
   );
 }
