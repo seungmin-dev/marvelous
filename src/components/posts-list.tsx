@@ -61,17 +61,19 @@ export const PostList = () => {
             <S.PostCreatedAt>{timeAgo(post.createdAt)}</S.PostCreatedAt>
           </S.PostHeader>
           <S.PostContent>{post.post}</S.PostContent>
-          <S.PostImgWrapper length={post.photo.length}>
-            {post.photo &&
-              post.photo.length > 0 &&
-              post.photo.map((pic, i) => (
-                <S.PostImg
-                  src={pic}
-                  isEven={(i + 1) % 2 === 0}
-                  isLast={post.photo.length === i + 1}
-                />
-              ))}
-          </S.PostImgWrapper>
+          {post.photo ? (
+            <S.PostImgWrapper length={post.photo && post.photo.length}>
+              {post.photo &&
+                post.photo.length > 0 &&
+                post.photo.map((pic, i) => (
+                  <S.PostImg
+                    src={pic}
+                    isEven={(i + 1) % 2 === 0}
+                    isLast={post.photo.length === i + 1}
+                  />
+                ))}
+            </S.PostImgWrapper>
+          ) : null}
           <S.PostButtonWrapper>
             <S.Icon>
               <FontAwesomeIcon icon={faComment} />
