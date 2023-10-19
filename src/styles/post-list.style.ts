@@ -7,9 +7,6 @@ export const ListWrapper = styled.div`
   flex-direction: column;
   gap: 10px;
   overflow-y: scroll;
-  @media (max-width: 800px) {
-    height: 85vh;
-  }
 `;
 export const Post = styled.div`
   width: 100%;

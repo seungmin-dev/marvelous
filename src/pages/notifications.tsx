@@ -1,3 +1,9 @@
+import { WrapperUI } from "../components/ui/wrapper";
+
 export default function Notifications() {
-  return <div>notifications</div>;
+  return (
+    <WrapperUI title="Notifications">
+      <div></div>
+    </WrapperUI>
+  );
 }

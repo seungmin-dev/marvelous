@@ -1,17 +1,7 @@
 import styled from "@emotion/styled";
 import { hashtagData } from "../commons/hashtagData";
+import { WrapperUI } from "../components/ui/wrapper";
 
-const Wrapper = styled.div`
-  width: 100%;
-  max-width: 800px;
-  height: 100%;
-  padding: 20px;
-  margin: 0 auto;
-`;
-const Title = styled.h2`
-  font-size: 30px;
-  margin-bottom: 20px;
-`;
 const HashtagWrapper = styled.div`
   width: 100%;
   height: auto;
@@ -35,13 +25,12 @@ const Hashtag = styled.a`
 
 export default function Hashtags() {
   return (
-    <Wrapper>
-      <Title>Hashtags</Title>
+    <WrapperUI title="Hashtags">
       <HashtagWrapper>
         {hashtagData.map((hashtag) => (
           <Hashtag href={`/hashtaging?${hashtag}`}>#{hashtag}</Hashtag>
         ))}
       </HashtagWrapper>
-    </Wrapper>
+    </WrapperUI>
   );
 }

@@ -6,6 +6,7 @@ import { db } from "../../firebase";
 import { Post } from "../types/type";
 import { PostUI } from "../components/ui/post";
 import { useFetchBookmarks } from "../components/hooks/useFetchBookmarks";
+import { WrapperUI } from "../components/ui/wrapper";
 
 export default function Bookmarks() {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -42,8 +43,7 @@ export default function Bookmarks() {
   }, []);
 
   return (
-    <S.Wrapper>
-      <S.Title>Bookmarks</S.Title>
+    <WrapperUI title="Bookmarks">
       {posts ? (
         <S.PostWrapper>
           {posts.map((post) => (
@@ -55,6 +55,6 @@ export default function Bookmarks() {
           <S.Text>북마크한 글이 없어요 🧐</S.Text>
         </S.BlankWrapper>
       )}
-    </S.Wrapper>
+    </WrapperUI>
   );
 }

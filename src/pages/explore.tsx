@@ -1,3 +1,9 @@
+import { WrapperUI } from "../components/ui/wrapper";
+
 export default function Explore() {
-  return <div>Explore</div>;
+  return (
+    <WrapperUI title="Explore">
+      <div></div>
+    </WrapperUI>
+  );
 }

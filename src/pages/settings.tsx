@@ -1,3 +1,9 @@
+import { WrapperUI } from "../components/ui/wrapper";
+
 export default function Settings() {
-  return <div>settings</div>;
+  return (
+    <WrapperUI title="Settings">
+      <div></div>
+    </WrapperUI>
+  );
 }

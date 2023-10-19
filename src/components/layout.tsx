@@ -38,7 +38,7 @@ const InnerWrapper = styled.div`
   height: 100vh;
   position: relative;
   @media (max-width: 800px) {
-    padding: 60px 0;
+    padding: 80px 0;
   }
 `;
 const SearchWrapper = styled.div`
