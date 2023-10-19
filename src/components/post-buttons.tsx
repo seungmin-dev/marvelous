@@ -8,44 +8,17 @@ import { faBookmark as faBookmarkSolid } from "@fortawesome/free-solid-svg-icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { auth, db } from "../../firebase";
-import {
-  arrayRemove,
-  arrayUnion,
-  collection,
-  doc,
-  getDocs,
-  limit,
-  query,
-  setDoc,
-  where,
-} from "firebase/firestore";
+import { arrayRemove, arrayUnion, doc, setDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
+import { useFetchBookmarks } from "./hooks/useFetchBookmarks";
 
 interface IPostButtonsProps {
   postId: string;
 }
 
 export const PostButtons = ({ postId }: IPostButtonsProps) => {
-  const [tempBookmark, setTempBookmark] = useState(false);
+  const { fetchBookmarks } = useFetchBookmarks();
   const [bookmarked, setBookmarked] = useState(false);
-
-  const user = auth.currentUser;
-
-  const fetchBookmarks = async () => {
-    const bookmarksQuery = query(
-      collection(db, "users"),
-      where("userId", "==", user?.uid),
-      limit(25)
-    );
-    const snapshot = await getDocs(bookmarksQuery);
-    const bookmarkList = snapshot.docs.map((doc) => {
-      const { bookmarks } = doc.data();
-      return {
-        bookmarks: bookmarks as string,
-      };
-    });
-    return [...bookmarkList[0].bookmarks];
-  };
 
   const fetching = (bookmarks: string[]) => {
     for (const i in bookmarks) {
