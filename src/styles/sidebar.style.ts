@@ -28,7 +28,7 @@ export const Item = styled.li`
   display: flex;
   gap: 5px;
 `;
-export const ItemLink = styled.a`
+export const ItemLink = styled.span`
   color: ${({ theme, isActive }: { isActive: boolean }) =>
     isActive ? theme.activeColor : theme.textColor};
   transition: 0.2s all ease 0s;

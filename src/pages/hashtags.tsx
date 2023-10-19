@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { hashtagData } from "../commons/hashtagData";
 import { WrapperUI } from "../components/ui/wrapper";
+import { Link } from "react-router-dom";
 
 const HashtagWrapper = styled.div`
   width: 100%;
@@ -10,7 +11,7 @@ const HashtagWrapper = styled.div`
   gap: 10px;
   flex-wrap: wrap;
 `;
-const Hashtag = styled.a`
+const Hashtag = styled.span`
   cursor: pointer;
   padding: 10px 15px;
   font-weight: bold;
@@ -29,7 +30,9 @@ export default function Hashtags() {
     <WrapperUI title="Hashtags">
       <HashtagWrapper>
         {hashtagData.map((hashtag) => (
-          <Hashtag href={`/hashtaging?${hashtag}`}>#{hashtag}</Hashtag>
+          <Link to={`/hashtaging?${hashtag}`}>
+            <Hashtag>#{hashtag}</Hashtag>
+          </Link>
         ))}
       </HashtagWrapper>
     </WrapperUI>

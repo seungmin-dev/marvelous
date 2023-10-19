@@ -3,7 +3,7 @@ import { HashtagContent, SidebarContent } from "../router";
 import { signOut } from "firebase/auth";
 import { useRouter } from "./hooks/useRouter";
 import { auth } from "../../firebase";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export default function Sidebar() {
   const user = auth.currentUser;
@@ -28,13 +28,12 @@ export default function Sidebar() {
             {SidebarContent.map((sidebar, i) =>
               sidebar.id < 4 ? (
                 <S.Item key={i}>
-                  <S.ItemLink
-                    href={sidebar.path}
-                    isActive={currentPath === sidebar.path}
-                  >
-                    <S.MenuIcon>{sidebar.icon}</S.MenuIcon>
-                    <S.MenuTitle>{sidebar.label}</S.MenuTitle>
-                  </S.ItemLink>
+                  <Link to={sidebar.path}>
+                    <S.ItemLink isActive={currentPath === sidebar.path}>
+                      <S.MenuIcon>{sidebar.icon}</S.MenuIcon>
+                      <S.MenuTitle>{sidebar.label}</S.MenuTitle>
+                    </S.ItemLink>
+                  </Link>
                 </S.Item>
               ) : null
             )}
@@ -42,14 +41,15 @@ export default function Sidebar() {
           <S.Tab>
             {HashtagContent.map((hashtag, i) => (
               <S.Item key={i}>
-                <S.ItemLink
-                  href={hashtag.path}
-                  isActive={
-                    hashtag.path === location.pathname + location.search
-                  }
-                >
-                  {hashtag.label}
-                </S.ItemLink>
+                <Link to={hashtag.path}>
+                  <S.ItemLink
+                    isActive={
+                      hashtag.path === location.pathname + location.search
+                    }
+                  >
+                    {hashtag.label}
+                  </S.ItemLink>
+                </Link>
               </S.Item>
             ))}
           </S.Tab>
@@ -57,13 +57,12 @@ export default function Sidebar() {
             {SidebarContent.map((sidebar, i) =>
               sidebar.id > 3 && sidebar.id !== 7 ? (
                 <S.Item key={i}>
-                  <S.ItemLink
-                    href={sidebar.path}
-                    isActive={currentPath === sidebar.path}
-                  >
-                    <S.MenuIcon>{sidebar.icon}</S.MenuIcon>
-                    <S.MenuTitle>{sidebar.label}</S.MenuTitle>
-                  </S.ItemLink>
+                  <Link to={sidebar.path}>
+                    <S.ItemLink isActive={currentPath === sidebar.path}>
+                      <S.MenuIcon>{sidebar.icon}</S.MenuIcon>
+                      <S.MenuTitle>{sidebar.label}</S.MenuTitle>
+                    </S.ItemLink>
+                  </Link>
                 </S.Item>
               ) : null
             )}
@@ -71,7 +70,9 @@ export default function Sidebar() {
         </S.TabWrapper>
         <S.ProfileWrapper>
           <S.ProfileImg src={user?.photoURL as string} />
-          <S.ProfileName>{user?.displayName}</S.ProfileName>
+          <S.ProfileName>
+            <Link to="/profile">{user?.displayName}</Link>
+          </S.ProfileName>
           <S.Icon onClick={onClickLogout}>
             <svg
               fill="none"

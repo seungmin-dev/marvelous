@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { SidebarContent } from "../router";
 import { useRouter } from "./hooks/useRouter";
+import { Link } from "react-router-dom";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -21,7 +22,7 @@ const Item = styled.div`
   font-size: 26px;
   text-align: center;
 `;
-const ItemLink = styled.a`
+const ItemLink = styled.span`
   color: ${({ isActive, theme }: { isActive: boolean }) =>
     isActive ? theme.activeColor : theme.textColor};
 `;
@@ -33,12 +34,11 @@ export const MobileMenu = () => {
       {SidebarContent.map((sidebar, i) =>
         sidebar.id < 6 ? (
           <Item key={i}>
-            <ItemLink
-              href={sidebar.path}
-              isActive={currentPath === sidebar.path}
-            >
-              {sidebar.icon}
-            </ItemLink>
+            <Link to={sidebar.path}>
+              <ItemLink isActive={currentPath === sidebar.path}>
+                {sidebar.icon}
+              </ItemLink>
+            </Link>
           </Item>
         ) : null
       )}
