@@ -8,8 +8,8 @@ const Wrapper = styled.div`
   width: 100%;
   height: 100vh;
   position: relative;
-  @media (max-width: 800px) {
-  }
+  background-color: ${({ theme }) => theme.backgroundColor};
+  color: ${({ theme }) => theme.textColor};
 `;
 const SideWrapper = styled.div`
   width: 25%;
@@ -52,6 +52,7 @@ const SearchWrapper = styled.div`
     display: none;
   }
 `;
+
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <Wrapper>

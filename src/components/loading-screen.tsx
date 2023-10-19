@@ -4,21 +4,21 @@ import styled from "@emotion/styled";
 const Wrapper = styled.div`
   width: 100%;
   height: 100vh;
-  background: white;
   display: flex;
   justify-content: center;
   align-items: center;
+  color: ${({ theme }) => theme.activeColor};
+  background-color: ${({ theme }) => theme.backgroundColor};
 `;
 
 const stroke = keyframes`
   0% {
-		fill: rgba(72,138,20,0); stroke: rgba(255, 56, 62,1);
+		fill: rgba(72,138,20,0);
 		stroke-dashoffset: 25%; stroke-dasharray: 0 50%; stroke-width: 2;
 	}
-	70%  {fill: rgba(72,138,20,0); stroke: rgba(255, 56, 62,1); }
-	80%  {fill: rgba(72,138,20,0); stroke: rgba(255, 56, 62,1); stroke-width: 3; }
+	70%  {fill: rgba(72,138,20,0); stroke-width: 3; }
 	100% {
-		fill: rgba(239, 21, 28,1); stroke: rgba(255, 56, 62,0); 
+		fill: currentColor;  
 		stroke-dashoffset: -25%; stroke-dasharray: 50% 0; stroke-width: 0;
 	}`;
 const SvgWrapper = styled.div`

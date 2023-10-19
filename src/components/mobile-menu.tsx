@@ -5,7 +5,7 @@ import { useRouter } from "./hooks/useRouter";
 const Wrapper = styled.div`
   width: 100%;
   height: 80px;
-  background-color: white;
+  background-color: ${({ theme }) => theme.backgroundColor};
   position: fixed;
   bottom: 0;
   left: 0;
@@ -22,11 +22,9 @@ const Item = styled.div`
   text-align: center;
 `;
 const ItemLink = styled.a`
-  color: ${(props: ItemProps) => (props.isActive ? "#ef151e" : "")};
+  color: ${({ isActive, theme }: { isActive: boolean }) =>
+    isActive ? theme.activeColor : theme.textColor};
 `;
-interface ItemProps {
-  isActive: boolean;
-}
 
 export const MobileMenu = () => {
   const { currentPath } = useRouter();

@@ -17,7 +17,7 @@ export const MenuWrapper = styled.div`
 export const TabWrapper = styled.div``;
 export const Tab = styled.ul`
   padding: 20px 0;
-  border-bottom: 1px solid #dfdfdf;
+  border-bottom: ${({ theme }) => `1px solid ${theme.grayColor}`};
   display: flex;
   flex-direction: column;
   gap: 15px;
@@ -29,7 +29,12 @@ export const Item = styled.li`
   gap: 5px;
 `;
 export const ItemLink = styled.a`
-  color: ${(props: ItemProps) => (props.isActive ? "#ef151e" : "black")};
+  color: ${({ theme, isActive }: { isActive: boolean }) =>
+    isActive ? theme.activeColor : theme.textColor};
+  transition: 0.2s all ease 0s;
+  :hover {
+    color: ${({ theme }) => theme.activeColor};
+  }
 `;
 export const MenuIcon = styled.span`
   margin-right: 10px;
@@ -37,9 +42,6 @@ export const MenuIcon = styled.span`
   text-align: center;
 `;
 export const MenuTitle = styled.span``;
-interface ItemProps {
-  isActive: boolean;
-}
 export const ProfileWrapper = styled.div`
   padding: 20px 0;
   display: flex;

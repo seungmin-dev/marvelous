@@ -15,7 +15,7 @@ const SearchWrapper = styled.div`
 const TrailerWrapper = styled.div`
   height: 30%;
   padding: 20px;
-  border-top: 1px solid #bdbdbd;
+  border-top: ${({ theme }) => `1px solid ${theme.grayColor}`};
 `;
 
 export default function SearchBar() {

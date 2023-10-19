@@ -10,7 +10,7 @@ const Wrapper = styled.div`
   z-index: 100;
   width: 100%;
   height: 80px;
-  background-color: white;
+  background-color: ${({ theme }) => theme.backgroundColor};
   align-items: center;
   justify-content: space-between;
   padding: 10px 20px;

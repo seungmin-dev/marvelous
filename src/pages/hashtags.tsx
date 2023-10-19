@@ -15,11 +15,12 @@ const Hashtag = styled.a`
   padding: 10px 15px;
   font-weight: bold;
   border-radius: 20px;
-  border: 1.5px solid #ef151e;
+  border: ${({ theme }) => `1.5px solid ${theme.activeColor}`};
   transition: 0.2s all ease 0s;
+  color: ${({ theme }) => theme.textColor};
   :hover {
-    background-color: #ef151e;
-    color: white;
+    background-color: ${({ theme }) => theme.activeColor};
+    color: ${({ theme }) => theme.revertedColor};
   }
 `;
 
