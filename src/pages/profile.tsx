@@ -6,6 +6,7 @@ import { Post } from "../types/type";
 import { PostUI } from "../components/ui/post";
 import { useFetchBookmarks } from "../components/hooks/useFetchBookmarks";
 import { useFetchPostById } from "../components/hooks/useFetchPostById";
+import { BlankUI } from "../components/ui/blank";
 
 export default function Profile() {
   const user = auth.currentUser;
@@ -96,25 +97,19 @@ export default function Profile() {
               (posts.length > 0 ? (
                 posts.map((post) => <PostUI post={post} />)
               ) : (
-                <S.BlankWrapper>
-                  <S.Text>작성한 글이 없어요 🧐</S.Text>
-                </S.BlankWrapper>
+                <BlankUI text="작성한 글" />
               ))}
             {curMenu === "hearts" &&
               (hearts.length > 0 ? (
                 hearts.map((heart) => <PostUI post={heart} />)
               ) : (
-                <S.BlankWrapper>
-                  <S.Text>하트한 글이 없어요 🧐</S.Text>
-                </S.BlankWrapper>
+                <BlankUI text="하트한 글" />
               ))}
             {curMenu === "bookmarks" &&
               (bookmarks.length > 0 ? (
                 bookmarks.map((bookmark) => <PostUI post={bookmark} />)
               ) : (
-                <S.BlankWrapper>
-                  <S.Text>북마크한 글이 없어요 🧐</S.Text>
-                </S.BlankWrapper>
+                <BlankUI text="북마크한 글" />
               ))}
           </S.PostList>
         </S.PostBox>

@@ -18,6 +18,7 @@ import {
   faHeart,
   faUserGroup,
 } from "@fortawesome/free-solid-svg-icons";
+import { BlankUI } from "../components/ui/blank";
 
 interface Alert {
   id: string;
@@ -93,28 +94,32 @@ export default function Notifications() {
 
   return (
     <WrapperUI title="Notifications">
-      <AlertList>
-        {alerts.map((alert) => (
-          <Alert key={alert.id} type={alert.type}>
-            <AlertHeader>
-              {alert.type === "bookmark" ? (
-                <FontAwesomeIcon icon={faBookmark} />
-              ) : alert.type === "heart" ? (
-                <FontAwesomeIcon icon={faHeart} />
-              ) : (
-                <FontAwesomeIcon icon={faUserGroup} />
-              )}
-              <Icon onClick={onClickDelete(alert.id)}>
-                <FontAwesomeIcon icon={faCircleXmark} />
-              </Icon>
-            </AlertHeader>
-            <Content>
-              <b>{alert.personName}</b>님이 나의 글 <b>{alert.content}</b>에{" "}
-              <b>{alert.type === "bookmark" ? "북마크" : "하트"}</b>를 했어요
-            </Content>
-          </Alert>
-        ))}
-      </AlertList>
+      {alerts && alerts.length > 0 ? (
+        <AlertList>
+          {alerts.map((alert) => (
+            <Alert key={alert.id} type={alert.type}>
+              <AlertHeader>
+                {alert.type === "bookmark" ? (
+                  <FontAwesomeIcon icon={faBookmark} />
+                ) : alert.type === "heart" ? (
+                  <FontAwesomeIcon icon={faHeart} />
+                ) : (
+                  <FontAwesomeIcon icon={faUserGroup} />
+                )}
+                <Icon onClick={onClickDelete(alert.id)}>
+                  <FontAwesomeIcon icon={faCircleXmark} />
+                </Icon>
+              </AlertHeader>
+              <Content>
+                <b>{alert.personName}</b>님이 나의 글 <b>{alert.content}</b>에{" "}
+                <b>{alert.type === "bookmark" ? "북마크" : "하트"}</b>를 했어요
+              </Content>
+            </Alert>
+          ))}
+        </AlertList>
+      ) : (
+        <BlankUI text="새 알림" />
+      )}
     </WrapperUI>
   );
 }

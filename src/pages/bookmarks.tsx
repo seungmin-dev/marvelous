@@ -5,6 +5,7 @@ import { PostUI } from "../components/ui/post";
 import { useFetchBookmarks } from "../components/hooks/useFetchBookmarks";
 import { WrapperUI } from "../components/ui/wrapper";
 import { useFetchPostById } from "../components/hooks/useFetchPostById";
+import { BlankUI } from "../components/ui/blank";
 
 export default function Bookmarks() {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -34,9 +35,7 @@ export default function Bookmarks() {
           ))}
         </S.PostWrapper>
       ) : (
-        <S.BlankWrapper>
-          <S.Text>북마크한 글이 없어요 🧐</S.Text>
-        </S.BlankWrapper>
+        <BlankUI text="북마크한 글" />
       )}
     </WrapperUI>
   );
