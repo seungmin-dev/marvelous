@@ -5,16 +5,19 @@ import type { Post } from "../../types/type";
 import { useEffect, useRef, useState } from "react";
 import { ButtonUI2 } from "./button-ui-2";
 import { doc, updateDoc } from "firebase/firestore";
-import { db } from "../../../firebase";
+import { auth, db } from "../../../firebase";
 import { FirebaseError } from "firebase/app";
 import { Modal } from "antd";
 import { useNoti } from "../hooks/useNoti";
+import { useFollow } from "../hooks/useFollow";
 
 interface IPostUI {
   post: Post;
 }
 
 export const PostUI = ({ post }: IPostUI) => {
+  const user = auth.currentUser;
+
   const [edit, setEdit] = useState(false);
   const [originContent, setOriginContent] = useState("");
   const [edittedContent, setContent] = useState("");
@@ -24,6 +27,7 @@ export const PostUI = ({ post }: IPostUI) => {
     setContent(e.currentTarget.value);
   };
   const { contextHolder, openNotification } = useNoti();
+  const { following, fetchFollowYn, onClickFollow } = useFollow();
 
   const onSubmitEdit = (postId: string) => async () => {
     if (textareaRef.current?.value === "") return;
@@ -41,16 +45,30 @@ export const PostUI = ({ post }: IPostUI) => {
       setEdit(false);
     }
   };
+
   useEffect(() => {
     setOriginContent(textareaRef.current?.value as string);
   }, [edit]);
+
+  useEffect(() => {
+    if (post.userId !== user?.uid) fetchFollowYn(post.userId);
+  }, []);
 
   return (
     <S.Post key={post.id}>
       {contextHolder}
       <S.PostHeader>
         <S.PostProfileImg src={post.userphoto} />
-        <S.PostUsername>{post.username}</S.PostUsername>
+        <S.PostUsername myDoc={user?.uid === post.userId}>
+          {post.username}
+        </S.PostUsername>
+        {user?.uid !== post.userId ? (
+          <S.ButtonWrapper myDoc={user?.uid === post.userId}>
+            <S.Button onClick={onClickFollow(post.userId)}>
+              {following ? "언팔로우" : "팔로우"}
+            </S.Button>
+          </S.ButtonWrapper>
+        ) : null}
         {edit ? (
           <ButtonUI2
             text={loading ? "Loading" : "Save"}

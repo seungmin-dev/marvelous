@@ -33,7 +33,22 @@ export const PostProfileImg = styled.img`
   border: 1px solid black;
 `;
 export const PostUsername = styled.span`
-  flex-grow: 1;
+  flex-grow: ${({ myDoc }: { myDoc: boolean }) => (myDoc ? "1" : "0")};
+`;
+export const ButtonWrapper = styled.div`
+  height: 100%;
+  flex-grow: ${({ myDoc }: { myDoc: boolean }) => (myDoc ? "0" : "1")};
+`;
+export const Button = styled.span`
+  cursor: pointer;
+  padding: 10px 20px;
+  background-color: ${({ theme }) => theme.activeColor};
+  border-radius: 10px;
+  color: ${({ theme }) => theme.revertedColor};
+  font-weight: bold;
+  :hover {
+    background-color: ${({ theme }) => theme.inActiveColor};
+  }
 `;
 export const PostCreatedAt = styled.span`
   font-size: 14px;
