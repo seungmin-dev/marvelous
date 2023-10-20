@@ -12,7 +12,7 @@ export const Post = styled.div`
   width: 100%;
   height: auto;
   padding: 20px 10px;
-  border-bottom: 1px solid #bdbdbd;
+  border-bottom: ${({ theme }) => `1px solid ${theme.grayColor}`};
   :last-of-type {
     border: none;
   }

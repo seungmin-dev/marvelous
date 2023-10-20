@@ -7,9 +7,9 @@ const Wrapper = styled.div`
   padding: 10px 20px;
   margin: 0 auto;
   position: relative;
-  /* @media (max-width: 800px) {
-    padding-top: 40px;
-  } */
+  @media (max-width: 800px) {
+    padding-top: 100px;
+  }
 `;
 export const Title = styled.h2`
   font-size: 30px;

@@ -14,6 +14,6 @@ export const BlankWrapper = styled.div`
 `;
 export const Text = styled.h3`
   text-align: center;
-  color: #bdbdbd;
+  color: ${({ theme }) => theme.grayColor};
   font-size: 24px;
 `;

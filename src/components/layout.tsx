@@ -18,6 +18,7 @@ const SideWrapper = styled.div`
   top: 0;
   left: 0;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  z-index: 30;
   @media (max-width: 800px) {
     display: none;
   }
@@ -37,14 +38,12 @@ const InnerWrapper = styled.div`
   width: 100%;
   height: 100vh;
   position: relative;
-  @media (max-width: 800px) {
-    padding: 80px 0;
-  }
 `;
 const SearchWrapper = styled.div`
   width: 25%;
   height: 100%;
   position: absolute;
+  z-index: 30;
   right: 0;
   top: 0;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
