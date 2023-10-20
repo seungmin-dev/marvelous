@@ -4,11 +4,14 @@ import { signOut } from "firebase/auth";
 import { useRouter } from "./hooks/useRouter";
 import { auth } from "../../firebase";
 import { Link, useLocation } from "react-router-dom";
+import { ModalUI } from "./ui/modal-ui";
+import { useModal } from "./hooks/useModal";
 
 export default function Sidebar() {
   const user = auth.currentUser;
   const { routeTo, currentPath } = useRouter();
   const location = useLocation();
+  const { modalOpen, onClickOpenModal } = useModal();
 
   const onClickLogout = () => {
     signOut(auth)
@@ -73,7 +76,7 @@ export default function Sidebar() {
           <S.ProfileName>
             <Link to="/profile">{user?.displayName}</Link>
           </S.ProfileName>
-          <S.Icon onClick={onClickLogout}>
+          <S.Icon onClick={onClickOpenModal}>
             <svg
               fill="none"
               stroke="currentColor"
@@ -89,6 +92,12 @@ export default function Sidebar() {
               />
             </svg>
           </S.Icon>
+          <ModalUI
+            modalOpen={modalOpen}
+            title="로그아웃 할까요? 🫨"
+            onOkFn={onClickLogout}
+            onCancelFn={onClickOpenModal}
+          />
         </S.ProfileWrapper>
       </S.MenuWrapper>
     </S.Wrapper>

@@ -22,6 +22,8 @@ import { useEffect, useState } from "react";
 import { useFetchBookmarks } from "./hooks/useFetchBookmarks";
 import { FirebaseError } from "firebase/app";
 import { Dropdown } from "antd";
+import { useModal } from "./hooks/useModal";
+import { ModalUI } from "./ui/modal-ui";
 
 interface IPostButtonsProps {
   postId: string;
@@ -38,6 +40,8 @@ export const PostButtons = ({
   const { fetchBookmarks } = useFetchBookmarks();
   const [bookmarked, setBookmarked] = useState(false);
   const [deleteDocId, setDelDocId] = useState("");
+
+  const { modalOpen, onClickOpenModal } = useModal();
 
   const fetching = (bookmarks: string[]) => {
     for (const i in bookmarks) {
@@ -95,6 +99,8 @@ export const PostButtons = ({
       await deleteDoc(docRef);
     } catch (error) {
       if (error instanceof FirebaseError) console.log(error);
+    } finally {
+      onClickOpenModal();
     }
   };
   const onClickDelDocId = (postId: string) => () => {
@@ -102,7 +108,7 @@ export const PostButtons = ({
   };
   const items = [
     {
-      label: <span onClick={onClickDelete(deleteDocId)}>글 삭제</span>,
+      label: <span onClick={onClickOpenModal}>글 삭제</span>,
       key: "1",
       icon: <FontAwesomeIcon icon={faTrash} />,
     },
@@ -135,6 +141,12 @@ export const PostButtons = ({
             </S.Icon>
           </Dropdown>
         ) : null}
+        <ModalUI
+          modalOpen={modalOpen}
+          onOkFn={onClickDelete(deleteDocId)}
+          onCancelFn={onClickOpenModal}
+          title="글을 정말로 삭제할까요? 😲"
+        />
       </S.PostButtonWrapper>
     </>
   );
