@@ -1,11 +1,13 @@
-import * as S from "../../styles/write-form.style";
+import * as S from "../styles/write-form.style";
 import { faImage } from "@fortawesome/free-solid-svg-icons";
 import { useRef, useState } from "react";
 import { addDoc, collection, updateDoc } from "firebase/firestore";
-import { auth, db, storage } from "../../../firebase";
+import { auth, db, storage } from "../../firebase";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ButtonUI2 } from "./button-ui-2";
+import { ButtonUI2 } from "./ui/button-ui-2";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { useNoti } from "./hooks/useNoti";
+import { Modal } from "antd";
 
 export const WriteForm = () => {
   const [loading, setLoading] = useState(false);
@@ -13,6 +15,8 @@ export const WriteForm = () => {
   const [fileList, setFileList] = useState<File[] | null>(null);
   const [tempUrlList, setTempUrlList] = useState<string[]>([]);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+
+  const { contextHolder, openNotification } = useNoti();
 
   const onChangeTextarea = () => {
     if ((textareaRef.current?.value.length as number) > 0) setComplete(true);
@@ -34,12 +38,12 @@ export const WriteForm = () => {
       }
     }
     if (tempFiles.length > 4) {
-      alert("사진은 최대 4개까지 업로드할 수 있어요.");
+      Modal.info({ content: "사진은 최대 4개까지 업로드할 수 있어요." });
       tempFiles.pop();
     }
     for (let i = 0; i < tempFiles.length; i++) {
       if (tempFiles[i].size > 1024 ** 2) {
-        alert("이미지 파일은 1MB까지 업로드할 수 있어요");
+        Modal.info({ content: "이미지 파일은 1MB까지 업로드할 수 있어요" });
         return;
       }
     }
@@ -90,13 +94,16 @@ export const WriteForm = () => {
       setFileList(null);
       setTempUrlList([]);
     } catch (error) {
-      if (error instanceof Error) console.log(error.message);
+      if (error instanceof Error)
+        Modal.error({ content: "글 등록에 실패했어요 😥" });
     } finally {
       setLoading(false);
+      openNotification("글 등록");
     }
   };
   return (
     <S.WriteFormWrapper>
+      {contextHolder}
       <S.Form onSubmit={submitPost}>
         <S.Textarea
           placeholder="What's on your mind...?"

@@ -6,6 +6,7 @@ import { auth } from "../../firebase";
 import { Link, useLocation } from "react-router-dom";
 import { ModalUI } from "./ui/modal-ui";
 import { useModal } from "./hooks/useModal";
+import { Modal } from "antd";
 
 export default function Sidebar() {
   const user = auth.currentUser;
@@ -19,7 +20,8 @@ export default function Sidebar() {
         routeTo("/login");
       })
       .catch((error) => {
-        if (error instanceof Error) console.log(error);
+        if (error instanceof Error)
+          Modal.error({ content: "로그아웃에 실패했어요 🫥" });
       });
   };
   return (

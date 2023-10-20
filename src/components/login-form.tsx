@@ -42,7 +42,6 @@ export const LoginForm = (props: ILoginFormProps) => {
     } catch (error) {
       if (error instanceof FirebaseError && typeof error.code === "string") {
         setFsError(customErrors(error.code));
-        console.log(error.message);
       }
     } finally {
       setLoading(false);

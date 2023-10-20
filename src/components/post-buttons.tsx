@@ -21,9 +21,10 @@ import {
 import { useEffect, useState } from "react";
 import { useFetchBookmarks } from "./hooks/useFetchBookmarks";
 import { FirebaseError } from "firebase/app";
-import { Dropdown } from "antd";
+import { Dropdown, Modal } from "antd";
 import { useModal } from "./hooks/useModal";
 import { ModalUI } from "./ui/modal-ui";
+import { useNoti } from "./hooks/useNoti";
 
 interface IPostButtonsProps {
   postId: string;
@@ -42,6 +43,7 @@ export const PostButtons = ({
   const [deleteDocId, setDelDocId] = useState("");
 
   const { modalOpen, onClickOpenModal } = useModal();
+  const { contextHolder, openNotification } = useNoti();
 
   const fetching = (bookmarks: string[]) => {
     for (const i in bookmarks) {
@@ -60,36 +62,44 @@ export const PostButtons = ({
       // UI상 북마크 아이콘 변경
       setBookmarked((prev) => !prev);
 
-      // 유저 북마크 목록에 추가
-      const userRef = doc(db, "users", user?.uid as string);
-      await setDoc(
-        userRef,
-        {
-          userId: user?.uid,
-          username: user?.displayName,
-          bookmarks: bookmarked
-            ? arrayRemove(bookmarkId)
-            : arrayUnion(bookmarkId),
-        },
-        { merge: true }
-      );
+      try {
+        // 유저 북마크 목록에 추가
+        const userRef = doc(db, "users", user?.uid as string);
+        await setDoc(
+          userRef,
+          {
+            userId: user?.uid,
+            username: user?.displayName,
+            bookmarks: bookmarked
+              ? arrayRemove(bookmarkId)
+              : arrayUnion(bookmarkId),
+          },
+          { merge: true }
+        );
 
-      // 글 작성자에게 알림 보내기(자기 글을 북마크할 시 알림 X)
-      if (user?.uid === writerId) return;
+        // 글 작성자에게 알림 보내기(자기 글을 북마크할 시 알림 X)
+        if (user?.uid === writerId) return;
 
-      const writerRef = doc(db, "alerts", `${user?.uid}-${bookmarkId}`);
+        const writerRef = doc(db, "alerts", `${user?.uid}-${bookmarkId}`);
 
-      if (!bookmarked) {
-        await setDoc(doc(db, "alerts", `${user?.uid}-${bookmarkId}`), {
-          userId: writerId,
-          personId: user?.uid,
-          personName: user?.displayName,
-          type: "bookmark",
-          content: postContent.slice(0, 10),
-          createdAt: Date.now(),
-        });
-      } else {
-        await deleteDoc(writerRef);
+        if (!bookmarked) {
+          await setDoc(doc(db, "alerts", `${user?.uid}-${bookmarkId}`), {
+            userId: writerId,
+            personId: user?.uid,
+            personName: user?.displayName,
+            type: "bookmark",
+            content: postContent.slice(0, 10),
+            createdAt: Date.now(),
+          });
+        } else {
+          await deleteDoc(writerRef);
+        }
+      } catch (error) {
+        if (error instanceof FirebaseError)
+          Modal.error({ content: "북마크에 실패했어요 😵‍💫" });
+        setBookmarked((prev) => !prev);
+      } finally {
+        openNotification(bookmarked ? "북마크 해제" : "북마크 등록");
       }
     };
 
@@ -98,9 +108,11 @@ export const PostButtons = ({
       const docRef = doc(db, "posts", postId);
       await deleteDoc(docRef);
     } catch (error) {
-      if (error instanceof FirebaseError) console.log(error);
+      if (error instanceof FirebaseError)
+        Modal.error({ content: "글 삭제에 실패했어요 😥" });
     } finally {
       onClickOpenModal();
+      openNotification("글 삭제");
     }
   };
   const onClickDelDocId = (postId: string) => () => {
@@ -116,6 +128,7 @@ export const PostButtons = ({
 
   return (
     <>
+      {contextHolder}
       <S.PostButtonWrapper>
         <S.Icon>
           <FontAwesomeIcon icon={faComment} />
