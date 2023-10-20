@@ -1,65 +1,11 @@
-import styled from "@emotion/styled";
+import * as S from "../../styles/write-form.style";
 import { faImage } from "@fortawesome/free-solid-svg-icons";
-import { library } from "@fortawesome/fontawesome-svg-core";
 import { useRef, useState } from "react";
 import { addDoc, collection, updateDoc } from "firebase/firestore";
 import { auth, db, storage } from "../../../firebase";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ButtonUI2 } from "./button-ui-2";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-
-library.add(faImage);
-
-const WriteFormWrapper = styled.div`
-  width: 100%;
-  height: auto;
-  margin-bottom: 20px;
-  @media (max-width: 800px) {
-    display: none;
-  }
-`;
-const Form = styled.form``;
-const Textarea = styled.textarea`
-  width: 100%;
-  height: 100px;
-  resize: none;
-  border: 1px solid #bdbdbd;
-  font-size: 16px;
-  padding: 20px;
-  border-radius: 10px;
-  margin-bottom: 10px;
-  ::placeholder {
-    color: #bdbdbd;
-  }
-`;
-const ButtonWrapper = styled.div`
-  width: 100%;
-  height: auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-`;
-const TempImgWrapper = styled.div`
-  display: flex;
-  flex-grow: 1;
-  height: 50px;
-  gap: 10px;
-`;
-const TempImg = styled.img`
-  aspect-ratio: 1/1;
-  object-fit: cover;
-  height: 100%;
-  border-radius: 10px;
-`;
-const Icon = styled.label`
-  cursor: pointer;
-  font-size: 30px;
-  padding-left: 10px;
-`;
-const FileInput = styled.input`
-  display: none;
-`;
 
 export const WriteForm = () => {
   const [loading, setLoading] = useState(false);
@@ -150,23 +96,23 @@ export const WriteForm = () => {
     }
   };
   return (
-    <WriteFormWrapper>
-      <Form onSubmit={submitPost}>
-        <Textarea
+    <S.WriteFormWrapper>
+      <S.Form onSubmit={submitPost}>
+        <S.Textarea
           placeholder="What's on your mind...?"
           ref={textareaRef}
           onChange={onChangeTextarea}
         />
-        <ButtonWrapper>
-          <TempImgWrapper>
+        <S.ButtonWrapper>
+          <S.TempImgWrapper>
             {tempUrlList.map((url, i) => (
-              <TempImg src={url} key={i} />
+              <S.TempImg src={url} key={i} />
             ))}
-          </TempImgWrapper>
-          <Icon htmlFor="file">
+          </S.TempImgWrapper>
+          <S.Icon htmlFor="file">
             <FontAwesomeIcon icon={faImage} />
-          </Icon>
-          <FileInput
+          </S.Icon>
+          <S.FileInput
             type="file"
             multiple
             onChange={onChangeFile}
@@ -178,8 +124,8 @@ export const WriteForm = () => {
             text={loading ? "loading" : "Post"}
             onComplete={onComplete}
           />
-        </ButtonWrapper>
-      </Form>
-    </WriteFormWrapper>
+        </S.ButtonWrapper>
+      </S.Form>
+    </S.WriteFormWrapper>
   );
 };

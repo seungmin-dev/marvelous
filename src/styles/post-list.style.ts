@@ -4,6 +4,8 @@ export const ListWrapper = styled.div`
   width: 100%;
   height: 80vh;
   display: flex;
+  box-sizing: border-box;
+  padding: 10px 20px;
   flex-direction: column;
   gap: 10px;
   overflow-y: scroll;
@@ -27,6 +29,8 @@ export const PostProfileImg = styled.img`
   width: 50px;
   height: 50px;
   border-radius: 100%;
+  box-sizing: border-box;
+  border: 1px solid black;
 `;
 export const PostUsername = styled.span`
   flex-grow: 1;

@@ -5,6 +5,8 @@ import { modeState } from "../store";
 
 const List = styled.ul`
   width: 100%;
+  box-sizing: border-box;
+  padding: 10px 20px;
 `;
 const Item = styled.li`
   width: 100%;

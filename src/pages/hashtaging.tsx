@@ -13,7 +13,10 @@ import { auth, db } from "../../firebase";
 import type { Post } from "../types/type";
 import { WrapperUI } from "../components/ui/wrapper";
 
-const PostWrapper = styled.div``;
+const PostWrapper = styled.div`
+  box-sizing: border-box;
+  padding: 10px 20px;
+`;
 
 export default function Hashtaging() {
   const location = useLocation();

@@ -6,10 +6,11 @@ import { Link } from "react-router-dom";
 const HashtagWrapper = styled.div`
   width: 100%;
   height: auto;
-  padding: 10px 0;
+  padding: 10px 20px;
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+  box-sizing: border-box;
 `;
 const Hashtag = styled.span`
   cursor: pointer;
@@ -18,10 +19,14 @@ const Hashtag = styled.span`
   border-radius: 20px;
   border: ${({ theme }) => `1.5px solid ${theme.activeColor}`};
   transition: 0.2s all ease 0s;
-  color: ${({ theme }) => theme.textColor};
+  a {
+    color: ${({ theme }) => theme.textColor};
+  }
   :hover {
     background-color: ${({ theme }) => theme.activeColor};
-    color: ${({ theme }) => theme.revertedColor};
+    a {
+      color: ${({ theme }) => theme.revertedColor};
+    }
   }
 `;
 
@@ -30,9 +35,9 @@ export default function Hashtags() {
     <WrapperUI title="Hashtags">
       <HashtagWrapper>
         {hashtagData.map((hashtag) => (
-          <Link to={`/hashtaging?${hashtag}`}>
-            <Hashtag>#{hashtag}</Hashtag>
-          </Link>
+          <Hashtag>
+            <Link to={`/hashtaging?${hashtag}`}>#{hashtag}</Link>
+          </Hashtag>
         ))}
       </HashtagWrapper>
     </WrapperUI>

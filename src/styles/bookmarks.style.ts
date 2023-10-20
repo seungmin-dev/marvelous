@@ -4,6 +4,8 @@ export const PostWrapper = styled.div`
   width: 100%;
   height: 90vh;
   overflow-y: scroll;
+  box-sizing: border-box;
+  padding: 10px 20px;
 `;
 export const BlankWrapper = styled.div`
   width: 100%;

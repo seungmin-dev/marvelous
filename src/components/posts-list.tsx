@@ -10,6 +10,7 @@ import { db } from "../../firebase";
 import { useEffect, useState } from "react";
 import type { Post } from "../types/type";
 import { PostUI } from "./ui/post";
+import { BlankUI } from "./ui/blank";
 
 export const PostList = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -46,9 +47,11 @@ export const PostList = () => {
   }, []);
   return (
     <S.ListWrapper>
-      {posts.map((post) => (
-        <PostUI post={post} />
-      ))}
+      {posts && posts.length > 0 ? (
+        posts.map((post) => <PostUI post={post} />)
+      ) : (
+        <BlankUI text="작성된 글" />
+      )}
     </S.ListWrapper>
   );
 };

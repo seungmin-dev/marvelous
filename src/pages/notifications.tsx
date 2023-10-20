@@ -34,6 +34,8 @@ const AlertList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+  box-sizing: border-box;
+  padding: 10px 20px;
 `;
 const Alert = styled.div`
   width: 100%;
