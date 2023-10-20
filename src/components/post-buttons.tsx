@@ -4,7 +4,10 @@ import {
   faHeart,
   faBookmark,
 } from "@fortawesome/free-regular-svg-icons";
-import { faBookmark as faBookmarkSolid } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBookmark as faBookmarkSolid,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { auth, db } from "../../firebase";
@@ -17,6 +20,8 @@ import {
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useFetchBookmarks } from "./hooks/useFetchBookmarks";
+import { FirebaseError } from "firebase/app";
+import { Dropdown } from "antd";
 
 interface IPostButtonsProps {
   postId: string;
@@ -29,8 +34,10 @@ export const PostButtons = ({
   writerId,
   postContent,
 }: IPostButtonsProps) => {
+  const user = auth.currentUser;
   const { fetchBookmarks } = useFetchBookmarks();
   const [bookmarked, setBookmarked] = useState(false);
+  const [deleteDocId, setDelDocId] = useState("");
 
   const fetching = (bookmarks: string[]) => {
     for (const i in bookmarks) {
@@ -50,7 +57,6 @@ export const PostButtons = ({
       setBookmarked((prev) => !prev);
 
       // 유저 북마크 목록에 추가
-      const user = auth.currentUser;
       const userRef = doc(db, "users", user?.uid as string);
       await setDoc(
         userRef,
@@ -83,24 +89,53 @@ export const PostButtons = ({
       }
     };
 
+  const onClickDelete = (postId: string) => async () => {
+    try {
+      const docRef = doc(db, "posts", postId);
+      await deleteDoc(docRef);
+    } catch (error) {
+      if (error instanceof FirebaseError) console.log(error);
+    }
+  };
+  const onClickDelDocId = (postId: string) => () => {
+    setDelDocId(postId);
+  };
+  const items = [
+    {
+      label: <span onClick={onClickDelete(deleteDocId)}>글 삭제</span>,
+      key: "1",
+      icon: <FontAwesomeIcon icon={faTrash} />,
+    },
+  ];
+
   return (
-    <S.PostButtonWrapper>
-      <S.Icon>
-        <FontAwesomeIcon icon={faComment} />
-      </S.Icon>
-      <S.Icon>
-        <FontAwesomeIcon icon={faHeart} />
-      </S.Icon>
-      <S.Icon onClick={onClickBookmark(postId, writerId, postContent)}>
-        {bookmarked ? (
-          <FontAwesomeIcon icon={faBookmarkSolid} />
-        ) : (
-          <FontAwesomeIcon icon={faBookmark} />
-        )}
-      </S.Icon>
-      <S.Icon>
-        <FontAwesomeIcon icon={faEllipsis} />
-      </S.Icon>
-    </S.PostButtonWrapper>
+    <>
+      <S.PostButtonWrapper>
+        <S.Icon>
+          <FontAwesomeIcon icon={faComment} />
+        </S.Icon>
+        <S.Icon>
+          <FontAwesomeIcon icon={faHeart} />
+        </S.Icon>
+        <S.Icon onClick={onClickBookmark(postId, writerId, postContent)}>
+          {bookmarked ? (
+            <FontAwesomeIcon icon={faBookmarkSolid} />
+          ) : (
+            <FontAwesomeIcon icon={faBookmark} />
+          )}
+        </S.Icon>
+        {user?.uid === writerId ? (
+          <Dropdown
+            menu={{ items }}
+            trigger={["click"]}
+            placement="bottomRight"
+          >
+            <S.Icon onClick={onClickDelDocId(postId)}>
+              <FontAwesomeIcon icon={faEllipsis} />
+            </S.Icon>
+          </Dropdown>
+        ) : null}
+      </S.PostButtonWrapper>
+    </>
   );
 };
