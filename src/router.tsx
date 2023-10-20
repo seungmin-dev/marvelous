@@ -19,6 +19,8 @@ import Notifications from "./pages/notifications";
 import Settings from "./pages/settings";
 import Bookmarks from "./pages/bookmarks";
 import Hashtaging from "./pages/hashtaging";
+import Profile from "./pages/profile";
+import NotFound from "./pages/not-found";
 
 library.add(faHouse, faHashtag, faGlasses, faBell, faGear, faBookmark);
 interface RouterElement {
@@ -106,6 +108,14 @@ const routerData: RouterElement[] = [
     element: <Hashtaging />,
     withAuth: true,
   },
+  {
+    id: 7,
+    path: "/profile",
+    label: "Profile",
+    icon: <FontAwesomeIcon icon={faBookmark} />,
+    element: <Profile />,
+    withAuth: true,
+  },
 ];
 
 export const routers = createBrowserRouter(
@@ -118,6 +128,7 @@ export const routers = createBrowserRouter(
             <Layout>{router.element}</Layout>
           </ProtectedRoute>
         ),
+        errorElement: <NotFound />,
       };
     } else {
       return {
