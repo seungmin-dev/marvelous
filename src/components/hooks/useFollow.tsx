@@ -11,6 +11,16 @@ import { FirebaseError } from "firebase/app";
 import { Modal } from "antd";
 import { useState } from "react";
 
+export interface Following {
+  username: string;
+  userId: string;
+}
+interface FollowInProfileProps {
+  followings: Following[];
+  setFollowings: React.Dispatch<React.SetStateAction<Following[]>>;
+  objectUserId: string;
+}
+
 export const useFollow = () => {
   const user = auth.currentUser;
   const [following, setFollowing] = useState(false);
@@ -45,5 +55,25 @@ export const useFollow = () => {
     if (result.following.includes(objectUserId)) setFollowing(true);
   };
 
-  return { following, onClickFollow, fetchFollowYn };
+  const onClickFollowInProfile =
+    ({ followings, objectUserId, setFollowings }: FollowInProfileProps) =>
+    async () => {
+      const filteredList = followings.filter(
+        (following) => following.userId !== objectUserId
+      );
+      setFollowings(filteredList);
+
+      const userRef = doc(db, "users", user?.uid as string);
+      await setDoc(
+        userRef,
+        {
+          userId: user?.uid,
+          username: user?.displayName,
+          follow: arrayRemove(objectUserId),
+        },
+        { merge: true }
+      );
+    };
+
+  return { following, onClickFollow, fetchFollowYn, onClickFollowInProfile };
 };

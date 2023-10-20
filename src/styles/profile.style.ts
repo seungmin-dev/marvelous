@@ -46,6 +46,9 @@ export const UserHeader = styled.div`
 export const UserProfilePic = styled.img`
   height: 100%;
   aspect-ratio: 1/1;
+  box-sizing: border-box;
+  border-radius: 100%;
+  border: 1px solid black;
 `;
 export const UserName = styled.h2`
   font-size: 30px;
@@ -71,4 +74,35 @@ export const PostList = styled.div`
   width: 100%;
   box-sizing: border-box;
   padding: 10px 20px;
+`;
+export const FollowItem = styled.div`
+  width: 100%;
+  height: 100px;
+  padding: 20px 0;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  border-bottom: ${({ theme }) => `1px solid ${theme.grayColor}`};
+`;
+export const FollowingUserImg = styled.img`
+  height: 100%;
+  aspect-ratio: 1/1;
+  border-radius: 100%;
+  box-sizing: border-box;
+  border: 1px solid black;
+`;
+export const FollowingUserName = styled.span`
+  font-size: 18px;
+  flex-grow: 1;
+`;
+export const FollowingButton = styled.span`
+  cursor: pointer;
+  padding: 10px 20px;
+  background-color: ${({ theme }) => theme.activeColor};
+  border-radius: 10px;
+  color: ${({ theme }) => theme.revertedColor};
+  font-weight: bold;
+  :hover {
+    background-color: ${({ theme }) => theme.inActiveColor};
+  }
 `;
