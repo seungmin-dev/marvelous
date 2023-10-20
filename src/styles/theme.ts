@@ -2,8 +2,9 @@ export const theme = {
   light: {
     textColor: "black",
     backgroundColor: "white",
-    activeColor: "#ef151c",
     grayColor: "#dfdfdf",
+    activeColor: "#ef151e",
+    inActiveColor: "#ba1116",
     revertedColor: "white",
     alert: {
       bookmark: "#f0ffe0",
@@ -14,8 +15,9 @@ export const theme = {
   dark: {
     textColor: "white",
     backgroundColor: "#242322",
-    activeColor: "#ef151c",
     grayColor: "#525252",
+    activeColor: "#ef151e",
+    inActiveColor: "#ba1116",
     revertedColor: "black",
     alert: {
       bookmark: "#687d51",

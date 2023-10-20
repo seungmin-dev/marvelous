@@ -42,6 +42,19 @@ export const PostCreatedAt = styled.span`
 export const PostContent = styled.p`
   padding: 10px 0;
 `;
+export const Textarea = styled.textarea`
+  width: 100%;
+  height: 100px;
+  resize: none;
+  border: 1px solid #bdbdbd;
+  font-size: 16px;
+  padding: 20px;
+  border-radius: 10px;
+  margin: 10px 0;
+  ::placeholder {
+    color: #bdbdbd;
+  }
+`;
 export const PostImgWrapper = styled.div`
   width: 100%;
   aspect-ratio: ${(props: imgWrapperProps) =>

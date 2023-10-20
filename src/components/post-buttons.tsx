@@ -6,6 +6,7 @@ import {
 } from "@fortawesome/free-regular-svg-icons";
 import {
   faBookmark as faBookmarkSolid,
+  faPenToSquare,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -30,17 +31,19 @@ interface IPostButtonsProps {
   postId: string;
   writerId: string;
   postContent: string;
+  setEdit: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const PostButtons = ({
   postId,
   writerId,
   postContent,
+  setEdit,
 }: IPostButtonsProps) => {
   const user = auth.currentUser;
   const { fetchBookmarks } = useFetchBookmarks();
   const [bookmarked, setBookmarked] = useState(false);
-  const [deleteDocId, setDelDocId] = useState("");
+  const [pickedId, setPickedId] = useState("");
 
   const { modalOpen, onClickOpenModal } = useModal();
   const { contextHolder, openNotification } = useNoti();
@@ -116,13 +119,26 @@ export const PostButtons = ({
     }
   };
   const onClickDelDocId = (postId: string) => () => {
-    setDelDocId(postId);
+    setPickedId(postId);
   };
+  const onClickEdit = () => {
+    setEdit(true);
+  };
+
   const items = [
     {
-      label: <span onClick={onClickOpenModal}>글 삭제</span>,
+      label: <span onClick={onClickEdit}>글 수정</span>,
       key: "1",
-      icon: <FontAwesomeIcon icon={faTrash} />,
+      icon: <FontAwesomeIcon icon={faPenToSquare} />,
+    },
+    {
+      label: (
+        <span onClick={onClickOpenModal} style={{ color: "#ef151e" }}>
+          글 삭제
+        </span>
+      ),
+      key: "2",
+      icon: <FontAwesomeIcon icon={faTrash} style={{ color: "#ef151e" }} />,
     },
   ];
 
@@ -156,7 +172,7 @@ export const PostButtons = ({
         ) : null}
         <ModalUI
           modalOpen={modalOpen}
-          onOkFn={onClickDelete(deleteDocId)}
+          onOkFn={onClickDelete(pickedId)}
           onCancelFn={onClickOpenModal}
           title="글을 정말로 삭제할까요? 😲"
         />

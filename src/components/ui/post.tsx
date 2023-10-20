@@ -2,20 +2,77 @@ import * as S from "../../styles/post-list.style";
 import { timeAgo } from "../../commons/time-ago";
 import { PostButtons } from "../post-buttons";
 import type { Post } from "../../types/type";
+import { useEffect, useRef, useState } from "react";
+import { ButtonUI2 } from "./button-ui-2";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../../../firebase";
+import { FirebaseError } from "firebase/app";
+import { Modal } from "antd";
+import { useNoti } from "../hooks/useNoti";
 
 interface IPostUI {
   post: Post;
 }
 
 export const PostUI = ({ post }: IPostUI) => {
+  const [edit, setEdit] = useState(false);
+  const [originContent, setOriginContent] = useState("");
+  const [edittedContent, setContent] = useState("");
+  const [loading, setLoading] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const onChangeText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setContent(e.currentTarget.value);
+  };
+  const { contextHolder, openNotification } = useNoti();
+
+  const onSubmitEdit = (postId: string) => async () => {
+    if (textareaRef.current?.value === "") return;
+    setLoading(true);
+    try {
+      const docRef = doc(db, "posts", postId);
+      await updateDoc(docRef, { post: textareaRef.current?.value });
+
+      openNotification("글 수정");
+    } catch (error) {
+      if (error instanceof FirebaseError)
+        Modal.error({ content: "글 수정에 실패했어요 🤥" });
+    } finally {
+      setLoading(false);
+      setEdit(false);
+    }
+  };
+  useEffect(() => {
+    setOriginContent(textareaRef.current?.value as string);
+  }, [edit]);
+
   return (
     <S.Post key={post.id}>
+      {contextHolder}
       <S.PostHeader>
         <S.PostProfileImg src={post.userphoto} />
         <S.PostUsername>{post.username}</S.PostUsername>
-        <S.PostCreatedAt>{timeAgo(post.createdAt)}</S.PostCreatedAt>
+        {edit ? (
+          <ButtonUI2
+            text={loading ? "Loading" : "Save"}
+            type="button"
+            onComplete={
+              edittedContent !== "" || originContent === edittedContent
+            }
+            onClick={onSubmitEdit(post.id)}
+          />
+        ) : (
+          <S.PostCreatedAt>{timeAgo(post.createdAt)}</S.PostCreatedAt>
+        )}
       </S.PostHeader>
-      <S.PostContent>{post.post}</S.PostContent>
+      {!edit ? (
+        <S.PostContent>{post.post}</S.PostContent>
+      ) : (
+        <S.Textarea
+          defaultValue={post.post}
+          onChange={onChangeText}
+          ref={textareaRef}
+        />
+      )}
       {post.photo ? (
         <S.PostImgWrapper length={post.photo && post.photo.length}>
           {post.photo &&
@@ -29,11 +86,14 @@ export const PostUI = ({ post }: IPostUI) => {
             ))}
         </S.PostImgWrapper>
       ) : null}
-      <PostButtons
-        postId={post.id}
-        writerId={post.userId}
-        postContent={post.post}
-      />
+      {!edit ? (
+        <PostButtons
+          postId={post.id}
+          writerId={post.userId}
+          postContent={post.post}
+          setEdit={setEdit}
+        />
+      ) : null}
     </S.Post>
   );
 };

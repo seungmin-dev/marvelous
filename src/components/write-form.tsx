@@ -65,6 +65,8 @@ export const WriteForm = () => {
   ): Promise<void> => {
     e.preventDefault();
 
+    if (textareaRef.current?.value.length === 0) return;
+
     const user = auth.currentUser;
     setLoading(true);
 
