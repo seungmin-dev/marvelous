@@ -57,6 +57,9 @@ export const ProfileImg = styled.img`
 export const ProfileName = styled.span`
   font-size: 22px;
   flex-grow: 1;
+  a {
+    color: ${({ theme }) => theme.textColor};
+  }
 `;
 export const Icon = styled.span`
   cursor: pointer;
