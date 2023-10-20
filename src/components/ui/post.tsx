@@ -29,7 +29,11 @@ export const PostUI = ({ post }: IPostUI) => {
             ))}
         </S.PostImgWrapper>
       ) : null}
-      <PostButtons postId={post.id as string} />
+      <PostButtons
+        postId={post.id}
+        writerId={post.userId}
+        postContent={post.post}
+      />
     </S.Post>
   );
 };

@@ -44,7 +44,7 @@ export default function Bookmarks() {
 
   return (
     <WrapperUI title="Bookmarks">
-      {posts ? (
+      {posts.length !== 0 ? (
         <S.PostWrapper>
           {posts.map((post) => (
             <PostUI post={post} />
