@@ -14,6 +14,7 @@ import { useState } from "react";
 export interface Following {
   username: string;
   userId: string;
+  userPhoto: string;
 }
 interface FollowInProfileProps {
   followings: Following[];

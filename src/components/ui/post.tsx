@@ -10,12 +10,14 @@ import { FirebaseError } from "firebase/app";
 import { Modal } from "antd";
 import { useNoti } from "../hooks/useNoti";
 import { useFollow } from "../hooks/useFollow";
+import { Link } from "react-router-dom";
 
 interface IPostUI {
   post: Post;
+  isObject?: boolean;
 }
 
-export const PostUI = ({ post }: IPostUI) => {
+export const PostUI = ({ post, isObject }: IPostUI) => {
   const user = auth.currentUser;
 
   const [edit, setEdit] = useState(false);
@@ -60,9 +62,9 @@ export const PostUI = ({ post }: IPostUI) => {
       <S.PostHeader>
         <S.PostProfileImg src={post.userphoto} />
         <S.PostUsername myDoc={user?.uid === post.userId}>
-          {post.username}
+          <Link to={`/user-profile?${post.userId}`}>{post.username}</Link>
         </S.PostUsername>
-        {user?.uid !== post.userId ? (
+        {!isObject && user?.uid !== post.userId ? (
           <S.ButtonWrapper myDoc={user?.uid === post.userId}>
             <S.Button onClick={onClickFollow(post.userId)}>
               {following ? "언팔로우" : "팔로우"}

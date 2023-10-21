@@ -21,7 +21,8 @@ export const InnerWrapper = styled.div`
 `;
 export const UserBox = styled.div`
   width: 100%;
-  height: 20vh;
+  height: ${({ isObject }: { isObject: boolean }) =>
+    isObject ? "15vh" : "20vh"};
   position: sticky;
   top: 0;
   left: 0;
@@ -39,6 +40,8 @@ export const UserBox = styled.div`
 export const UserHeader = styled.div`
   width: 100%;
   height: 65%;
+  height: ${({ isObject }: { isObject: boolean }) =>
+    isObject ? "100%" : "65%"};
   display: flex;
   align-items: center;
   gap: 20px;
@@ -52,6 +55,7 @@ export const UserProfilePic = styled.img`
 `;
 export const UserName = styled.h2`
   font-size: 30px;
+  flex-grow: 1;
 `;
 export const PostBox = styled.div`
   width: 100%;

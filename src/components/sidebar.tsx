@@ -60,7 +60,7 @@ export default function Sidebar() {
           </S.Tab>
           <S.Tab>
             {SidebarContent.map((sidebar, i) =>
-              sidebar.id > 3 && sidebar.id !== 7 ? (
+              sidebar.id > 3 && sidebar.id < 7 ? (
                 <S.Item key={i}>
                   <Link to={sidebar.path}>
                     <S.ItemLink isActive={currentPath === sidebar.path}>

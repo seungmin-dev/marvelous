@@ -3,13 +3,14 @@ import * as S from "../styles/login.style";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SignupSchema } from "../validation/yup";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth } from "../../firebase";
+import { auth, db } from "../../firebase";
 import { useRouter } from "./hooks/useRouter";
 import { FirebaseError } from "firebase/app";
 import { customErrors } from "../commons/custom-errors";
 import { FormInputUI } from "./ui/form-input";
 import { ButtonUI } from "./ui/button";
 import { useEffect, useState } from "react";
+import { doc, setDoc } from "firebase/firestore";
 
 interface SignupForm {
   email: string;
@@ -41,6 +42,14 @@ export const SignupForm = (props: ISignupFormProps) => {
           photoURL: `/src/assets/symbols/symbol${
             Math.floor(Math.random() * 21) + 1
           }.png`,
+        });
+
+        // db에 user 정보 생성
+        const userRef = doc(db, "users", user.uid);
+        await setDoc(userRef, {
+          username: user.displayName,
+          userId: user.uid,
+          userPhoto: user.photoURL,
         });
         routeTo("/");
       });

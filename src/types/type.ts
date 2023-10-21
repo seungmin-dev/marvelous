@@ -16,3 +16,11 @@ export interface InputUIProps {
   placeholder: string;
   register?: UseFormRegisterReturn;
 }
+
+export interface User {
+  username: string;
+  userId: string;
+  userPhoto: string;
+  follow?: string[];
+  bookmarks?: string[];
+}
