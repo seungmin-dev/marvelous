@@ -34,6 +34,7 @@ export const PostProfileImg = styled.img`
 `;
 export const PostUsername = styled.span`
   flex-grow: ${({ myDoc }: { myDoc: boolean }) => (myDoc ? "1" : "0")};
+  color: ${({ theme }) => theme.textColor};
 `;
 export const ButtonWrapper = styled.div`
   height: 100%;
@@ -44,7 +45,7 @@ export const Button = styled.span`
   padding: 10px 20px;
   background-color: ${({ theme }) => theme.activeColor};
   border-radius: 10px;
-  color: ${({ theme }) => theme.revertedColor};
+  color: white;
   font-weight: bold;
   :hover {
     background-color: ${({ theme }) => theme.inActiveColor};
