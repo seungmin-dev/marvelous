@@ -14,7 +14,7 @@ import { Post } from "../types/type";
 import { useFetchBookmarks } from "../components/hooks/useFetchBookmarks";
 import { useFetchPostById } from "../components/hooks/useFetchPostById";
 import { Following } from "../components/hooks/useFollow";
-import { ProfileMy } from "../components/ui/profile-my";
+import { ProfileMy } from "../components/profile-my";
 
 export default function Profile() {
   const user = auth.currentUser;
@@ -71,7 +71,7 @@ export default function Profile() {
     const result = {
       username: snapshot.data()?.username,
       userId: snapshot.data()?.userId,
-      userPhoto: snapshot.data()?.userPhoto,
+      userphoto: snapshot.data()?.userphoto,
     };
 
     return result;

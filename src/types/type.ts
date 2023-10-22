@@ -20,7 +20,7 @@ export interface InputUIProps {
 export interface User {
   username: string;
   userId: string;
-  userPhoto: string;
+  userphoto: string;
   follow?: string[];
   bookmarks?: string[];
 }

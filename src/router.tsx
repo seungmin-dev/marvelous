@@ -21,6 +21,7 @@ import Bookmarks from "./pages/bookmarks";
 import Hashtaging from "./pages/hashtaging";
 import Profile from "./pages/profile";
 import NotFound from "./pages/not-found";
+import UserProfile from "./pages/user-profile";
 
 library.add(faHouse, faHashtag, faGlasses, faBell, faGear, faBookmark);
 interface RouterElement {
@@ -114,6 +115,14 @@ const routerData: RouterElement[] = [
     label: "Profile",
     icon: <FontAwesomeIcon icon={faBookmark} />,
     element: <Profile />,
+    withAuth: true,
+  },
+  {
+    id: 8,
+    path: "/user-profile",
+    label: "Profile",
+    icon: <FontAwesomeIcon icon={faBookmark} />,
+    element: <UserProfile />,
     withAuth: true,
   },
 ];

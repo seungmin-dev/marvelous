@@ -19,6 +19,7 @@ import {
   faUserGroup,
 } from "@fortawesome/free-solid-svg-icons";
 import { BlankUI } from "../components/ui/blank";
+import { Link } from "react-router-dom";
 
 interface Alert {
   id: string;
@@ -112,10 +113,21 @@ export default function Notifications() {
                   <FontAwesomeIcon icon={faCircleXmark} />
                 </Icon>
               </AlertHeader>
-              <Content>
-                <b>{alert.personName}</b>님이 나의 글 <b>{alert.content}</b>에{" "}
-                <b>{alert.type === "bookmark" ? "북마크" : "하트"}</b>를 했어요
-              </Content>
+              {alert.type !== "follow" ? (
+                <Content>
+                  <b>{alert.personName}</b>님이 나의 글{" "}
+                  <b>{alert.content}...</b>에{" "}
+                  <b>{alert.type === "bookmark" ? "북마크" : "하트"}</b>를
+                  했어요
+                </Content>
+              ) : (
+                <Content>
+                  <Link to={`/user-profile?${alert.personId}`}>
+                    <b>{alert.personName}</b>
+                  </Link>
+                  님이 나를 <b>팔로우</b>하기 시작했어요
+                </Content>
+              )}
             </Alert>
           ))}
         </AlertList>

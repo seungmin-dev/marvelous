@@ -9,15 +9,57 @@ export const Wrapper = styled.div`
 export const ProfileBox = styled.div`
   width: inherit;
   height: 20vh;
-  background-color: red;
   box-sizing: border-box;
   @media (max-width: 800px) {
     margin-top: 80px;
   }
+  position: relative;
+`;
+export const ProfileBgEditButton = styled.label`
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+  mix-blend-mode: difference;
+  svg {
+    color: white;
+  }
+`;
+export const UserProfilePicWrapper = styled.div`
+  height: 100%;
+  aspect-ratio: 1/1;
+  box-sizing: border-box;
+  border-radius: 100%;
+  border: 1px solid black;
+  position: relative;
+`;
+export const ProfilePicEditButton = styled.label`
+  cursor: pointer;
+  position: absolute;
+  width: 25px;
+  aspect-ratio: 1/1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: ${({ theme }) => theme.revertedColor};
+  border-radius: 100%;
+  border: ${({ theme }) => `1px solid ${theme.textColor}`};
+  svg {
+    color: ${({ theme }) => theme.textColor};
+  }
+`;
+
+export const ProfileBgImg = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 `;
 export const InnerWrapper = styled.div`
   width: 100%;
   height: auto;
+  min-height: 80vh;
+  box-shadow: rgba(0, 0, 0, 0.7) 0px 5px 15px;
 `;
 export const UserBox = styled.div`
   width: 100%;
@@ -56,6 +98,12 @@ export const UserProfilePic = styled.img`
 export const UserName = styled.h2`
   font-size: 30px;
   flex-grow: 1;
+`;
+export const Icon = styled.span`
+  cursor: pointer;
+  svg {
+    width: 18px;
+  }
 `;
 export const PostBox = styled.div`
   width: 100%;

@@ -1,6 +1,7 @@
 import {
   arrayRemove,
   arrayUnion,
+  deleteDoc,
   doc,
   getDoc,
   setDoc,
@@ -14,7 +15,7 @@ import { useState } from "react";
 export interface Following {
   username: string;
   userId: string;
-  userPhoto: string;
+  userphoto: string;
 }
 interface FollowInProfileProps {
   followings: Following[];
@@ -40,6 +41,22 @@ export const useFollow = () => {
         },
         { merge: true }
       );
+
+      // 팔로우한 대상에게 알림 보내기
+      const followRef = doc(db, "alerts", `${user?.uid}-${objectId}`);
+
+      if (!following) {
+        await setDoc(doc(db, "alerts", `${user?.uid}-${objectId}`), {
+          userId: objectId,
+          personId: user?.uid,
+          personName: user?.displayName,
+          type: "follow",
+          createdAt: Date.now(),
+        });
+      } else {
+        await deleteDoc(followRef);
+      }
+
       openNotification(following ? "언팔로우" : "팔로우");
     } catch (error) {
       setFollowing((prev) => !prev);

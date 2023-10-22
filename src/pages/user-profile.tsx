@@ -71,7 +71,7 @@ export default function UserProfile() {
       <S.InnerWrapper>
         <S.UserBox isObject>
           <S.UserHeader isObject>
-            <S.UserProfilePic src={objectUserInfo?.userPhoto as string} />
+            <S.UserProfilePic src={objectUserInfo?.userphoto as string} />
             <S.UserName>{objectUserInfo?.username}</S.UserName>
             <S.FollowingButton onClick={onClickFollow(objectUserId)}>
               {following ? "언팔로우" : "팔로우"}

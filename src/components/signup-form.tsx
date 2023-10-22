@@ -49,7 +49,7 @@ export const SignupForm = (props: ISignupFormProps) => {
         await setDoc(userRef, {
           username: user.displayName,
           userId: user.uid,
-          userPhoto: user.photoURL,
+          userphoto: user.photoURL,
         });
         routeTo("/");
       });
