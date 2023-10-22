@@ -62,7 +62,15 @@ export const PostUI = ({ post, isObject }: IPostUI) => {
       <S.PostHeader>
         <S.PostProfileImg src={post.userphoto} />
         <S.PostUsername myDoc={user?.uid === post.userId}>
-          <Link to={`/user-profile?${post.userId}`}>{post.username}</Link>
+          <Link
+            to={
+              post.userId === user?.uid
+                ? "/profile"
+                : `/user-profile?${post.userId}`
+            }
+          >
+            {post.username}
+          </Link>
         </S.PostUsername>
         {!isObject && user?.uid !== post.userId ? (
           <S.ButtonWrapper myDoc={user?.uid === post.userId}>
@@ -109,6 +117,7 @@ export const PostUI = ({ post, isObject }: IPostUI) => {
       {!edit ? (
         <PostButtons
           postId={post.id}
+          heartedNum={post.heartedNum ? post.heartedNum : 0}
           writerId={post.userId}
           postContent={post.post}
           setEdit={setEdit}

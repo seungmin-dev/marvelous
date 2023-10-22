@@ -8,6 +8,7 @@ export interface Post {
   userId: string;
   username: string;
   userphoto: string;
+  heartedNum: number;
 }
 
 export interface InputUIProps {

@@ -47,8 +47,16 @@ export default function UserProfile() {
     );
     const snapshot = await getDocs(postQuery);
     const posts = snapshot.docs.map((doc) => {
-      const { post, photo, createdAt, userId, username, userphoto, userBgImg } =
-        doc.data();
+      const {
+        post,
+        photo,
+        createdAt,
+        userId,
+        username,
+        userphoto,
+        userBgImg,
+        heartedNum,
+      } = doc.data();
       return {
         post,
         photo,
@@ -57,6 +65,7 @@ export default function UserProfile() {
         username,
         userphoto,
         userBgImg,
+        heartedNum,
         id: doc.id,
       };
     });

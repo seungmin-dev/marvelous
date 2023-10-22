@@ -102,4 +102,10 @@ export const PostButtonWrapper = styled.div`
 export const Icon = styled.span`
   cursor: pointer;
   font-size: 20px;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+`;
+export const HeartNum = styled.span`
+  font-size: 16px;
 `;

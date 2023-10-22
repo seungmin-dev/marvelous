@@ -2,7 +2,7 @@ import * as S from "../styles/bookmarks.style";
 import { useEffect, useState } from "react";
 import { Post } from "../types/type";
 import { PostUI } from "../components/ui/post";
-import { useFetchBookmarks } from "../components/hooks/useFetchBookmarks";
+import { useFetchPostInfo } from "../components/hooks/useFetchPostInfo";
 import { WrapperUI } from "../components/ui/wrapper";
 import { useFetchPostById } from "../components/hooks/useFetchPostById";
 import { BlankUI } from "../components/ui/blank";
@@ -11,7 +11,7 @@ import { auth, db } from "../../firebase";
 
 export default function Bookmarks() {
   const [posts, setPosts] = useState<Post[]>([]);
-  const { fetchBookmarks } = useFetchBookmarks();
+  const { fetchBookmarks } = useFetchPostInfo();
   const { fetchPostById } = useFetchPostById();
   const user = auth.currentUser;
 
