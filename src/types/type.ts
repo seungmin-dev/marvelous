@@ -21,6 +21,7 @@ export interface User {
   username: string;
   userId: string;
   userphoto: string;
+  userBgImg: string;
   follow?: string[];
   bookmarks?: string[];
 }
