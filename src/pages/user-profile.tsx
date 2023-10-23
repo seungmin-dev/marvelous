@@ -78,7 +78,13 @@ export default function UserProfile() {
   return (
     <S.Wrapper>
       <S.ProfileBox>
-        <S.ProfileBgImg src={objectUserInfo?.userBgImg} />
+        <S.ProfileBgImg
+          src={
+            objectUserInfo?.userBgImg
+              ? objectUserInfo?.userBgImg
+              : "/src/assets/emptyBgImg.png"
+          }
+        />
       </S.ProfileBox>
       <S.InnerWrapper>
         <S.UserBox isObject>
