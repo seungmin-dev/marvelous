@@ -1,7 +1,10 @@
 import {
+  Unsubscribe,
   collection,
   doc,
   getDocs,
+  onSnapshot,
+  orderBy,
   query,
   updateDoc,
   where,
@@ -45,7 +48,8 @@ export const Comment = () => {
   const fetchComments = async () => {
     const commentQuery = query(
       collection(db, "comments"),
-      where("postId", "==", location.state.postId)
+      where("postId", "==", location.state.postId),
+      orderBy("createdAt", "desc")
     );
     const snapshot = await getDocs(commentQuery);
     const comments = snapshot.docs.map((doc) => {
@@ -99,7 +103,51 @@ export const Comment = () => {
   };
 
   useEffect(() => {
-    fetchComments();
+    let unsubscribe: Unsubscribe | null = null;
+    const fetchPosts = async (): Promise<void> => {
+      const commentQuery = query(
+        collection(db, "comments"),
+        where("postId", "==", location.state.postId),
+        orderBy("createdAt", "desc")
+      );
+      unsubscribe = await onSnapshot(commentQuery, (snapshot) => {
+        const comments = snapshot.docs.map((doc) => {
+          const {
+            postId,
+            writerId,
+            writerName,
+            commentWriterId,
+            commentWriterName,
+            commentWriterPhoto,
+            comment,
+            photo,
+            heartedNum,
+            commentNum,
+            createdAt,
+          } = doc.data();
+
+          return {
+            postId,
+            writerId,
+            writerName,
+            userId: commentWriterId,
+            username: commentWriterName,
+            userphoto: commentWriterPhoto,
+            post: comment,
+            photo,
+            heartedNum,
+            commentNum,
+            createdAt,
+            id: doc.id,
+          };
+        });
+        setComments(comments);
+      });
+    };
+    fetchPosts();
+    return () => {
+      unsubscribe && unsubscribe();
+    };
   }, []);
 
   useEffect(() => {

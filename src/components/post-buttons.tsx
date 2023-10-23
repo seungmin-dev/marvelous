@@ -136,7 +136,6 @@ export const PostButtons = ({
         });
         // 알림 삭제
         await deleteDoc(doc(db, "alerts", postId));
-        window.location.reload();
       }
     } catch (error) {
       if (error instanceof FirebaseError)
