@@ -232,11 +232,11 @@ export const ProfileMy = ({
                 followings.map((following) => (
                   <S.FollowItem>
                     <S.FollowingUserImg src={following.userphoto} />
-                    <S.FollowingUserName>
-                      <Link to={`/user-profile?${following.userId}`}>
+                    <Link to={`/user-profile?${following.userId}`}>
+                      <S.FollowingUserName>
                         {following.username}
-                      </Link>
-                    </S.FollowingUserName>
+                      </S.FollowingUserName>
+                    </Link>
                     <S.FollowingButton
                       onClick={onClickFollowInProfile({
                         followings,

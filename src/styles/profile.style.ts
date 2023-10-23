@@ -146,13 +146,14 @@ export const FollowingUserImg = styled.img`
 export const FollowingUserName = styled.span`
   font-size: 18px;
   flex-grow: 1;
+  color: ${({ theme }) => theme.textColor};
 `;
 export const FollowingButton = styled.span`
   cursor: pointer;
   padding: 10px 20px;
   background-color: ${({ theme }) => theme.activeColor};
   border-radius: 10px;
-  color: ${({ theme }) => theme.revertedColor};
+  color: white;
   font-weight: bold;
   :hover {
     background-color: ${({ theme }) => theme.inActiveColor};

@@ -113,17 +113,17 @@ export const Comment = () => {
         <S.CommentBox key={comment.id}>
           <S.PostHeader>
             <S.PostProfileImg src={comment.userphoto} />
-            <S.PostUsername myDoc={user?.uid === comment.userId}>
-              <Link
-                to={
-                  comment.userId === user?.uid
-                    ? "/profile"
-                    : `/user-profile?${comment.userId}`
-                }
-              >
+            <Link
+              to={
+                comment.userId === user?.uid
+                  ? "/profile"
+                  : `/user-profile?${comment.userId}`
+              }
+            >
+              <S.PostUsername myDoc={user?.uid === comment.userId}>
                 {comment.username}
-              </Link>
-            </S.PostUsername>
+              </S.PostUsername>
+            </Link>
             {user?.uid !== comment.userId ? (
               <S.ButtonWrapper myDoc={user?.uid === comment.userId}>
                 <S.Button onClick={onClickFollow(comment.userId)}>

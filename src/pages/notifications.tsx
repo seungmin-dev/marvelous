@@ -68,7 +68,12 @@ const Icon = styled.span`
     width: 20px;
   }
 `;
-const Content = styled.p``;
+const Content = styled.p`
+  color: ${({ theme }) => theme.textColor};
+`;
+const Text = styled.span`
+  color: ${({ theme }) => theme.textColor};
+`;
 
 export default function Notifications() {
   const [alerts, setAlerts] = useState<Alert[]>([]);
@@ -124,29 +129,39 @@ export default function Notifications() {
               {alert.type === "follow" ? (
                 <Content>
                   <Link to={`/user-profile?${alert.personId}`}>
-                    <b>{alert.personName}</b>
+                    <Text>
+                      <b>{alert.personName}</b>
+                    </Text>
                   </Link>
                   님이 나를 <b>팔로우</b>하기 시작했어요
                 </Content>
               ) : alert.type === "comment" ? (
                 <Content>
                   <Link to={`/user-profile?${alert.personId}`}>
-                    <b>{alert.personName}</b>
+                    <Text>
+                      <b>{alert.personName}</b>
+                    </Text>
                   </Link>
                   님이 나의 글{" "}
                   <Link to={`/post?${alert.id}`}>
-                    <b>{alert.content}...</b>
+                    <Text>
+                      <b>{alert.content}...</b>
+                    </Text>
                   </Link>
                   에 <b>댓글</b>을 달았어요
                 </Content>
               ) : (
                 <Content>
                   <Link to={`/user-profile?${alert.personId}`}>
-                    <b>{alert.personName}</b>
+                    <Text>
+                      <b>{alert.personName}</b>
+                    </Text>
                   </Link>
                   님이 나의 글{" "}
                   <Link to={`/post?${alert.id}`}>
-                    <b>{alert.content}...</b>
+                    <Text>
+                      <b>{alert.content}...</b>
+                    </Text>
                   </Link>
                   에 <b>{alert.type === "bookmark" ? "북마크" : "하트"}</b>를
                   했어요
