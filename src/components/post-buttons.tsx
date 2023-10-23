@@ -60,7 +60,7 @@ export const PostButtons = ({
   const [heartNum, setHeartNum] = useState(0);
 
   const { fetchBookmarks, fetchHearts } = useFetchPostInfo();
-  const { modalOpen, setModalOpen, onClickOpenModal } = useModal();
+  const { modalOpen, onClickOpenModal } = useModal();
   const { contextHolder, openNotification } = useNoti();
   const navigate = useNavigate();
 
@@ -99,7 +99,7 @@ export const PostButtons = ({
         const writerRef = doc(
           db,
           "alerts",
-          `${user?.uid}-${bookmarkId}-bookmark`
+          `${bookmarkId}-${user?.uid}-bookmark`
         );
 
         if (!bookmarked) {
@@ -135,16 +135,13 @@ export const PostButtons = ({
           commentNum: increment(-1),
         });
         // 알림 삭제
-        await deleteDoc(
-          doc(db, "alerts", `${user?.uid}-${postId.split("-")[0]}-comment`)
-        );
+        await deleteDoc(doc(db, "alerts", postId));
         window.location.reload();
       }
     } catch (error) {
       if (error instanceof FirebaseError)
         Modal.error({ content: "글 삭제에 실패했어요 😥" });
     } finally {
-      setModalOpen(false);
       if (!isComment) openNotification("글 삭제");
     }
   };
@@ -182,7 +179,7 @@ export const PostButtons = ({
         // 글 작성자에게 알림
         if (user?.uid === writerId) return;
 
-        const alertRef = doc(db, "alerts", `${user?.uid}-${postId}-heart`);
+        const alertRef = doc(db, "alerts", `${postId}-${user?.uid}-heart`);
         if (!hearted) {
           await setDoc(alertRef, {
             userId: writerId,
@@ -204,7 +201,13 @@ export const PostButtons = ({
 
   const onClickComment = () => {
     navigate("/comment", {
-      state: { postId, writerId, writerName, commentNum },
+      state: {
+        postId,
+        writerId,
+        writerName,
+        originContent: postContent,
+        commentNum,
+      },
     });
   };
 

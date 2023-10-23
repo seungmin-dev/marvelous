@@ -143,7 +143,7 @@ export default function Notifications() {
                     </Text>
                   </Link>
                   님이 나의 글{" "}
-                  <Link to={`/post?${alert.id}`}>
+                  <Link to={`/post`} state={{ postId: alert.id.split("-")[0] }}>
                     <Text>
                       <b>{alert.content}...</b>
                     </Text>
@@ -158,7 +158,7 @@ export default function Notifications() {
                     </Text>
                   </Link>
                   님이 나의 글{" "}
-                  <Link to={`/post?${alert.id}`}>
+                  <Link to={`/post`} state={{ postId: alert.id.split("-")[0] }}>
                     <Text>
                       <b>{alert.content}...</b>
                     </Text>

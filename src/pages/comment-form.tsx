@@ -129,14 +129,14 @@ export default function CommentForm() {
         const alertRef = doc(
           db,
           "alerts",
-          `${user?.uid}-${commentInfo.postId}-comment`
+          `${commentInfo.postId}-${user?.uid}-comment-${uuidv4()}`
         );
         await setDoc(alertRef, {
           userId: commentInfo.writerId,
           personId: user?.uid,
           personName: user?.displayName,
           type: "comment",
-          content: textareaRef.current?.value.slice(0, 10),
+          content: location.state.originContent.slice(0, 10),
           createdAt: Date.now(),
         });
       }

@@ -70,7 +70,8 @@ export const useFollow = () => {
     const snapshot = await getDoc(ref);
     const result = { following: snapshot.data()?.follow };
 
-    if (result.following.includes(objectUserId)) setFollowing(true);
+    if (result.following && result.following.includes(objectUserId))
+      setFollowing(true);
   };
 
   const onClickFollowInProfile =

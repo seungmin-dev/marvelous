@@ -17,6 +17,7 @@ export const useFetchPostById = () => {
       commentNum: docSnap.data()?.commentNum,
       id,
     };
+
     return data;
   };
 
