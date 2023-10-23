@@ -9,6 +9,7 @@ export interface Post {
   username: string;
   userphoto: string;
   heartedNum: number;
+  commentNum: number;
 }
 
 export interface InputUIProps {

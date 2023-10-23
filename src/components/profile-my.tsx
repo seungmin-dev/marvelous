@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { auth, db, storage } from "../../firebase";
 import * as S from "../styles/profile.style";
 import { BlankUI } from "./ui/blank";
-import { PostUI } from "./ui/post";
+import { PostUI } from "./ui/post-ui";
 import { Following, useFollow } from "./hooks/useFollow";
 import { Post } from "../types/type";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

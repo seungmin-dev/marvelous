@@ -38,7 +38,7 @@ export const WrapperUI = ({
           <Title>{title}</Title>
         </TitleWrapper>
       ) : null}
-      <InnerWrapper>{children}</InnerWrapper>
+      {children}
     </Wrapper>
   );
 };

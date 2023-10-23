@@ -22,6 +22,8 @@ import Hashtaging from "./pages/hashtaging";
 import Profile from "./pages/profile";
 import NotFound from "./pages/not-found";
 import UserProfile from "./pages/user-profile";
+import Post from "./pages/post";
+import CommentForm from "./pages/comment-form";
 
 library.add(faHouse, faHashtag, faGlasses, faBell, faGear, faBookmark);
 interface RouterElement {
@@ -113,7 +115,6 @@ const routerData: RouterElement[] = [
     id: 7,
     path: "/profile",
     label: "Profile",
-    icon: <FontAwesomeIcon icon={faBookmark} />,
     element: <Profile />,
     withAuth: true,
   },
@@ -121,8 +122,21 @@ const routerData: RouterElement[] = [
     id: 8,
     path: "/user-profile",
     label: "Profile",
-    icon: <FontAwesomeIcon icon={faBookmark} />,
     element: <UserProfile />,
+    withAuth: true,
+  },
+  {
+    id: 9,
+    path: "/comment",
+    label: "Comment",
+    element: <CommentForm />,
+    withAuth: true,
+  },
+  {
+    id: 10,
+    path: "/post",
+    label: "Post",
+    element: <Post />,
     withAuth: true,
   },
 ];

@@ -10,6 +10,7 @@ export const theme = {
       bookmark: "#f0ffe0",
       heart: "#ffedf3",
       follow: "#e8f8fc",
+      comment: "#ece0ff",
     },
   },
   dark: {
@@ -23,6 +24,7 @@ export const theme = {
       bookmark: "#687d51",
       heart: "#b37489",
       follow: "#79a2ad",
+      comment: "#aa99c7",
     },
   },
 };

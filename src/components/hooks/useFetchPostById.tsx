@@ -14,9 +14,9 @@ export const useFetchPostById = () => {
       username: docSnap.data()?.username,
       userphoto: docSnap.data()?.userphoto,
       heartedNum: docSnap.data()?.heartedNum,
+      commentNum: docSnap.data()?.commentNum,
       id,
     };
-
     return data;
   };
 

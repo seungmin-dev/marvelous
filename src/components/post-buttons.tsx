@@ -18,6 +18,7 @@ import {
   arrayUnion,
   deleteDoc,
   doc,
+  increment,
   setDoc,
   updateDoc,
 } from "firebase/firestore";
@@ -28,31 +29,40 @@ import { Dropdown, Modal } from "antd";
 import { useModal } from "./hooks/useModal";
 import { ModalUI } from "./ui/modal-ui";
 import { useNoti } from "./hooks/useNoti";
+import { useNavigate } from "react-router-dom";
 
 interface IPostButtonsProps {
   postId: string;
   heartedNum: number;
+  commentNum?: number;
   writerId: string;
+  writerName: string;
   postContent: string;
   setEdit: React.Dispatch<React.SetStateAction<boolean>>;
+  isComment?: boolean;
 }
 
 export const PostButtons = ({
   postId,
   heartedNum,
+  commentNum,
   writerId,
+  writerName,
   postContent,
   setEdit,
+  isComment = false,
 }: IPostButtonsProps) => {
   const user = auth.currentUser;
-  const { fetchBookmarks, fetchHearts } = useFetchPostInfo();
+  const [commentsNum, setCommentsNum] = useState(0);
   const [bookmarked, setBookmarked] = useState(false);
   const [pickedId, setPickedId] = useState("");
   const [hearted, setHearted] = useState(false);
   const [heartNum, setHeartNum] = useState(0);
 
-  const { modalOpen, onClickOpenModal } = useModal();
+  const { fetchBookmarks, fetchHearts } = useFetchPostInfo();
+  const { modalOpen, setModalOpen, onClickOpenModal } = useModal();
   const { contextHolder, openNotification } = useNoti();
+  const navigate = useNavigate();
 
   const fetching = (type: string, posts: string[]) => {
     for (const i in posts) {
@@ -62,11 +72,6 @@ export const PostButtons = ({
       }
     }
   };
-
-  useEffect(() => {
-    fetchBookmarks().then((bookmarks) => fetching("bookmark", bookmarks));
-    fetchHearts().then((heartedNum) => fetching("heart", heartedNum));
-  }, []);
 
   const onClickBookmark =
     (bookmarkId: string, writerId: string, postContent: string) => async () => {
@@ -119,14 +124,28 @@ export const PostButtons = ({
 
   const onClickDelete = (postId: string) => async () => {
     try {
-      const docRef = doc(db, "posts", postId);
+      let docRef = doc(db, "posts", postId);
+      if (isComment) docRef = doc(db, "comments", postId);
       await deleteDoc(docRef);
+
+      // 댓글 삭제 시
+      if (isComment) {
+        // 원글 댓글 수 감소
+        await updateDoc(doc(db, "posts", postId.split("-")[0]), {
+          commentNum: increment(-1),
+        });
+        // 알림 삭제
+        await deleteDoc(
+          doc(db, "alerts", `${user?.uid}-${postId.split("-")[0]}-comment`)
+        );
+        window.location.reload();
+      }
     } catch (error) {
       if (error instanceof FirebaseError)
         Modal.error({ content: "글 삭제에 실패했어요 😥" });
     } finally {
-      onClickOpenModal();
-      openNotification("글 삭제");
+      setModalOpen(false);
+      if (!isComment) openNotification("글 삭제");
     }
   };
   const onClickDelDocId = (postId: string) => () => {
@@ -183,6 +202,12 @@ export const PostButtons = ({
       }
     };
 
+  const onClickComment = () => {
+    navigate("/comment", {
+      state: { postId, writerId, writerName, commentNum },
+    });
+  };
+
   const items = [
     {
       label: <span onClick={onClickEdit}>글 수정</span>,
@@ -201,31 +226,52 @@ export const PostButtons = ({
   ];
 
   useEffect(() => {
-    setHeartNum(heartedNum);
+    fetchBookmarks().then((bookmarks) => fetching("bookmark", bookmarks));
+    fetchHearts().then((heartedNum) => fetching("heart", heartedNum));
+
+    // 원글일 때에만 댓글 수, 하트 수 설정
+    if (!isComment) {
+      setHeartNum(heartedNum);
+      setCommentsNum(commentNum!);
+    }
   }, []);
 
   return (
     <>
       {contextHolder}
       <S.PostButtonWrapper>
-        <S.Icon>
-          <FontAwesomeIcon icon={faComment} />
-        </S.Icon>
-        <S.Icon onClick={onClickHeart(postId, heartNum, writerId, postContent)}>
-          {hearted ? (
-            <FontAwesomeIcon icon={faHeartSolid} />
-          ) : (
-            <FontAwesomeIcon icon={faHeart} />
-          )}
-          <S.HeartNum>{heartNum}</S.HeartNum>
-        </S.Icon>
-        <S.Icon onClick={onClickBookmark(postId, writerId, postContent)}>
-          {bookmarked ? (
-            <FontAwesomeIcon icon={faBookmarkSolid} />
-          ) : (
-            <FontAwesomeIcon icon={faBookmark} />
-          )}
-        </S.Icon>
+        {!isComment ? (
+          <>
+            <S.Icon onClick={onClickComment}>
+              <FontAwesomeIcon icon={faComment} />
+              <S.HeartNum>{commentsNum}</S.HeartNum>
+            </S.Icon>
+
+            <S.Icon
+              onClick={onClickHeart(postId, heartNum, writerId, postContent)}
+            >
+              {hearted ? (
+                <FontAwesomeIcon icon={faHeartSolid} />
+              ) : (
+                <FontAwesomeIcon icon={faHeart} />
+              )}
+              <S.HeartNum>{heartNum}</S.HeartNum>
+            </S.Icon>
+            <S.Icon onClick={onClickBookmark(postId, writerId, postContent)}>
+              {bookmarked ? (
+                <FontAwesomeIcon icon={faBookmarkSolid} />
+              ) : (
+                <FontAwesomeIcon icon={faBookmark} />
+              )}
+            </S.Icon>
+          </>
+        ) : (
+          <>
+            <div />
+            <div />
+            <div />
+          </>
+        )}
         {user?.uid === writerId ? (
           <Dropdown
             menu={{ items }}

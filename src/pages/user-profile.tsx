@@ -12,7 +12,7 @@ import * as S from "../styles/profile.style";
 import { useEffect, useState } from "react";
 import { Post, User } from "../types/type";
 import { useLocation } from "react-router-dom";
-import { PostUI } from "../components/ui/post";
+import { PostUI } from "../components/ui/post-ui";
 import { BlankUI } from "../components/ui/blank";
 import { useFollow } from "../components/hooks/useFollow";
 

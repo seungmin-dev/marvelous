@@ -10,7 +10,7 @@ import { FirebaseError } from "firebase/app";
 import { Modal } from "antd";
 import { useNoti } from "../hooks/useNoti";
 import { useFollow } from "../hooks/useFollow";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface IPostUI {
   post: Post;
@@ -19,6 +19,7 @@ interface IPostUI {
 
 export const PostUI = ({ post, isObject }: IPostUI) => {
   const user = auth.currentUser;
+  const navigate = useNavigate();
 
   const [edit, setEdit] = useState(false);
   const [originContent, setOriginContent] = useState("");
@@ -48,6 +49,11 @@ export const PostUI = ({ post, isObject }: IPostUI) => {
     }
   };
 
+  const onClickPost = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target !== e.currentTarget) return;
+    navigate("/post", { state: { postId: post.id } });
+  };
+
   useEffect(() => {
     setOriginContent(textareaRef.current?.value as string);
   }, [edit]);
@@ -57,7 +63,7 @@ export const PostUI = ({ post, isObject }: IPostUI) => {
   }, []);
 
   return (
-    <S.Post key={post.id}>
+    <S.Post key={post.id} onClick={onClickPost}>
       {contextHolder}
       <S.PostHeader>
         <S.PostProfileImg src={post.userphoto} />
@@ -118,7 +124,9 @@ export const PostUI = ({ post, isObject }: IPostUI) => {
         <PostButtons
           postId={post.id}
           heartedNum={post.heartedNum ? post.heartedNum : 0}
+          commentNum={post.commentNum ? post.commentNum : 0}
           writerId={post.userId}
+          writerName={post.username}
           postContent={post.post}
           setEdit={setEdit}
         />

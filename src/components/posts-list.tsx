@@ -9,7 +9,7 @@ import {
 import { db } from "../../firebase";
 import { useEffect, useState } from "react";
 import type { Post } from "../types/type";
-import { PostUI } from "./ui/post";
+import { PostUI } from "./ui/post-ui";
 import { BlankUI } from "./ui/blank";
 
 export const PostList = () => {
@@ -32,6 +32,7 @@ export const PostList = () => {
             username,
             userphoto,
             heartedNum,
+            commentNum,
           } = doc.data();
 
           return {
@@ -42,6 +43,7 @@ export const PostList = () => {
             username,
             userphoto,
             heartedNum,
+            commentNum,
             id: doc.id,
           };
         });

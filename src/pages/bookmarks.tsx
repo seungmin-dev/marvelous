@@ -1,7 +1,7 @@
 import * as S from "../styles/bookmarks.style";
 import { useEffect, useState } from "react";
 import { Post } from "../types/type";
-import { PostUI } from "../components/ui/post";
+import { PostUI } from "../components/ui/post-ui";
 import { useFetchPostInfo } from "../components/hooks/useFetchPostInfo";
 import { WrapperUI } from "../components/ui/wrapper";
 import { useFetchPostById } from "../components/hooks/useFetchPostById";

@@ -1,17 +1,14 @@
 import styled from "@emotion/styled";
 
-export const ListWrapper = styled.div`
+export const CommentWrapper = styled.div`
   width: 100%;
-  height: 80vh;
+  height: auto;
   display: flex;
-  box-sizing: border-box;
-  padding: 10px 20px;
-  flex-direction: column;
   gap: 10px;
-  overflow-y: scroll;
+  flex-wrap: wrap;
+  box-sizing: border-box;
 `;
-export const Post = styled.div`
-  cursor: pointer;
+export const CommentBox = styled.div`
   width: 100%;
   height: auto;
   padding: 20px 10px;
@@ -56,7 +53,7 @@ export const PostCreatedAt = styled.span`
   font-size: 14px;
   color: #bdbdbd;
 `;
-export const PostContent = styled.p`
+export const CommentPost = styled.p`
   padding: 10px 0;
 `;
 export const Textarea = styled.textarea`
@@ -74,8 +71,8 @@ export const Textarea = styled.textarea`
 `;
 export const PostImgWrapper = styled.div`
   width: 100%;
-  aspect-ratio: ${(props: imgWrapperProps) =>
-    props.length !== 2 ? "1/1" : ""};
+  aspect-ratio: ${({ length }: { length: number }) =>
+    length !== 2 ? "1/1" : ""};
   margin-bottom: 20px;
 `;
 export const PostImg = styled.img`
@@ -84,29 +81,6 @@ export const PostImg = styled.img`
   padding: 3px;
   object-fit: cover;
   border-radius: 10px;
-  width: ${(props: imgProps) =>
-    props.isLast ? (props.isEven ? "50%" : "100%") : "50%"};
-`;
-interface imgWrapperProps {
-  length: number;
-}
-interface imgProps {
-  isEven: boolean;
-  isLast: boolean;
-}
-export const PostButtonWrapper = styled.div`
-  width: 100%;
-  padding: 10px 0;
-  display: flex;
-  justify-content: space-around;
-`;
-export const Icon = styled.span`
-  cursor: pointer;
-  font-size: 20px;
-  display: flex;
-  gap: 5px;
-  align-items: center;
-`;
-export const HeartNum = styled.span`
-  font-size: 16px;
+  width: ${({ isLast, isEven }: { isLast: boolean; isEven: boolean }) =>
+    isLast ? (isEven ? "50%" : "100%") : "50%"};
 `;

@@ -8,58 +8,21 @@ import { ButtonUI2 } from "./ui/button-ui-2";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useNoti } from "./hooks/useNoti";
 import { Modal } from "antd";
+import { useFile } from "./hooks/useFile";
 
 export const WriteForm = () => {
   const [loading, setLoading] = useState(false);
   const [onComplete, setComplete] = useState(false);
-  const [fileList, setFileList] = useState<File[] | null>(null);
-  const [tempUrlList, setTempUrlList] = useState<string[]>([]);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   const { contextHolder, openNotification } = useNoti();
+  const { fileList, setFileList, tempUrlList, setTempUrlList, onChangeFiles } =
+    useFile();
 
   const onChangeTextarea = () => {
     if ((textareaRef.current?.value.length as number) > 0) setComplete(true);
   };
 
-  const onChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { files } = e.target;
-    const tempFiles: File[] = [];
-
-    // 이미 파일리스트에 이미지가 있다면
-    if (fileList && fileList !== undefined && fileList?.length > 0) {
-      fileList.forEach((file) => {
-        tempFiles.push(file);
-      });
-    }
-    if (files && files !== undefined) {
-      for (let j = 0; j < files?.length; j++) {
-        tempFiles?.push(files[j]);
-      }
-    }
-    if (tempFiles.length > 4) {
-      Modal.info({ content: "사진은 최대 4개까지 업로드할 수 있어요." });
-      tempFiles.pop();
-    }
-    for (let i = 0; i < tempFiles.length; i++) {
-      if (tempFiles[i].size > 1024 ** 2) {
-        Modal.info({ content: "이미지 파일은 1MB까지 업로드할 수 있어요" });
-        return;
-      }
-    }
-    setFileList(tempFiles);
-
-    setTempUrlList([]);
-    tempFiles!.map((file) => {
-      const fileReader = new FileReader();
-      fileReader.readAsDataURL(file);
-      fileReader.onload = (event) => {
-        if (typeof event.target?.result === "string") {
-          setTempUrlList((prev) => [...prev, event.target?.result]);
-        }
-      };
-    });
-  };
   const submitPost = async (
     e: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
@@ -124,7 +87,7 @@ export const WriteForm = () => {
           <S.FileInput
             type="file"
             multiple
-            onChange={onChangeFile}
+            onChange={onChangeFiles}
             id="file"
             accept="image/*"
           />

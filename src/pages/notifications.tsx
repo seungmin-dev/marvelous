@@ -15,6 +15,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBookmark,
   faCircleXmark,
+  faComment,
   faHeart,
   faUserGroup,
 } from "@fortawesome/free-solid-svg-icons";
@@ -25,13 +26,16 @@ interface Alert {
   id: string;
   personId: string;
   personName: string;
-  type: string;
+  type: "comment" | "bookmark" | "heart" | "follow";
   content: string;
   createdAt: number;
 }
 
 const AlertList = styled.div`
   width: 100%;
+  min-height: 30vh;
+  max-height: 90vh;
+  overflow-y: scroll;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -42,7 +46,9 @@ const Alert = styled.div`
   width: 100%;
   box-sizing: border-box;
   background-color: ${({ theme, type }: { type: string }) =>
-    type === "bookmark"
+    type === "comment"
+      ? theme.alert.comment
+      : type === "bookmark"
       ? theme.alert.bookmark
       : type === "heart"
       ? theme.alert.heart
@@ -106,26 +112,44 @@ export default function Notifications() {
                   <FontAwesomeIcon icon={faBookmark} />
                 ) : alert.type === "heart" ? (
                   <FontAwesomeIcon icon={faHeart} />
-                ) : (
+                ) : alert.type === "follow" ? (
                   <FontAwesomeIcon icon={faUserGroup} />
+                ) : (
+                  <FontAwesomeIcon icon={faComment} />
                 )}
                 <Icon onClick={onClickDelete(alert.id)}>
                   <FontAwesomeIcon icon={faCircleXmark} />
                 </Icon>
               </AlertHeader>
-              {alert.type !== "follow" ? (
+              {alert.type === "follow" ? (
                 <Content>
-                  <b>{alert.personName}</b>님이 나의 글{" "}
-                  <b>{alert.content}...</b>에{" "}
-                  <b>{alert.type === "bookmark" ? "북마크" : "하트"}</b>를
-                  했어요
+                  <Link to={`/user-profile?${alert.personId}`}>
+                    <b>{alert.personName}</b>
+                  </Link>
+                  님이 나를 <b>팔로우</b>하기 시작했어요
+                </Content>
+              ) : alert.type === "comment" ? (
+                <Content>
+                  <Link to={`/user-profile?${alert.personId}`}>
+                    <b>{alert.personName}</b>
+                  </Link>
+                  님이 나의 글{" "}
+                  <Link to={`/post?${alert.id}`}>
+                    <b>{alert.content}...</b>
+                  </Link>
+                  에 <b>댓글</b>을 달았어요
                 </Content>
               ) : (
                 <Content>
                   <Link to={`/user-profile?${alert.personId}`}>
                     <b>{alert.personName}</b>
                   </Link>
-                  님이 나를 <b>팔로우</b>하기 시작했어요
+                  님이 나의 글{" "}
+                  <Link to={`/post?${alert.id}`}>
+                    <b>{alert.content}...</b>
+                  </Link>
+                  에 <b>{alert.type === "bookmark" ? "북마크" : "하트"}</b>를
+                  했어요
                 </Content>
               )}
             </Alert>
