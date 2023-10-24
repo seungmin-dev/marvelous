@@ -7,7 +7,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { auth, db } from "../../../firebase";
-import { useNoti } from "../hooks/useNoti";
+import { useNoti } from "../../commons/hooks/useNoti";
 import { Modal } from "antd";
 import { FirebaseError } from "firebase/app";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,7 +15,7 @@ import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import * as S from "../../styles/post-list.style";
 import { useEffect, useState } from "react";
-import { useFetchPostInfo } from "../hooks/useFetchPostInfo";
+import { useFetchPostInfo } from "../../commons/hooks/useFetchPostInfo";
 
 interface HeartButtonProps {
   props: { postId: string; writerId: string; postContent: string };

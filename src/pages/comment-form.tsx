@@ -2,7 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
 import { WrapperUI } from "../components/ui/wrapper";
 import * as S from "../styles/write-form.style";
-import { useFile } from "../components/hooks/useFile";
+import { useFile } from "../commons/hooks/useFile";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ButtonUI2 } from "../components/ui/button-ui-2";
 import { faImage } from "@fortawesome/free-solid-svg-icons";
@@ -11,7 +11,7 @@ import { doc, setDoc, updateDoc } from "firebase/firestore";
 import { auth, db, storage } from "../../firebase";
 import { FirebaseError } from "firebase/app";
 import { Modal } from "antd";
-import { useNoti } from "../components/hooks/useNoti";
+import { useNoti } from "../commons/hooks/useNoti";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
 

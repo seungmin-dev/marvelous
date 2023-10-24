@@ -1,6 +1,6 @@
 import * as S from "../styles/post-list.style";
 import { useEffect, useState } from "react";
-import { useNoti } from "./hooks/useNoti";
+import { useNoti } from "../commons/hooks/useNoti";
 import { HeartButton } from "./buttons/heart-button";
 import { CommentButton } from "./buttons/comment-button";
 import { BookmarkButton } from "./buttons/bookmark-button";

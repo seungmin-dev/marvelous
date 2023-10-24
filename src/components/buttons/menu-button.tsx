@@ -18,9 +18,9 @@ import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import { faEllipsis, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { ModalUI } from "../ui/modal-ui";
 import { useState } from "react";
-import { useNoti } from "../hooks/useNoti";
+import { useNoti } from "../../commons/hooks/useNoti";
 import { useNavigate } from "react-router-dom";
-import { useModal } from "../hooks/useModal";
+import { useModal } from "../../commons/hooks/useModal";
 
 interface MenuButtonProps {
   isComment?: boolean;

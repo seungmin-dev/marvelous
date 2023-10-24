@@ -1,11 +1,11 @@
 import * as S from "../styles/sidebar.style";
 import { HashtagContent, SidebarContent } from "../router";
 import { signOut } from "firebase/auth";
-import { useRouter } from "./hooks/useRouter";
+import { useRouter } from "../commons/hooks/useRouter";
 import { auth } from "../../firebase";
 import { Link, useLocation } from "react-router-dom";
 import { ModalUI } from "./ui/modal-ui";
-import { useModal } from "./hooks/useModal";
+import { useModal } from "../commons/hooks/useModal";
 import { Modal } from "antd";
 
 export default function Sidebar() {

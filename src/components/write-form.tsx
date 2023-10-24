@@ -6,9 +6,9 @@ import { auth, db, storage } from "../../firebase";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ButtonUI2 } from "./ui/button-ui-2";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { useNoti } from "./hooks/useNoti";
+import { useNoti } from "../commons/hooks/useNoti";
 import { Modal } from "antd";
-import { useFile } from "./hooks/useFile";
+import { useFile } from "../commons/hooks/useFile";
 
 export const WriteForm = () => {
   const [loading, setLoading] = useState(false);

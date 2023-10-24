@@ -13,11 +13,11 @@ import { auth, db } from "../../firebase";
 import { Link, useLocation } from "react-router-dom";
 import * as S from "../styles/comment.style";
 import { Post } from "../types/type";
-import { useFollow } from "../components/hooks/useFollow";
+import { useFollow } from "../commons/hooks/useFollow";
 import { ButtonUI2 } from "../components/ui/button-ui-2";
 import { timeAgo } from "../commons/time-ago";
 import { PostButtons } from "../components/post-buttons";
-import { useNoti } from "../components/hooks/useNoti";
+import { useNoti } from "../commons/hooks/useNoti";
 import { FirebaseError } from "firebase/app";
 import { Modal } from "antd";
 

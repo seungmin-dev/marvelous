@@ -6,8 +6,8 @@ import { Post, User } from "../types/type";
 import { useLocation } from "react-router-dom";
 import { PostUI } from "../components/ui/post-ui";
 import { BlankUI } from "../components/ui/blank";
-import { useFollow } from "../components/hooks/useFollow";
-import { useFetchPost } from "../components/hooks/useFetchPost";
+import { useFollow } from "../commons/hooks/useFollow";
+import { useFetchPost } from "../commons/hooks/useFetchPost";
 
 export default function UserProfile() {
   const location = useLocation();

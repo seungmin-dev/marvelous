@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComment } from "@fortawesome/free-regular-svg-icons";
 import { useEffect, useState } from "react";
-import { useFetchPostInfo } from "../hooks/useFetchPostInfo";
+import { useFetchPostInfo } from "../../commons/hooks/useFetchPostInfo";
 
 interface CommentButtonProps {
   props: {

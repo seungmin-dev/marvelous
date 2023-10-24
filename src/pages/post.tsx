@@ -5,7 +5,7 @@ import { Post } from "../types/type";
 import { PostUI } from "../components/ui/post-ui";
 import styled from "@emotion/styled";
 import { Comment } from "./comment";
-import { useFetchPost } from "../components/hooks/useFetchPost";
+import { useFetchPost } from "../commons/hooks/useFetchPost";
 
 const PostWrapper = styled.div`
   width: 100%;

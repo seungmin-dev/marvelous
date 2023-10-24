@@ -7,14 +7,14 @@ import {
 } from "firebase/firestore";
 import * as S from "../../styles/post-list.style";
 import { auth, db } from "../../../firebase";
-import { useNoti } from "../hooks/useNoti";
+import { useNoti } from "../../commons/hooks/useNoti";
 import { FirebaseError } from "firebase/app";
 import { Modal } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookmark } from "@fortawesome/free-regular-svg-icons";
 import { faBookmark as faBookmarkSolid } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
-import { useFetchPostInfo } from "../hooks/useFetchPostInfo";
+import { useFetchPostInfo } from "../../commons/hooks/useFetchPostInfo";
 
 interface BookmarkButtonProps {
   props: { postId: string; writerId: string; postContent: string };

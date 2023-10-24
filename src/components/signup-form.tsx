@@ -4,7 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { SignupSchema } from "../validation/yup";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from "../../firebase";
-import { useRouter } from "./hooks/useRouter";
+import { useRouter } from "../commons/hooks/useRouter";
 import { FirebaseError } from "firebase/app";
 import { customErrors } from "../commons/custom-errors";
 import { FormInputUI } from "./ui/form-input";

@@ -8,8 +8,8 @@ import { doc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../../../firebase";
 import { FirebaseError } from "firebase/app";
 import { Modal } from "antd";
-import { useNoti } from "../hooks/useNoti";
-import { useFollow } from "../hooks/useFollow";
+import { useNoti } from "../../commons/hooks/useNoti";
+import { useFollow } from "../../commons/hooks/useFollow";
 import { Link, useNavigate } from "react-router-dom";
 
 interface IPostUI {

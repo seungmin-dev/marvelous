@@ -3,10 +3,10 @@ import { auth, db } from "../../firebase";
 import * as S from "../styles/profile.style";
 import { useEffect, useState } from "react";
 import { Post } from "../types/type";
-import { useFetchPostInfo } from "../components/hooks/useFetchPostInfo";
-import { Following } from "../components/hooks/useFollow";
+import { useFetchPostInfo } from "../commons/hooks/useFetchPostInfo";
+import { Following } from "../commons/hooks/useFollow";
 import { ProfileMy } from "../components/profile-my";
-import { useFetchPost } from "../components/hooks/useFetchPost";
+import { useFetchPost } from "../commons/hooks/useFetchPost";
 
 export default function Profile() {
   const user = auth.currentUser;

@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 import { auth } from "../../firebase";
 import type { Post } from "../types/type";
 import { WrapperUI } from "../components/ui/wrapper";
-import { useFetchPost } from "../components/hooks/useFetchPost";
+import { useFetchPost } from "../commons/hooks/useFetchPost";
 
 const PostWrapper = styled.div`
   box-sizing: border-box;

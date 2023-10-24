@@ -2,7 +2,7 @@ import { auth } from "../../firebase";
 import * as S from "../styles/login.style";
 import { useEffect, useState } from "react";
 import { GithubLogin } from "../components/github-login";
-import { useRouter } from "../components/hooks/useRouter";
+import { useRouter } from "../commons/hooks/useRouter";
 import { ButtonUI } from "../components/ui/button";
 import { SignupForm } from "../components/signup-form";
 import { LoginForm } from "../components/login-form";

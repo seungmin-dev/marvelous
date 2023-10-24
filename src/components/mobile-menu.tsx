@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { SidebarContent } from "../router";
-import { useRouter } from "./hooks/useRouter";
+import { useRouter } from "../commons/hooks/useRouter";
 import { Link } from "react-router-dom";
 
 const Wrapper = styled.div`
