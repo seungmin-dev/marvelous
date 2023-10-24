@@ -87,6 +87,8 @@ export default function CommentForm() {
         commentInfo.atWriterName
       )[1];
 
+      if (splittedStr === "") return;
+
       await setDoc(commentRef, {
         postId: commentInfo.postId,
         writerId: commentInfo.writerId,
