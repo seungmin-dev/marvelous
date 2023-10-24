@@ -68,5 +68,42 @@ export const useFetchPost = () => {
     return data;
   };
 
-  return { fetchPosts, fetchPostById };
+  const fetchPostsByHashtag = async (hashtag: string) => {
+    const keywordQuery = query(
+      collection(db, "posts"),
+      where("post", "array-contains", hashtag),
+      orderBy("createdAt", "desc")
+    );
+    const snapshot = await getDocs(keywordQuery);
+    const posts = snapshot.docs.map((doc) => {
+      const {
+        post,
+        photo,
+        photoLeng,
+        createdAt,
+        userId,
+        username,
+        userphoto,
+        userBgImg,
+        heartedNum,
+        commentNum,
+      } = doc.data();
+      return {
+        post,
+        photo,
+        photoLeng,
+        createdAt,
+        userId,
+        username,
+        userphoto,
+        userBgImg,
+        heartedNum,
+        commentNum,
+        id: doc.id,
+      };
+    });
+    return posts;
+  };
+
+  return { fetchPosts, fetchPostById, fetchPostsByHashtag };
 };

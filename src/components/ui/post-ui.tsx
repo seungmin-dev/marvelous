@@ -99,7 +99,7 @@ export const PostUI = ({ post, isObject }: IPostUI) => {
         )}
       </S.PostHeader>
       {editPostId !== post.id ? (
-        <S.PostContent>{post.post}</S.PostContent>
+        <S.PostContent>{post.post.join(" ")}</S.PostContent>
       ) : (
         <S.Textarea
           defaultValue={post.post}

@@ -9,6 +9,7 @@ export const useFetchPostInfo = () => {
   const fetchBookmarksOfUser = async () => {
     const snapshot = await getDoc(userRef);
 
+    if (!snapshot.exists()) return;
     return snapshot.data()?.bookmarks;
   };
 
@@ -16,6 +17,7 @@ export const useFetchPostInfo = () => {
   const fetchHeartsOfUser = async () => {
     const snapshot = await getDoc(userRef);
 
+    if (!snapshot.exists()) return;
     return snapshot.data()?.heart;
   };
 
@@ -24,6 +26,7 @@ export const useFetchPostInfo = () => {
     const docRef = doc(db, "posts", postId);
     const docResult = await getDoc(docRef);
 
+    if (!docResult.exists()) return;
     return docResult.data()?.heartedNum;
   };
 
@@ -32,6 +35,7 @@ export const useFetchPostInfo = () => {
     const docRef = doc(db, "posts", postId);
     const docResult = await getDoc(docRef);
 
+    if (!docResult.exists()) return;
     return docResult.data()?.commentNum;
   };
 

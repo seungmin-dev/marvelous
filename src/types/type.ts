@@ -2,7 +2,7 @@ import { UseFormRegisterReturn } from "react-hook-form";
 
 export interface Post {
   id: string;
-  post: string;
+  post: string[];
   photo: string[];
   photoLeng: number;
   createdAt: number;

@@ -35,7 +35,7 @@ export const WriteForm = () => {
 
     try {
       const doc = await addDoc(collection(db, "posts"), {
-        post: textareaRef.current?.value,
+        post: textareaRef.current?.value.split(" "),
         createdAt: Date.now(),
         username: user?.displayName,
         userId: user?.uid,
