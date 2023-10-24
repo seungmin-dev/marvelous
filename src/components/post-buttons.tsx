@@ -202,6 +202,9 @@ export const PostButtons = ({
         await deleteDoc(doc(db, "alerts", postId));
       }
       openNotification("글 삭제");
+
+      // 원글 삭제 시 홈으로 이동
+      if (!isComment) navigate("/");
     } catch (error) {
       if (error instanceof FirebaseError)
         Modal.error({ content: "글 삭제에 실패했어요 😥" });
