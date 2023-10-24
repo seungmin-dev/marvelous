@@ -1,42 +1,44 @@
-import { collection, getDocs, limit, query, where } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from "../../../firebase";
 
 export const useFetchPostInfo = () => {
-  const fetchBookmarks = async () => {
-    const user = auth.currentUser;
+  const user = auth.currentUser;
+  const userRef = doc(db, "users", user?.uid as string);
 
-    const bookmarksQuery = query(
-      collection(db, "users"),
-      where("userId", "==", user?.uid),
-      limit(25)
-    );
-    const snapshot = await getDocs(bookmarksQuery);
-    const bookmarkList = snapshot.docs.map((doc) => {
-      const { bookmarks } = doc.data();
-      return {
-        bookmarks: bookmarks as string,
-      };
-    });
-    return [...bookmarkList[0].bookmarks];
+  // 유저 북마크 목록
+  const fetchBookmarksOfUser = async () => {
+    const snapshot = await getDoc(userRef);
+
+    return snapshot.data()?.bookmarks;
   };
 
-  const fetchHearts = async () => {
-    const user = auth.currentUser;
+  // 유저 하트 목록
+  const fetchHeartsOfUser = async () => {
+    const snapshot = await getDoc(userRef);
 
-    const heartsQuery = query(
-      collection(db, "users"),
-      where("userId", "==", user?.uid),
-      limit(25)
-    );
-    const snapshot = await getDocs(heartsQuery);
-    const heartList = snapshot.docs.map((doc) => {
-      const { heart } = doc.data();
-      return {
-        heart: heart as string,
-      };
-    });
-    return [...heartList[0].heart];
+    return snapshot.data()?.heart;
   };
 
-  return { fetchBookmarks, fetchHearts };
+  // 포스트 하트 수
+  const fetchHeartNum = async (postId: string) => {
+    const docRef = doc(db, "posts", postId);
+    const docResult = await getDoc(docRef);
+
+    return docResult.data()?.heartedNum;
+  };
+
+  // 포스트 댓글 수
+  const fetchCommentNum = async (postId: string) => {
+    const docRef = doc(db, "posts", postId);
+    const docResult = await getDoc(docRef);
+
+    return docResult.data()?.commentNum;
+  };
+
+  return {
+    fetchBookmarksOfUser,
+    fetchHeartsOfUser,
+    fetchHeartNum,
+    fetchCommentNum,
+  };
 };

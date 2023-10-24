@@ -1,315 +1,40 @@
 import * as S from "../styles/post-list.style";
-import {
-  faComment,
-  faHeart,
-  faBookmark,
-} from "@fortawesome/free-regular-svg-icons";
-import {
-  faBookmark as faBookmarkSolid,
-  faPenToSquare,
-  faTrash,
-  faHeart as faHeartSolid,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
-import { auth, db, storage } from "../../firebase";
-import {
-  arrayRemove,
-  arrayUnion,
-  collection,
-  deleteDoc,
-  doc,
-  getDoc,
-  getDocs,
-  increment,
-  query,
-  setDoc,
-  updateDoc,
-  where,
-} from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { useFetchPostInfo } from "./hooks/useFetchPostInfo";
-import { FirebaseError } from "firebase/app";
-import { Dropdown, Modal } from "antd";
-import { useModal } from "./hooks/useModal";
-import { ModalUI } from "./ui/modal-ui";
 import { useNoti } from "./hooks/useNoti";
-import { useNavigate } from "react-router-dom";
-import { deleteObject, ref } from "firebase/storage";
+import { HeartButton } from "./buttons/heart-button";
+import { CommentButton } from "./buttons/comment-button";
+import { BookmarkButton } from "./buttons/bookmark-button";
+import { MenuButton } from "./buttons/menu-button";
+import { Post } from "../types/type";
 
 interface IPostButtonsProps {
-  postId: string;
-  heartedNum: number;
-  commentNum?: number;
-  writerId: string;
-  writerName: string;
-  postContent: string;
-  setEdit: React.Dispatch<React.SetStateAction<boolean>>;
+  post: Post;
+  setEditPostId: React.Dispatch<React.SetStateAction<string>>;
   isComment?: boolean;
-  photoLeng?: number;
 }
 
 export const PostButtons = ({
-  postId,
-  heartedNum,
-  commentNum,
-  writerId,
-  writerName,
-  postContent,
-  setEdit,
+  post,
+  setEditPostId,
   isComment = false,
-  photoLeng,
 }: IPostButtonsProps) => {
-  const user = auth.currentUser;
-  const [commentsNum, setCommentsNum] = useState(0);
-  const [bookmarked, setBookmarked] = useState(false);
-  const [pickedId, setPickedId] = useState("");
-  const [hearted, setHearted] = useState(false);
-  const [heartNum, setHeartNum] = useState(0);
+  const [propsObj, setPropsObj] = useState({
+    postId: "",
+    writerId: "",
+    writerName: "",
+    postContent: "",
+  });
 
-  const { fetchBookmarks, fetchHearts } = useFetchPostInfo();
-  const { modalOpen, onClickOpenModal } = useModal();
-  const { contextHolder, openNotification } = useNoti();
-  const navigate = useNavigate();
-
-  const fetching = (type: string, posts: string[]) => {
-    for (const i in posts) {
-      if (posts[i] === postId) {
-        if (type === "bookmark") setBookmarked(true);
-        else if (type === "heart") setHearted(true);
-        // else if (type === "comment") setCommentsNum(true);
-      }
-    }
-  };
-
-  const onClickBookmark =
-    (bookmarkId: string, writerId: string, postContent: string) => async () => {
-      // UI상 북마크 아이콘 변경
-      setBookmarked((prev) => !prev);
-
-      try {
-        // 유저 북마크 목록에 추가
-        const userRef = doc(db, "users", user?.uid as string);
-        await setDoc(
-          userRef,
-          {
-            userId: user?.uid,
-            username: user?.displayName,
-            bookmarks: bookmarked
-              ? arrayRemove(bookmarkId)
-              : arrayUnion(bookmarkId),
-          },
-          { merge: true }
-        );
-
-        // 글 작성자에게 알림 보내기(자기 글을 북마크할 시 알림 X)
-        if (user?.uid === writerId) return;
-
-        const writerRef = doc(
-          db,
-          "alerts",
-          `${bookmarkId}-${user?.uid}-bookmark`
-        );
-
-        if (!bookmarked) {
-          await setDoc(writerRef, {
-            userId: writerId,
-            personId: user?.uid,
-            personName: user?.displayName,
-            type: "bookmark",
-            content: postContent.slice(0, 10),
-            createdAt: Date.now(),
-          });
-        } else {
-          await deleteDoc(writerRef);
-        }
-        openNotification(bookmarked ? "북마크 해제" : "북마크 등록");
-      } catch (error) {
-        if (error instanceof FirebaseError)
-          Modal.error({ content: "북마크에 실패했어요 😵‍💫" });
-        setBookmarked((prev) => !prev);
-      }
-    };
-
-  const onClickDelete = (postId: string) => async () => {
-    try {
-      const docRef = doc(db, `${!isComment ? "posts" : "comments"}`, postId);
-      await deleteDoc(docRef);
-      if (!isComment) {
-        // 원글 삭제 시 댓글까지 같이 삭제
-        const commentDelQuery = query(
-          collection(db, "comments"),
-          where("postId", "==", postId)
-        );
-        const commentSnapshot = await getDocs(commentDelQuery);
-        commentSnapshot.docs.map((doc) => {
-          deleteDoc(doc.ref);
-
-          // 이미지 삭제
-          if (doc.data().photoLeng && doc.data().photoLeng > 0) {
-            for (let i = 0; i < doc.data().photoLeng; i++) {
-              const storageRef = ref(
-                storage,
-                `comments/${user?.uid}-${user?.displayName}/${doc.ref.id}-${i}`
-              );
-
-              deleteObject(storageRef)
-                .then(() => {})
-                .catch((error) => {
-                  // 저장된 이미지가 없다면 중단
-                  if (error.code === "storage/object-not-found") return 0;
-                  if (error instanceof FirebaseError)
-                    Modal.error({
-                      content:
-                        "첨부된 이미지를 삭제하는 중에 에러가 발생했어요 😵‍💫",
-                    });
-                });
-            }
-          }
-        });
-      }
-
-      // 이미지 삭제
-      if (photoLeng && photoLeng > 0) {
-        for (let i = 0; i < photoLeng; i++) {
-          const storageRef = ref(
-            storage,
-            `${!isComment ? "posts" : "comments"}/${user?.uid}-${
-              user?.displayName
-            }/${postId}-${i}`
-          );
-
-          deleteObject(storageRef)
-            .then(() => {})
-            .catch((error) => {
-              // 저장된 이미지가 없다면 중단
-              if (error.code === "storage/object-not-found") return 0;
-              if (error instanceof FirebaseError)
-                Modal.error({
-                  content: "첨부된 이미지를 삭제하는 중에 에러가 발생했어요 😵‍💫",
-                });
-            });
-        }
-      }
-
-      // 댓글 삭제 시
-      if (isComment) {
-        // 원글 댓글 수 감소
-        await updateDoc(doc(db, "posts", postId.split("-")[0]), {
-          commentNum: increment(-1),
-        });
-        // 알림 삭제
-        await deleteDoc(doc(db, "alerts", postId));
-      }
-      openNotification("글 삭제");
-
-      // 원글 삭제 시 홈으로 이동
-      if (!isComment) navigate("/");
-    } catch (error) {
-      if (error instanceof FirebaseError)
-        Modal.error({ content: "글 삭제에 실패했어요 😥" });
-    }
-  };
-  const onClickDelDocId = (postId: string) => () => {
-    setPickedId(postId);
-  };
-  const onClickEdit = () => {
-    setEdit(true);
-  };
-  const onClickHeart =
-    (postId: string, heartNum: number, writerId: string, postContent: string) =>
-    async () => {
-      setHearted((prev) => !prev);
-
-      try {
-        // 유저 하트 목록에 추가
-        const heartRef = doc(db, "users", user?.uid as string);
-        await setDoc(
-          heartRef,
-          { heart: hearted ? arrayRemove(postId) : arrayUnion(postId) },
-          { merge: true }
-        );
-
-        // 게시글에 하트 수 증감
-        const docRef = doc(db, "posts", postId);
-        await updateDoc(docRef, {
-          heartedNum: hearted ? --heartNum : ++heartNum,
-        });
-
-        if (!hearted) setHeartNum((prev) => ++prev);
-        else setHeartNum((prev) => --prev);
-
-        openNotification(hearted ? "하트 해제" : "하트");
-
-        // 글 작성자에게 알림
-        if (user?.uid === writerId) return;
-
-        const alertRef = doc(db, "alerts", `${postId}-${user?.uid}-heart`);
-        if (!hearted) {
-          await setDoc(alertRef, {
-            userId: writerId,
-            personId: user?.uid,
-            personName: user?.displayName,
-            type: "heart",
-            content: postContent.slice(0, 10),
-            createdAt: Date.now(),
-          });
-        } else {
-          await deleteDoc(alertRef);
-        }
-      } catch (error) {
-        if (error instanceof FirebaseError)
-          Modal.error({ content: "하트에 실패했어요 😫" });
-        setHearted((prev) => !prev);
-      }
-    };
-
-  const onClickComment = async () => {
-    navigate("/comment", {
-      state: {
-        postId,
-        writerId,
-        writerName,
-        originContent: postContent,
-        commentNum: await getCommentsNum(),
-      },
-    });
-  };
-
-  const items = [
-    {
-      label: <span onClick={onClickEdit}>글 수정</span>,
-      key: "1",
-      icon: <FontAwesomeIcon icon={faPenToSquare} />,
-    },
-    {
-      label: (
-        <span onClick={onClickOpenModal} style={{ color: "#ef151e" }}>
-          글 삭제
-        </span>
-      ),
-      key: "2",
-      icon: <FontAwesomeIcon icon={faTrash} style={{ color: "#ef151e" }} />,
-    },
-  ];
-
-  // 댓글 수 조회
-  const getCommentsNum = async () => {
-    const docRef = doc(db, "posts", postId.split("-")[0]);
-    const docResult = await getDoc(docRef);
-
-    return docResult.data()?.commentNum;
-  };
+  const { contextHolder } = useNoti();
 
   useEffect(() => {
-    fetchBookmarks().then((bookmarks) => fetching("bookmark", bookmarks));
-    fetchHearts().then((heartedNum) => fetching("heart", heartedNum));
-
-    // 원글일 때에만 댓글 수, 하트 수 설정
-    if (!isComment) {
-      setHeartNum(heartedNum);
-      setCommentsNum(commentNum!);
-    }
+    if (post)
+      setPropsObj({
+        postId: post.id,
+        writerId: post.userId,
+        writerName: post.username,
+        postContent: post.post,
+      });
   }, []);
 
   return (
@@ -318,28 +43,9 @@ export const PostButtons = ({
       <S.PostButtonWrapper>
         {!isComment ? (
           <>
-            <S.Icon onClick={onClickComment}>
-              <FontAwesomeIcon icon={faComment} />
-              <S.HeartNum>{commentsNum}</S.HeartNum>
-            </S.Icon>
-
-            <S.Icon
-              onClick={onClickHeart(postId, heartNum, writerId, postContent)}
-            >
-              {hearted ? (
-                <FontAwesomeIcon icon={faHeartSolid} />
-              ) : (
-                <FontAwesomeIcon icon={faHeart} />
-              )}
-              <S.HeartNum>{heartNum}</S.HeartNum>
-            </S.Icon>
-            <S.Icon onClick={onClickBookmark(postId, writerId, postContent)}>
-              {bookmarked ? (
-                <FontAwesomeIcon icon={faBookmarkSolid} />
-              ) : (
-                <FontAwesomeIcon icon={faBookmark} />
-              )}
-            </S.Icon>
+            <CommentButton props={propsObj} />
+            <HeartButton props={propsObj} />
+            <BookmarkButton props={propsObj} />
           </>
         ) : (
           <>
@@ -348,22 +54,11 @@ export const PostButtons = ({
             <div />
           </>
         )}
-        {user?.uid === writerId ? (
-          <Dropdown
-            menu={{ items }}
-            trigger={["click"]}
-            placement="bottomRight"
-          >
-            <S.Icon onClick={onClickDelDocId(postId)}>
-              <FontAwesomeIcon icon={faEllipsis} />
-            </S.Icon>
-          </Dropdown>
-        ) : null}
-        <ModalUI
-          modalOpen={modalOpen}
-          onOkFn={onClickDelete(pickedId)}
-          onCancelFn={onClickOpenModal}
-          title="글을 정말로 삭제할까요? 😲"
+        <MenuButton
+          isComment={isComment}
+          props={propsObj}
+          setEditPostId={setEditPostId}
+          photoLeng={post ? post.photoLeng : 0}
         />
       </S.PostButtonWrapper>
     </>

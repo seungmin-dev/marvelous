@@ -1,17 +1,10 @@
 import styled from "@emotion/styled";
-import {
-  collection,
-  getDocs,
-  limit,
-  orderBy,
-  query,
-  where,
-} from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { auth, db } from "../../firebase";
+import { auth } from "../../firebase";
 import type { Post } from "../types/type";
 import { WrapperUI } from "../components/ui/wrapper";
+import { useFetchPost } from "../components/hooks/useFetchPost";
 
 const PostWrapper = styled.div`
   box-sizing: border-box;
@@ -23,33 +16,10 @@ export default function Hashtaging() {
   const [posts, setPosts] = useState<Post[]>([]);
   const user = auth.currentUser;
   const queryString = location.search;
-
-  const fetchPosts = async () => {
-    const tweetQuery = query(
-      collection(db, "posts"),
-      where("userId", "==", user?.uid),
-      orderBy("createdAt", "desc"),
-      limit(25)
-    );
-    const snapshot = await getDocs(tweetQuery);
-    const posts = snapshot.docs.map((doc) => {
-      const { post, photo, createdAt, userId, username, userphoto } =
-        doc.data();
-      return {
-        post,
-        photo,
-        createdAt,
-        userId,
-        username,
-        userphoto,
-        id: doc.id,
-      };
-    });
-    setPosts(posts);
-  };
+  const { fetchPosts } = useFetchPost();
 
   useEffect(() => {
-    fetchPosts();
+    fetchPosts(user?.uid as string).then((result) => setPosts(result));
   }, []);
 
   return (

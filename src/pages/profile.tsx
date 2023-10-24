@@ -1,20 +1,12 @@
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  orderBy,
-  query,
-  where,
-} from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from "../../firebase";
 import * as S from "../styles/profile.style";
 import { useEffect, useState } from "react";
 import { Post } from "../types/type";
 import { useFetchPostInfo } from "../components/hooks/useFetchPostInfo";
-import { useFetchPostById } from "../components/hooks/useFetchPostById";
 import { Following } from "../components/hooks/useFollow";
 import { ProfileMy } from "../components/profile-my";
+import { useFetchPost } from "../components/hooks/useFetchPost";
 
 export default function Profile() {
   const user = auth.currentUser;
@@ -25,8 +17,8 @@ export default function Profile() {
   const [bookmarks, setBookmarks] = useState<Post[]>([]);
   const [followings, setFollowings] = useState<Following[]>([]);
 
-  const { fetchBookmarks, fetchHearts } = useFetchPostInfo();
-  const { fetchPostById } = useFetchPostById();
+  const { fetchBookmarksOfUser, fetchHeartsOfUser } = useFetchPostInfo();
+  const { fetchPosts, fetchPostById } = useFetchPost();
 
   const getFetchPosts = async (type: string, posts: string[]) => {
     const tempArr: Post[] = [];
@@ -37,37 +29,6 @@ export default function Profile() {
     }
     if (type === "bookmark") setBookmarks(tempArr);
     else if (type === "heart") setHearts(tempArr);
-  };
-
-  const fetchPosts = async (userId: string) => {
-    const postQuery = query(
-      collection(db, "posts"),
-      where("userId", "==", userId),
-      orderBy("createdAt", "desc")
-    );
-    const snapshot = await getDocs(postQuery);
-    const posts = snapshot.docs.map((doc) => {
-      const {
-        post,
-        photo,
-        createdAt,
-        userId,
-        username,
-        userphoto,
-        heartedNum,
-      } = doc.data();
-      return {
-        post,
-        photo,
-        createdAt,
-        userId,
-        username,
-        userphoto,
-        heartedNum,
-        id: doc.id,
-      };
-    });
-    setPosts(posts);
   };
 
   const onClickMenu = (menu: string) => () => {
@@ -98,13 +59,14 @@ export default function Profile() {
   };
 
   useEffect(() => {
-    if (curMenu === "posts") fetchPosts(user!.uid);
+    if (curMenu === "posts")
+      fetchPosts(user!.uid).then((result) => setPosts(result));
     if (curMenu === "hearts")
-      fetchHearts().then((hearts) => {
+      fetchHeartsOfUser().then((hearts) => {
         getFetchPosts("heart", hearts);
       });
     if (curMenu === "bookmarks")
-      fetchBookmarks().then((bookmarks) =>
+      fetchBookmarksOfUser().then((bookmarks) =>
         getFetchPosts("bookmark", bookmarks)
       );
     if (curMenu === "following") fetchFollowingList();

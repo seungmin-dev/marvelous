@@ -21,7 +21,7 @@ export const PostUI = ({ post, isObject }: IPostUI) => {
   const user = auth.currentUser;
   const navigate = useNavigate();
 
-  const [edit, setEdit] = useState(false);
+  const [editPostId, setEditPostId] = useState("");
   const [originContent, setOriginContent] = useState("");
   const [edittedContent, setContent] = useState("");
   const [loading, setLoading] = useState(false);
@@ -45,7 +45,7 @@ export const PostUI = ({ post, isObject }: IPostUI) => {
         Modal.error({ content: "글 수정에 실패했어요 🤥" });
     } finally {
       setLoading(false);
-      setEdit(false);
+      setEditPostId("");
     }
   };
 
@@ -56,7 +56,7 @@ export const PostUI = ({ post, isObject }: IPostUI) => {
 
   useEffect(() => {
     setOriginContent(textareaRef.current?.value as string);
-  }, [edit]);
+  }, [editPostId]);
 
   useEffect(() => {
     if (post.userId !== user?.uid) fetchFollowYn(post.userId);
@@ -85,7 +85,7 @@ export const PostUI = ({ post, isObject }: IPostUI) => {
             </S.Button>
           </S.ButtonWrapper>
         ) : null}
-        {edit ? (
+        {editPostId === post.id ? (
           <ButtonUI2
             text={loading ? "Loading" : "Save"}
             type="button"
@@ -98,7 +98,7 @@ export const PostUI = ({ post, isObject }: IPostUI) => {
           <S.PostCreatedAt>{timeAgo(post.createdAt)}</S.PostCreatedAt>
         )}
       </S.PostHeader>
-      {!edit ? (
+      {editPostId !== post.id ? (
         <S.PostContent>{post.post}</S.PostContent>
       ) : (
         <S.Textarea
@@ -120,17 +120,8 @@ export const PostUI = ({ post, isObject }: IPostUI) => {
             ))}
         </S.PostImgWrapper>
       ) : null}
-      {!edit ? (
-        <PostButtons
-          postId={post.id}
-          heartedNum={post.heartedNum ? post.heartedNum : 0}
-          commentNum={post.commentNum ? post.commentNum : 0}
-          writerId={post.userId}
-          writerName={post.username}
-          postContent={post.post}
-          setEdit={setEdit}
-          photoLeng={post.photoLeng}
-        />
+      {editPostId !== post.id ? (
+        <PostButtons post={post} setEditPostId={setEditPostId} />
       ) : null}
     </S.Post>
   );

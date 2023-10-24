@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { useFetchPostById } from "../components/hooks/useFetchPostById";
 import { WrapperUI } from "../components/ui/wrapper";
 import { useLocation } from "react-router-dom";
 import { Post } from "../types/type";
 import { PostUI } from "../components/ui/post-ui";
 import styled from "@emotion/styled";
 import { Comment } from "./comment";
+import { useFetchPost } from "../components/hooks/useFetchPost";
 
 const PostWrapper = styled.div`
   width: 100%;
@@ -22,7 +22,7 @@ const PostWrapper = styled.div`
 export default function Post() {
   const location = useLocation();
   const [post, setPost] = useState<Post>();
-  const { fetchPostById } = useFetchPostById();
+  const { fetchPostById } = useFetchPost();
 
   useEffect(() => {
     fetchPostById(location.state.postId).then((result) => setPost(result));

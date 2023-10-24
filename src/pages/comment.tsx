@@ -2,7 +2,6 @@ import {
   Unsubscribe,
   collection,
   doc,
-  getDocs,
   onSnapshot,
   orderBy,
   query,
@@ -35,7 +34,7 @@ export const Comment = () => {
   const { following, onClickFollow } = useFollow();
 
   const [comments, setComments] = useState<Comment[]>([]);
-  const [edit, setEdit] = useState(false);
+  const [editPostId, setEditPostId] = useState("");
   const [originContent, setOriginContent] = useState("");
   const [edittedContent, setContent] = useState("");
   const [loading, setLoading] = useState(false);
@@ -45,47 +44,6 @@ export const Comment = () => {
     setContent(e.currentTarget.value);
   };
 
-  const fetchComments = async () => {
-    const commentQuery = query(
-      collection(db, "comments"),
-      where("postId", "==", location.state.postId),
-      orderBy("createdAt", "desc")
-    );
-    const snapshot = await getDocs(commentQuery);
-    const comments = snapshot.docs.map((doc) => {
-      const {
-        postId,
-        writerId,
-        writerName,
-        commentWriterId,
-        commentWriterName,
-        commentWriterPhoto,
-        comment,
-        photo,
-        photoLeng,
-        heartedNum,
-        commentNum,
-        createdAt,
-      } = doc.data();
-
-      return {
-        postId,
-        writerId,
-        writerName,
-        userId: commentWriterId,
-        username: commentWriterName,
-        userphoto: commentWriterPhoto,
-        post: comment,
-        photo,
-        photoLeng,
-        heartedNum,
-        commentNum,
-        createdAt,
-        id: doc.id,
-      };
-    });
-    setComments(comments);
-  };
   const onSubmitEdit = (commentId: string) => async () => {
     if (textareaRef.current?.value === "") return;
     setLoading(true);
@@ -94,13 +52,12 @@ export const Comment = () => {
       await updateDoc(docRef, { comment: edittedContent });
 
       openNotification("글 수정");
-      fetchComments();
     } catch (error) {
       if (error instanceof FirebaseError)
         Modal.error({ content: "글 수정에 실패했어요 🤥" });
     } finally {
       setLoading(false);
-      setEdit(false);
+      setEditPostId("");
     }
   };
 
@@ -156,7 +113,7 @@ export const Comment = () => {
 
   useEffect(() => {
     setOriginContent(textareaRef.current?.value as string);
-  }, [edit]);
+  }, [editPostId]);
 
   return (
     <S.CommentWrapper>
@@ -183,7 +140,7 @@ export const Comment = () => {
                 </S.Button>
               </S.ButtonWrapper>
             ) : null}
-            {edit ? (
+            {editPostId === comment.id ? (
               <ButtonUI2
                 text={loading ? "Loading" : "Save"}
                 type="button"
@@ -196,7 +153,7 @@ export const Comment = () => {
               <S.PostCreatedAt>{timeAgo(comment.createdAt)}</S.PostCreatedAt>
             )}
           </S.PostHeader>
-          {!edit ? (
+          {editPostId !== comment.id ? (
             <S.CommentPost>
               <b>@{comment.writerName} </b>
               {comment.post}
@@ -221,16 +178,11 @@ export const Comment = () => {
                 ))}
             </S.PostImgWrapper>
           ) : null}
-          {!edit ? (
+          {editPostId !== comment.id ? (
             <PostButtons
-              postId={comment.id}
-              heartedNum={comment.heartedNum ? comment.heartedNum : 0}
-              writerId={comment.userId}
-              writerName={comment.username}
-              postContent={comment.post}
-              setEdit={setEdit}
+              post={comment}
+              setEditPostId={setEditPostId}
               isComment={true}
-              photoLeng={comment.photoLeng}
             />
           ) : null}
         </S.CommentBox>

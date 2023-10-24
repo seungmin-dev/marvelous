@@ -107,6 +107,6 @@ export const Icon = styled.span`
   gap: 5px;
   align-items: center;
 `;
-export const HeartNum = styled.span`
+export const IconText = styled.span`
   font-size: 16px;
 `;

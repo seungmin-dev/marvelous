@@ -1,12 +1,4 @@
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  orderBy,
-  query,
-  where,
-} from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 import * as S from "../styles/profile.style";
 import { useEffect, useState } from "react";
@@ -15,6 +7,7 @@ import { useLocation } from "react-router-dom";
 import { PostUI } from "../components/ui/post-ui";
 import { BlankUI } from "../components/ui/blank";
 import { useFollow } from "../components/hooks/useFollow";
+import { useFetchPost } from "../components/hooks/useFetchPost";
 
 export default function UserProfile() {
   const location = useLocation();
@@ -23,6 +16,7 @@ export default function UserProfile() {
   const [posts, setPosts] = useState<Post[]>([]);
 
   const { following, fetchFollowYn, onClickFollow } = useFollow();
+  const { fetchPosts } = useFetchPost();
 
   const getObjectUserInfo = async (objectUserId: string) => {
     const userRef = doc(db, "users", objectUserId);
@@ -36,45 +30,9 @@ export default function UserProfile() {
       setObjectUserId(location.search.slice(1, location.search.length));
 
     getObjectUserInfo(objectUserId);
-    fetchPosts(objectUserId);
+    fetchPosts(objectUserId).then((result) => setPosts(result));
   }, [location, objectUserId]);
 
-  const fetchPosts = async (userId: string) => {
-    const postQuery = query(
-      collection(db, "posts"),
-      where("userId", "==", userId),
-      orderBy("createdAt", "desc")
-    );
-    const snapshot = await getDocs(postQuery);
-    const posts = snapshot.docs.map((doc) => {
-      const {
-        post,
-        photo,
-        photoLeng,
-        createdAt,
-        userId,
-        username,
-        userphoto,
-        userBgImg,
-        heartedNum,
-        commentNum,
-      } = doc.data();
-      return {
-        post,
-        photo,
-        photoLeng,
-        createdAt,
-        userId,
-        username,
-        userphoto,
-        userBgImg,
-        heartedNum,
-        commentNum,
-        id: doc.id,
-      };
-    });
-    setPosts(posts);
-  };
   useEffect(() => {
     fetchFollowYn(objectUserId);
   }, [fetchFollowYn, objectUserId]);

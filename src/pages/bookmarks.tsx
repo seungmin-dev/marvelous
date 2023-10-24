@@ -4,15 +4,15 @@ import { Post } from "../types/type";
 import { PostUI } from "../components/ui/post-ui";
 import { useFetchPostInfo } from "../components/hooks/useFetchPostInfo";
 import { WrapperUI } from "../components/ui/wrapper";
-import { useFetchPostById } from "../components/hooks/useFetchPostById";
+import { useFetchPost } from "../components/hooks/useFetchPost";
 import { BlankUI } from "../components/ui/blank";
 import { arrayRemove, doc, setDoc } from "firebase/firestore";
 import { auth, db } from "../../firebase";
 
 export default function Bookmarks() {
   const [posts, setPosts] = useState<Post[]>([]);
-  const { fetchBookmarks } = useFetchPostInfo();
-  const { fetchPostById } = useFetchPostById();
+  const { fetchBookmarksOfUser } = useFetchPostInfo();
+  const { fetchPostById } = useFetchPost();
   const user = auth.currentUser;
 
   const getFetchPosts = async (bookmarks: string[]) => {
@@ -36,7 +36,7 @@ export default function Bookmarks() {
   };
 
   useEffect(() => {
-    fetchBookmarks().then((bookmarks) => getFetchPosts(bookmarks));
+    fetchBookmarksOfUser().then((bookmarks) => getFetchPosts(bookmarks));
   }, []);
 
   return (
