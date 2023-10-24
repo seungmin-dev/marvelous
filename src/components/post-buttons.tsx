@@ -18,6 +18,7 @@ import {
   arrayUnion,
   deleteDoc,
   doc,
+  getDoc,
   increment,
   setDoc,
   updateDoc,
@@ -72,6 +73,7 @@ export const PostButtons = ({
       if (posts[i] === postId) {
         if (type === "bookmark") setBookmarked(true);
         else if (type === "heart") setHearted(true);
+        // else if (type === "comment") setCommentsNum(true);
       }
     }
   };
@@ -154,6 +156,7 @@ export const PostButtons = ({
         }
       }
 
+      openNotification("글 삭제");
       // 댓글 삭제 시
       if (isComment) {
         // 원글 댓글 수 감소
@@ -166,8 +169,6 @@ export const PostButtons = ({
     } catch (error) {
       if (error instanceof FirebaseError)
         Modal.error({ content: "글 삭제에 실패했어요 😥" });
-    } finally {
-      openNotification("글 삭제");
     }
   };
   const onClickDelDocId = (postId: string) => () => {
@@ -224,14 +225,14 @@ export const PostButtons = ({
       }
     };
 
-  const onClickComment = () => {
+  const onClickComment = async () => {
     navigate("/comment", {
       state: {
         postId,
         writerId,
         writerName,
         originContent: postContent,
-        commentNum,
+        commentNum: await getCommentsNum(),
       },
     });
   };
@@ -252,6 +253,14 @@ export const PostButtons = ({
       icon: <FontAwesomeIcon icon={faTrash} style={{ color: "#ef151e" }} />,
     },
   ];
+
+  // 댓글 수 조회
+  const getCommentsNum = async () => {
+    const docRef = doc(db, "posts", postId.split("-")[0]);
+    const docResult = await getDoc(docRef);
+
+    return docResult.data()?.commentNum;
+  };
 
   useEffect(() => {
     fetchBookmarks().then((bookmarks) => fetching("bookmark", bookmarks));

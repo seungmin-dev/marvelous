@@ -63,7 +63,10 @@ export default function CommentForm() {
       writerId: location.state.writerId,
       writerName: location.state.writerName,
       atWriterName: `@${location.state.writerName} `,
-      commentNum: Number(location.state.commentNum),
+      commentNum:
+        location.state.commentNum === undefined
+          ? 0
+          : Number(location.state.commentNum),
     });
   }, [location]);
 
