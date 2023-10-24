@@ -34,8 +34,11 @@ export const WriteForm = () => {
     setLoading(true);
 
     try {
+      const filteredPost = textareaRef.current?.value
+        .split(" ")
+        .filter((text) => text.length > 0);
       const doc = await addDoc(collection(db, "posts"), {
-        post: textareaRef.current?.value.split(" "),
+        post: filteredPost,
         createdAt: Date.now(),
         username: user?.displayName,
         userId: user?.uid,

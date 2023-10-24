@@ -18,6 +18,7 @@ export interface InputUIProps {
   text?: string;
   placeholder: string;
   register?: UseFormRegisterReturn;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export interface User {

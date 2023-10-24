@@ -27,7 +27,7 @@ export default function Post() {
 
   useEffect(() => {
     fetchPostById(location.state.postId).then((result) => setPost(result));
-  }, []);
+  }, [location]);
   return (
     <WrapperUI title="Post">
       <PostWrapper>
