@@ -16,12 +16,16 @@ import { auth, db, storage } from "../../firebase";
 import {
   arrayRemove,
   arrayUnion,
+  collection,
   deleteDoc,
   doc,
   getDoc,
+  getDocs,
   increment,
+  query,
   setDoc,
   updateDoc,
+  where,
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useFetchPostInfo } from "./hooks/useFetchPostInfo";
@@ -129,9 +133,41 @@ export const PostButtons = ({
 
   const onClickDelete = (postId: string) => async () => {
     try {
-      let docRef = doc(db, "posts", postId);
-      if (isComment) docRef = doc(db, "comments", postId);
+      const docRef = doc(db, `${!isComment ? "posts" : "comments"}`, postId);
       await deleteDoc(docRef);
+      if (!isComment) {
+        // 원글 삭제 시 댓글까지 같이 삭제
+        const commentDelQuery = query(
+          collection(db, "comments"),
+          where("postId", "==", postId)
+        );
+        const commentSnapshot = await getDocs(commentDelQuery);
+        commentSnapshot.docs.map((doc) => {
+          deleteDoc(doc.ref);
+
+          // 이미지 삭제
+          if (doc.data().photoLeng && doc.data().photoLeng > 0) {
+            for (let i = 0; i < doc.data().photoLeng; i++) {
+              const storageRef = ref(
+                storage,
+                `comments/${user?.uid}-${user?.displayName}/${doc.ref.id}-${i}`
+              );
+
+              deleteObject(storageRef)
+                .then(() => {})
+                .catch((error) => {
+                  // 저장된 이미지가 없다면 중단
+                  if (error.code === "storage/object-not-found") return 0;
+                  if (error instanceof FirebaseError)
+                    Modal.error({
+                      content:
+                        "첨부된 이미지를 삭제하는 중에 에러가 발생했어요 😵‍💫",
+                    });
+                });
+            }
+          }
+        });
+      }
 
       // 이미지 삭제
       if (photoLeng && photoLeng > 0) {
@@ -156,7 +192,6 @@ export const PostButtons = ({
         }
       }
 
-      openNotification("글 삭제");
       // 댓글 삭제 시
       if (isComment) {
         // 원글 댓글 수 감소
@@ -166,6 +201,7 @@ export const PostButtons = ({
         // 알림 삭제
         await deleteDoc(doc(db, "alerts", postId));
       }
+      openNotification("글 삭제");
     } catch (error) {
       if (error instanceof FirebaseError)
         Modal.error({ content: "글 삭제에 실패했어요 😥" });
