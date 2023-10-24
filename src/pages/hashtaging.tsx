@@ -5,6 +5,7 @@ import { auth } from "../../firebase";
 import type { Post } from "../types/type";
 import { WrapperUI } from "../components/ui/wrapper";
 import { useFetchPost } from "../commons/hooks/useFetchPost";
+import { v4 as uuidv4 } from "uuid";
 
 const PostWrapper = styled.div`
   box-sizing: border-box;
@@ -26,7 +27,7 @@ export default function Hashtaging() {
     <WrapperUI title={queryString.slice(1, queryString.length)}>
       <PostWrapper>
         {posts.map((post) => (
-          <div key={post.id}>{post.post}</div>
+          <div key={uuidv4()}>{post.post}</div>
         ))}
       </PostWrapper>
     </WrapperUI>

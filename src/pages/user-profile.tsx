@@ -8,6 +8,7 @@ import { PostUI } from "../components/ui/post-ui";
 import { BlankUI } from "../components/ui/blank";
 import { useFollow } from "../commons/hooks/useFollow";
 import { useFetchPost } from "../commons/hooks/useFetchPost";
+import { v4 as uuidv4 } from "uuid";
 
 export default function UserProfile() {
   const location = useLocation();
@@ -61,7 +62,9 @@ export default function UserProfile() {
         <S.PostBox>
           <S.PostList>
             {posts.length > 0 ? (
-              posts.map((post) => <PostUI post={post} isObject />)
+              posts.map((post) => (
+                <PostUI key={uuidv4()} post={post} isObject />
+              ))
             ) : (
               <BlankUI text={`${objectUserInfo?.username}님이 작성한 글`} />
             )}

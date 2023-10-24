@@ -8,6 +8,7 @@ import { useFetchPost } from "../commons/hooks/useFetchPost";
 import { BlankUI } from "../components/ui/blank";
 import { arrayRemove, doc, setDoc } from "firebase/firestore";
 import { auth, db } from "../../firebase";
+import { v4 as uuidv4 } from "uuid";
 
 export default function Bookmarks() {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -44,7 +45,7 @@ export default function Bookmarks() {
       {posts.length !== 0 ? (
         <S.PostWrapper>
           {posts.map((post) => (
-            <PostUI post={post} />
+            <PostUI key={uuidv4()} post={post} />
           ))}
         </S.PostWrapper>
       ) : (

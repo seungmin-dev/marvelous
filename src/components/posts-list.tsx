@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import type { Post } from "../types/type";
 import { PostUI } from "./ui/post-ui";
 import { BlankUI } from "./ui/blank";
+import { v4 as uuidv4 } from "uuid";
 
 export const PostList = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -60,7 +61,7 @@ export const PostList = () => {
   return (
     <S.ListWrapper>
       {posts && posts.length > 0 ? (
-        posts.map((post) => <PostUI post={post} />)
+        posts.map((post) => <PostUI key={uuidv4()} post={post} />)
       ) : (
         <BlankUI text="작성된 글" />
       )}

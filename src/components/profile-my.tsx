@@ -16,6 +16,7 @@ import { useNoti } from "../commons/hooks/useNoti";
 import { InputUI2 } from "./ui/input-ui-2";
 import { ButtonUI3 } from "./ui/button-ui-3";
 import { updateProfile } from "firebase/auth";
+import { v4 as uuidv4 } from "uuid";
 
 interface ProfileProps {
   onClickMenu: (menu: string) => () => void;
@@ -211,19 +212,21 @@ export const ProfileMy = ({
           <S.PostList>
             {curMenu === "posts" &&
               (posts.length > 0 ? (
-                posts.map((post) => <PostUI post={post} />)
+                posts.map((post) => <PostUI key={uuidv4()} post={post} />)
               ) : (
                 <BlankUI text="작성한 글" />
               ))}
             {curMenu === "hearts" &&
               (hearts.length > 0 ? (
-                hearts.map((heart) => <PostUI post={heart} />)
+                hearts.map((heart) => <PostUI key={uuidv4()} post={heart} />)
               ) : (
                 <BlankUI text="하트한 글" />
               ))}
             {curMenu === "bookmarks" &&
               (bookmarks.length > 0 ? (
-                bookmarks.map((bookmark) => <PostUI post={bookmark} />)
+                bookmarks.map((bookmark) => (
+                  <PostUI key={uuidv4()} post={bookmark} />
+                ))
               ) : (
                 <BlankUI text="북마크한 글" />
               ))}

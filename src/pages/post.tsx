@@ -6,6 +6,7 @@ import { PostUI } from "../components/ui/post-ui";
 import styled from "@emotion/styled";
 import { Comment } from "./comment";
 import { useFetchPost } from "../commons/hooks/useFetchPost";
+import { v4 as uuidv4 } from "uuid";
 
 const PostWrapper = styled.div`
   width: 100%;
@@ -30,7 +31,7 @@ export default function Post() {
   return (
     <WrapperUI title="Post">
       <PostWrapper>
-        {post ? <PostUI post={post as Post} /> : null}
+        {post ? <PostUI key={uuidv4()} post={post as Post} /> : null}
         <Comment />
       </PostWrapper>
     </WrapperUI>
