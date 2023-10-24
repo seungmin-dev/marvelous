@@ -10,6 +10,7 @@ export const useFetchPostById = () => {
       post: docSnap.data()?.post,
       createdAt: docSnap.data()?.createdAt,
       photo: docSnap.data()?.photo,
+      photoLeng: docSnap.data()?.photoLeng,
       userId: docSnap.data()?.userId,
       username: docSnap.data()?.username,
       userphoto: docSnap.data()?.userphoto,

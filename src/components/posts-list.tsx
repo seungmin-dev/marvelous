@@ -27,6 +27,7 @@ export const PostList = () => {
           const {
             post,
             photo,
+            photoLeng,
             createdAt,
             userId,
             username,
@@ -38,6 +39,7 @@ export const PostList = () => {
           return {
             post,
             photo,
+            photoLeng,
             createdAt,
             userId,
             username,

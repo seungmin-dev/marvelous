@@ -50,22 +50,26 @@ export default function UserProfile() {
       const {
         post,
         photo,
+        photoLeng,
         createdAt,
         userId,
         username,
         userphoto,
         userBgImg,
         heartedNum,
+        commentNum,
       } = doc.data();
       return {
         post,
         photo,
+        photoLeng,
         createdAt,
         userId,
         username,
         userphoto,
         userBgImg,
         heartedNum,
+        commentNum,
         id: doc.id,
       };
     });

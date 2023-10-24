@@ -53,7 +53,7 @@ export const WriteForm = () => {
           const url = await getDownloadURL(result.ref);
           urlList.push(url);
         }
-        await updateDoc(doc, { photo: urlList });
+        await updateDoc(doc, { photo: urlList, photoLeng: urlList.length });
       }
       textareaRef.current!.value = "";
       setFileList(null);

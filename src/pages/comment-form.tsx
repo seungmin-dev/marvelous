@@ -105,13 +105,16 @@ export default function CommentForm() {
           const file = fileList[i];
           const locationRef = ref(
             storage,
-            `comments/${user?.uid}-${user?.displayName}/${commentInfo.postId}-${commentInfo.commentNum}-${i}`
+            `comments/${user?.uid}-${user?.displayName}/${commentRef.id}-${i}`
           );
           const result = await uploadBytes(locationRef, file);
           const url = await getDownloadURL(result.ref);
           urlList.push(url);
         }
-        await updateDoc(commentRef, { photo: urlList });
+        await updateDoc(commentRef, {
+          photo: urlList,
+          photoLeng: urlList.length,
+        });
       }
       setFileList(null);
       setTempUrlList([]);

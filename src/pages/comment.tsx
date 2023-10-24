@@ -62,6 +62,7 @@ export const Comment = () => {
         commentWriterPhoto,
         comment,
         photo,
+        photoLeng,
         heartedNum,
         commentNum,
         createdAt,
@@ -76,6 +77,7 @@ export const Comment = () => {
         userphoto: commentWriterPhoto,
         post: comment,
         photo,
+        photoLeng,
         heartedNum,
         commentNum,
         createdAt,
@@ -121,6 +123,7 @@ export const Comment = () => {
             commentWriterPhoto,
             comment,
             photo,
+            photoLeng,
             heartedNum,
             commentNum,
             createdAt,
@@ -135,6 +138,7 @@ export const Comment = () => {
             userphoto: commentWriterPhoto,
             post: comment,
             photo,
+            photoLeng,
             heartedNum,
             commentNum,
             createdAt,
@@ -226,6 +230,7 @@ export const Comment = () => {
               postContent={comment.post}
               setEdit={setEdit}
               isComment={true}
+              photoLeng={comment.photoLeng}
             />
           ) : null}
         </S.CommentBox>

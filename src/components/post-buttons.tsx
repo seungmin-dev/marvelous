@@ -12,7 +12,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
-import { auth, db } from "../../firebase";
+import { auth, db, storage } from "../../firebase";
 import {
   arrayRemove,
   arrayUnion,
@@ -30,6 +30,7 @@ import { useModal } from "./hooks/useModal";
 import { ModalUI } from "./ui/modal-ui";
 import { useNoti } from "./hooks/useNoti";
 import { useNavigate } from "react-router-dom";
+import { deleteObject, ref } from "firebase/storage";
 
 interface IPostButtonsProps {
   postId: string;
@@ -40,6 +41,7 @@ interface IPostButtonsProps {
   postContent: string;
   setEdit: React.Dispatch<React.SetStateAction<boolean>>;
   isComment?: boolean;
+  photoLeng?: number;
 }
 
 export const PostButtons = ({
@@ -51,6 +53,7 @@ export const PostButtons = ({
   postContent,
   setEdit,
   isComment = false,
+  photoLeng,
 }: IPostButtonsProps) => {
   const user = auth.currentUser;
   const [commentsNum, setCommentsNum] = useState(0);
@@ -128,6 +131,29 @@ export const PostButtons = ({
       if (isComment) docRef = doc(db, "comments", postId);
       await deleteDoc(docRef);
 
+      // 이미지 삭제
+      if (photoLeng && photoLeng > 0) {
+        for (let i = 0; i < photoLeng; i++) {
+          const storageRef = ref(
+            storage,
+            `${!isComment ? "posts" : "comments"}/${user?.uid}-${
+              user?.displayName
+            }/${postId}-${i}`
+          );
+
+          deleteObject(storageRef)
+            .then(() => {})
+            .catch((error) => {
+              // 저장된 이미지가 없다면 중단
+              if (error.code === "storage/object-not-found") return 0;
+              if (error instanceof FirebaseError)
+                Modal.error({
+                  content: "첨부된 이미지를 삭제하는 중에 에러가 발생했어요 😵‍💫",
+                });
+            });
+        }
+      }
+
       // 댓글 삭제 시
       if (isComment) {
         // 원글 댓글 수 감소
@@ -141,7 +167,7 @@ export const PostButtons = ({
       if (error instanceof FirebaseError)
         Modal.error({ content: "글 삭제에 실패했어요 😥" });
     } finally {
-      if (!isComment) openNotification("글 삭제");
+      openNotification("글 삭제");
     }
   };
   const onClickDelDocId = (postId: string) => () => {

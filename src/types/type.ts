@@ -4,6 +4,7 @@ export interface Post {
   id: string;
   post: string;
   photo: string[];
+  photoLeng: number;
   createdAt: number;
   userId: string;
   username: string;

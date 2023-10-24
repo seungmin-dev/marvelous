@@ -129,6 +129,7 @@ export const PostUI = ({ post, isObject }: IPostUI) => {
           writerName={post.username}
           postContent={post.post}
           setEdit={setEdit}
+          photoLeng={post.photoLeng}
         />
       ) : null}
     </S.Post>
