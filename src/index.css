@@ -12,8 +12,8 @@
   
   a {
     font-weight: 500;
-    color: black;
     text-decoration: inherit;
+    color: inherit
   }
   
   body {

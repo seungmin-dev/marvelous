@@ -67,17 +67,17 @@ export const PostUI = ({ post, isObject }: IPostUI) => {
       {contextHolder}
       <S.PostHeader>
         <S.PostProfileImg src={post.userphoto} />
-        <Link
-          to={
-            post.userId === user?.uid
-              ? "/profile"
-              : `/user-profile?${post.userId}`
-          }
-        >
-          <S.PostUsername myDoc={user?.uid === post.userId}>
+        <S.PostUsername myDoc={user?.uid === post.userId}>
+          <Link
+            to={
+              post.userId === user?.uid
+                ? "/profile"
+                : `/user-profile?${post.userId}`
+            }
+          >
             {post.username}
-          </S.PostUsername>
-        </Link>
+          </Link>
+        </S.PostUsername>
         {!isObject && user?.uid !== post.userId ? (
           <S.ButtonWrapper myDoc={user?.uid === post.userId}>
             <S.Button onClick={onClickFollow(post.userId)}>
