@@ -7,6 +7,7 @@ import styled from "@emotion/styled";
 import { Comment } from "./comment";
 import { useFetchPost } from "../commons/hooks/useFetchPost";
 import { v4 as uuidv4 } from "uuid";
+import { BlankUI } from "../components/ui/blank";
 
 const PostWrapper = styled.div`
   width: 100%;
@@ -23,17 +24,29 @@ const PostWrapper = styled.div`
 export default function Post() {
   const location = useLocation();
   const [post, setPost] = useState<Post>();
+  const [error, setError] = useState(false);
   const { fetchPostById } = useFetchPost();
 
   useEffect(() => {
-    fetchPostById(location.state.postId).then((result) => setPost(result));
+    fetchPostById(location.state.postId).then((result) => {
+      if (result.post === undefined) {
+        setError(true);
+        return;
+      }
+      setPost(result);
+    });
   }, [location]);
+
   return (
     <WrapperUI title="Post">
-      <PostWrapper>
-        {post ? <PostUI key={uuidv4()} post={post as Post} /> : null}
-        <Comment />
-      </PostWrapper>
+      {!error ? (
+        <PostWrapper>
+          {post ? <PostUI key={uuidv4()} post={post as Post} /> : null}
+          <Comment />
+        </PostWrapper>
+      ) : (
+        <BlankUI text="해당하는 글" />
+      )}
     </WrapperUI>
   );
 }

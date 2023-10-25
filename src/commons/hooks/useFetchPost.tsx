@@ -106,7 +106,6 @@ export const useFetchPost = () => {
   };
 
   const fetchPostsByKeyword = async (keyword: string) => {
-    console.log("keyword : ", keyword.split(" "));
     const keywordQuery = query(
       collection(db, "posts"),
       where("post", "array-contains-any", keyword.split(" ")),

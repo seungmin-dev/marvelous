@@ -87,7 +87,7 @@ export default function SearchBar() {
       <SearchResultWrapper>
         {searching ? (
           posts.length > 0 ? (
-            posts.map((post) => <PostUI key={uuidv4()} post={post} />)
+            posts.map((post) => <PostUI key={uuidv4()} post={post} isSearch />)
           ) : (
             <HelpText>검색 결과가 없어요 👻</HelpText>
           )

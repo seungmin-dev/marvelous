@@ -15,9 +15,10 @@ import { Link, useNavigate } from "react-router-dom";
 interface IPostUI {
   post: Post;
   isObject?: boolean;
+  isSearch?: boolean;
 }
 
-export const PostUI = ({ post, isObject }: IPostUI) => {
+export const PostUI = ({ post, isObject, isSearch = false }: IPostUI) => {
   const user = auth.currentUser;
   const navigate = useNavigate();
 
@@ -120,7 +121,7 @@ export const PostUI = ({ post, isObject }: IPostUI) => {
             ))}
         </S.PostImgWrapper>
       ) : null}
-      {editPostId !== post.id ? (
+      {editPostId !== post.id && !isSearch ? (
         <PostButtons post={post} setEditPostId={setEditPostId} />
       ) : null}
     </S.Post>
