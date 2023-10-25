@@ -3,6 +3,8 @@ import Sidebar from "./sidebar";
 import SearchBar from "./search-bar";
 import { MobileMenu } from "./mobile-menu";
 import { MobileHeader } from "./mobile-header";
+import { FloatButton } from "./buttons/float-button";
+import { useMobile } from "../commons/hooks/useMobile";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -53,6 +55,8 @@ const SearchWrapper = styled.div`
 `;
 
 export default function Layout({ children }: { children: React.ReactNode }) {
+  const { isMobile } = useMobile();
+
   return (
     <Wrapper>
       <SideWrapper>
@@ -61,6 +65,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <MainWrapper>
         <MobileHeader />
         <InnerWrapper>{children}</InnerWrapper>
+        {isMobile ? <FloatButton /> : null}
         <MobileMenu />
       </MainWrapper>
       <SearchWrapper>

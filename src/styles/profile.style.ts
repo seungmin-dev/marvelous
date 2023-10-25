@@ -125,7 +125,7 @@ export const Menu = styled.li`
 export const PostList = styled.div`
   width: 100%;
   box-sizing: border-box;
-  padding: 10px 20px;
+  padding: 10px 20px 80px;
 `;
 export const FollowItem = styled.div`
   width: 100%;

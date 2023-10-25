@@ -6,9 +6,6 @@ export const WriteFormWrapper = styled.div`
   padding: 20px;
   box-sizing: border-box;
   border-bottom: ${({ theme }) => `1px solid ${theme.grayColor}`};
-  @media (max-width: 800px) {
-    display: none;
-  }
 `;
 export const Form = styled.form``;
 export const Textarea = styled.textarea`

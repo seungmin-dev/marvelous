@@ -7,7 +7,7 @@ const Wrapper = styled.div`
   margin: 0 auto;
   position: relative;
   @media (max-width: 800px) {
-    padding-top: 80px;
+    padding: 80px 0;
   }
 `;
 export const TitleWrapper = styled.div`

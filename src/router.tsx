@@ -24,6 +24,7 @@ import NotFound from "./pages/not-found";
 import UserProfile from "./pages/user-profile";
 import Post from "./pages/post";
 import CommentForm from "./pages/comment-form";
+import MobileWrite from "./pages/mobile-write";
 
 library.add(faHouse, faHashtag, faGlasses, faBell, faGear, faBookmark);
 interface RouterElement {
@@ -137,6 +138,13 @@ const routerData: RouterElement[] = [
     path: "/post",
     label: "Post",
     element: <Post />,
+    withAuth: true,
+  },
+  {
+    id: 12,
+    path: "/mobile-write",
+    label: "Mobile",
+    element: <MobileWrite />,
     withAuth: true,
   },
 ];

@@ -6,6 +6,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import SearchBar from "./search-bar";
+import { useMobile } from "../commons/hooks/useMobile";
+import { useNavigate } from "react-router-dom";
 
 const Wrapper = styled.div`
   display: none;
@@ -36,22 +38,16 @@ const Icon = styled.span`
 
 export const MobileHeader = () => {
   const [clickSearch, setClickSearch] = useState(false);
-  const [isMobile, setMobile] = useState(false);
+  const { isMobile } = useMobile();
+  const navigate = useNavigate();
 
   const onClickSearch = () => {
     setClickSearch((prev) => !prev);
   };
 
-  const handleResize = () => {
-    if (window.innerWidth < 800) setMobile(true);
-    else setMobile(false);
-  };
-  window.addEventListener("resize", handleResize);
   useEffect(() => {
-    // width가 800이 넘으면 false
-    const mediaQuery = window.matchMedia("(max-width: 800px)").matches;
-    setMobile(mediaQuery);
-  }, []);
+    setClickSearch(false);
+  }, [navigate]);
 
   return (
     <>

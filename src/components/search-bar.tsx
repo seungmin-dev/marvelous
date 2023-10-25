@@ -48,10 +48,15 @@ const TrailerWrapper = styled.div`
 export default function SearchBar() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [playing, setPlaying] = useState(false);
+  const [searching, setSearching] = useState(false);
+
   const { fetchPostsByKeyword } = useFetchPost();
 
   const getDebounce = _.debounce((value) => {
-    fetchPostsByKeyword(value).then((result) => setPosts(result));
+    fetchPostsByKeyword(value).then((result) => {
+      setSearching(true);
+      setPosts(result);
+    });
   }, 500);
 
   const onChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,8 +85,12 @@ export default function SearchBar() {
         />
       </SearchWrapper>
       <SearchResultWrapper>
-        {posts.length > 0 ? (
-          posts.map((post) => <PostUI key={uuidv4()} post={post} />)
+        {searching ? (
+          posts.length > 0 ? (
+            posts.map((post) => <PostUI key={uuidv4()} post={post} />)
+          ) : (
+            <HelpText>검색 결과가 없어요 👻</HelpText>
+          )
         ) : (
           <HelpText>현재 검색 기능은 한 단어로만 가능합니다.</HelpText>
         )}

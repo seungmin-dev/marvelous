@@ -9,12 +9,16 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useNoti } from "../commons/hooks/useNoti";
 import { Modal } from "antd";
 import { useFile } from "../commons/hooks/useFile";
+import { useMobile } from "../commons/hooks/useMobile";
+import { useNavigate } from "react-router-dom";
 
 export const WriteForm = () => {
   const [loading, setLoading] = useState(false);
   const [onComplete, setComplete] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
+  const navigate = useNavigate();
+  const { isMobile } = useMobile();
   const { contextHolder, openNotification } = useNoti();
   const { fileList, setFileList, tempUrlList, setTempUrlList, onChangeFiles } =
     useFile();
@@ -61,6 +65,8 @@ export const WriteForm = () => {
       textareaRef.current!.value = "";
       setFileList(null);
       setTempUrlList([]);
+
+      if (isMobile) navigate("/");
     } catch (error) {
       if (error instanceof Error)
         Modal.error({ content: "글 등록에 실패했어요 😥" });

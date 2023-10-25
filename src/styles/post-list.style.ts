@@ -9,6 +9,9 @@ export const ListWrapper = styled.div`
   flex-direction: column;
   gap: 10px;
   overflow-y: scroll;
+  @media (max-width: 800px) {
+    height: 100%;
+  }
 `;
 export const Post = styled.div`
   cursor: pointer;
