@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { SidebarContent } from "../router";
 import { useRouter } from "../commons/hooks/useRouter";
 import { Link } from "react-router-dom";
+import { auth } from "../../firebase";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -23,20 +24,34 @@ const Item = styled.div`
   text-align: center;
 `;
 const ItemLink = styled.span`
+  width: 100%;
+  height: 100%;
   color: ${({ isActive, theme }: { isActive: boolean }) =>
     isActive ? theme.activeColor : theme.textColor};
 `;
+const Img = styled.img`
+  width: 60%;
+  aspect-ratio: 1/1;
+  border-radius: 100%;
+  box-sizing: border-box;
+  border: ${({ theme }) => `1px solid ${theme.textColor}`};
+`;
 
 export const MobileMenu = () => {
+  const user = auth.currentUser;
   const { currentPath } = useRouter();
   return (
     <Wrapper>
       {SidebarContent.map((sidebar, i) =>
-        sidebar.id < 6 ? (
+        sidebar.id < 5 || sidebar.id === 8 ? (
           <Item key={i}>
             <Link to={sidebar.path}>
               <ItemLink isActive={currentPath === sidebar.path}>
-                {sidebar.icon}
+                {sidebar.id !== 8 ? (
+                  sidebar.icon
+                ) : (
+                  <Img src={user?.photoURL as string} />
+                )}
               </ItemLink>
             </Link>
           </Item>

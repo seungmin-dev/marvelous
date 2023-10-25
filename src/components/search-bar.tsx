@@ -3,7 +3,7 @@ import { SearchInput } from "./ui/searchInput";
 import ReactPlayer from "react-player";
 import { useFetchPost } from "../commons/hooks/useFetchPost";
 import _ from "lodash";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Post } from "../types/type";
 import { v4 as uuidv4 } from "uuid";
 import { PostUI } from "./ui/post-ui";
@@ -14,6 +14,9 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  @media (max-width: 800px) {
+    padding-top: 80px;
+  }
 `;
 const SearchWrapper = styled.div`
   padding: 20px;
@@ -37,10 +40,14 @@ const TrailerWrapper = styled.div`
   height: 30%;
   padding: 20px;
   border-top: ${({ theme }) => `1px solid ${theme.grayColor}`};
+  @media (max-width: 800px) {
+    display: none;
+  }
 `;
 
 export default function SearchBar() {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [playing, setPlaying] = useState(false);
   const { fetchPostsByKeyword } = useFetchPost();
 
   const getDebounce = _.debounce((value) => {
@@ -50,6 +57,18 @@ export default function SearchBar() {
   const onChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     getDebounce(e.currentTarget.value);
   };
+
+  const handleResize = () => {
+    if (window.innerWidth < 800) setPlaying(false);
+  };
+  window.addEventListener("resize", handleResize);
+
+  useEffect(() => {
+    // width가 800이 넘으면 false
+    const mediaQuery = window.matchMedia("(max-width: 800px)").matches;
+    // 현재 환경이 PC라면 트레일러 재생
+    setPlaying(!mediaQuery);
+  }, []);
 
   return (
     <Wrapper>
@@ -70,7 +89,7 @@ export default function SearchBar() {
       <TrailerWrapper>
         <ReactPlayer
           url={"https://youtu.be/dug56u8NN7g?si=50No8BlqnVBydXua"}
-          playing
+          playing={playing}
           loop
           width="100%"
           height="100%"

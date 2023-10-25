@@ -1,6 +1,11 @@
 import styled from "@emotion/styled";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircleXmark,
+  faMagnifyingGlass,
+} from "@fortawesome/free-solid-svg-icons";
+import { useEffect, useState } from "react";
+import SearchBar from "./search-bar";
 
 const Wrapper = styled.div`
   display: none;
@@ -30,12 +35,37 @@ const Icon = styled.span`
 `;
 
 export const MobileHeader = () => {
+  const [clickSearch, setClickSearch] = useState(false);
+  const [isMobile, setMobile] = useState(false);
+
+  const onClickSearch = () => {
+    setClickSearch((prev) => !prev);
+  };
+
+  const handleResize = () => {
+    if (window.innerWidth < 800) setMobile(true);
+    else setMobile(false);
+  };
+  window.addEventListener("resize", handleResize);
+  useEffect(() => {
+    // width가 800이 넘으면 false
+    const mediaQuery = window.matchMedia("(max-width: 800px)").matches;
+    setMobile(mediaQuery);
+  }, []);
+
   return (
-    <Wrapper>
-      <Logo src="/src/assets/logo.png" />
-      <Icon>
-        <FontAwesomeIcon icon={faMagnifyingGlass} />
-      </Icon>
-    </Wrapper>
+    <>
+      <Wrapper>
+        <Logo src="/src/assets/logo.png" />
+        <Icon onClick={onClickSearch}>
+          {clickSearch ? (
+            <FontAwesomeIcon icon={faCircleXmark} />
+          ) : (
+            <FontAwesomeIcon icon={faMagnifyingGlass} />
+          )}
+        </Icon>
+      </Wrapper>
+      {isMobile ? clickSearch ? <SearchBar /> : null : null}
+    </>
   );
 };
