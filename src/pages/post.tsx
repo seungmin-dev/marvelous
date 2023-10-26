@@ -29,7 +29,7 @@ export default function Post() {
 
   useEffect(() => {
     fetchPostById(location.state.postId).then((result) => {
-      if (result.post === undefined) {
+      if (result.content === undefined) {
         setError(true);
         return;
       }

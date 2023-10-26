@@ -13,9 +13,9 @@ import { Modal } from "antd";
 import { useState } from "react";
 
 export interface Following {
-  username: string;
   userId: string;
-  userphoto: string;
+  userName: string;
+  userPhoto: string;
 }
 interface FollowInProfileProps {
   followings: Following[];
@@ -31,33 +31,31 @@ export const useFollow = () => {
   const onClickFollow = (objectId: string) => async () => {
     setFollowing((prev) => !prev);
     try {
-      const userRef = doc(db, "users", user?.uid as string);
+      const userRef = doc(db, "follow", user?.uid as string);
+
       await setDoc(
         userRef,
         {
-          userId: user?.uid,
-          username: user?.displayName,
-          follow: following ? arrayRemove(objectId) : arrayUnion(objectId),
+          userId: following ? arrayRemove(objectId) : arrayUnion(objectId),
         },
         { merge: true }
       );
+      openNotification(following ? "언팔로우" : "팔로우");
 
       // 팔로우한 대상에게 알림 보내기
-      const followRef = doc(db, "alerts", `${user?.uid}-${objectId}`);
+      const followRef = doc(db, "noti", `${user?.uid}-${objectId}`);
 
       if (!following) {
-        await setDoc(doc(db, "alerts", `${user?.uid}-${objectId}`), {
+        await setDoc(followRef, {
           userId: objectId,
-          personId: user?.uid,
-          personName: user?.displayName,
+          sendId: user?.uid,
+          sendName: user?.displayName,
           type: "follow",
           createdAt: Date.now(),
         });
       } else {
         await deleteDoc(followRef);
       }
-
-      openNotification(following ? "언팔로우" : "팔로우");
     } catch (error) {
       setFollowing((prev) => !prev);
       if (error instanceof FirebaseError)
@@ -66,9 +64,9 @@ export const useFollow = () => {
   };
 
   const fetchFollowYn = async (objectUserId: string) => {
-    const ref = doc(db, "users", user?.uid as string);
+    const ref = doc(db, "follow", user?.uid as string);
     const snapshot = await getDoc(ref);
-    const result = { following: snapshot.data()?.follow };
+    const result = { following: snapshot.data()?.userId };
 
     if (result.following && result.following.includes(objectUserId))
       setFollowing(true);
@@ -82,12 +80,10 @@ export const useFollow = () => {
       );
       setFollowings(filteredList);
 
-      const userRef = doc(db, "users", user?.uid as string);
+      const userRef = doc(db, "follow", user?.uid as string);
       await setDoc(
         userRef,
         {
-          userId: user?.uid,
-          username: user?.displayName,
           follow: arrayRemove(objectUserId),
         },
         { merge: true }

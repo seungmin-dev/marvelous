@@ -26,27 +26,30 @@ export const PostList = () => {
       unsubscribe = await onSnapshot(postsQuery, (snapshot) => {
         const posts = snapshot.docs.map((doc) => {
           const {
-            post,
+            userId,
+            content,
             photo,
             photoLeng,
-            createdAt,
-            userId,
-            username,
-            userphoto,
-            heartedNum,
+            heartNum,
             commentNum,
+            isComment,
+            originPostId,
+            originPostContent,
+            createdAt,
+            updatedAt,
           } = doc.data();
-
           return {
-            post,
+            userId,
+            content,
             photo,
             photoLeng,
-            createdAt,
-            userId,
-            username,
-            userphoto,
-            heartedNum,
+            heartNum,
             commentNum,
+            isComment,
+            originPostId,
+            originPostContent,
+            createdAt,
+            updatedAt,
             id: doc.id,
           };
         });

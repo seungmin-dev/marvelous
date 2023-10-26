@@ -3,19 +3,20 @@ import { auth, db } from "../../../firebase";
 
 export const useFetchPostInfo = () => {
   const user = auth.currentUser;
-  const userRef = doc(db, "users", user?.uid as string);
 
   // 유저 북마크 목록
   const fetchBookmarksOfUser = async () => {
-    const snapshot = await getDoc(userRef);
+    const bookmarkRef = doc(db, "bookmark", user?.uid as string);
+    const snapshot = await getDoc(bookmarkRef);
 
     if (!snapshot.exists()) return;
-    return snapshot.data()?.bookmarks;
+    return snapshot.data()?.bookmark;
   };
 
   // 유저 하트 목록
   const fetchHeartsOfUser = async () => {
-    const snapshot = await getDoc(userRef);
+    const heartRef = doc(db, "heart", user?.uid as string);
+    const snapshot = await getDoc(heartRef);
 
     if (!snapshot.exists()) return;
     return snapshot.data()?.heart;
@@ -27,7 +28,7 @@ export const useFetchPostInfo = () => {
     const docResult = await getDoc(docRef);
 
     if (!docResult.exists()) return;
-    return docResult.data()?.heartedNum;
+    return docResult.data()?.heartNum;
   };
 
   // 포스트 댓글 수

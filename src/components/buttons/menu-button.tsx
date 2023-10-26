@@ -1,10 +1,13 @@
 import {
+  arrayRemove,
   collection,
   deleteDoc,
   doc,
+  getDoc,
   getDocs,
   increment,
   query,
+  setDoc,
   updateDoc,
   where,
 } from "firebase/firestore";
@@ -21,35 +24,63 @@ import { useState } from "react";
 import { useNoti } from "../../commons/hooks/useNoti";
 import { useNavigate } from "react-router-dom";
 import { useModal } from "../../commons/hooks/useModal";
+import { useUserInfo } from "../../commons/hooks/useUserInfo";
 
 interface MenuButtonProps {
-  isComment?: boolean;
+  isComment: boolean;
   setEditPostId: React.Dispatch<React.SetStateAction<string>>;
   props: { postId: string; writerId: string };
   photoLeng?: number;
+  originPostId?: string;
 }
 export const MenuButton = ({
   isComment,
   setEditPostId,
   props,
   photoLeng,
+  originPostId,
 }: MenuButtonProps) => {
   const user = auth.currentUser;
   const [pickedId, setPickedId] = useState("");
   const navigate = useNavigate();
 
+  const { fetchAllUsers } = useUserInfo();
   const { contextHolder, openNotification } = useNoti();
   const { modalOpen, onClickOpenModal } = useModal();
 
   const onClickDelete = (postId: string) => async () => {
     try {
-      const docRef = doc(db, `${!isComment ? "posts" : "comments"}`, postId);
+      const docRef = doc(db, "posts", postId);
+      // 댓글 삭제 시
+      if (isComment) {
+        // 원글 댓글 수 감소
+        await getDoc(doc(db, "posts", postId)).then(
+          async (result) =>
+            await updateDoc(doc(db, "posts", result.data()?.originPostId), {
+              commentNum: increment(-1),
+            })
+        );
+        // 알림 삭제
+        await deleteDoc(doc(db, "noti", `${user?.uid}-${postId}-comment`));
+      }
       await deleteDoc(docRef);
+
+      fetchAllUsers().then(async (result) => {
+        for (let i = 0; i < result.length; i++) {
+          // 하트 목록에서 삭제
+          const heartRef = doc(db, "heart", result[i].userId);
+          await setDoc(heartRef, { heart: arrayRemove(postId) });
+          // 북마크 목록에서 삭제
+          const bookmarkRef = doc(db, "bookmark", result[i].userId);
+          await setDoc(bookmarkRef, { bookmark: arrayRemove(postId) });
+        }
+      });
+
       if (!isComment) {
         // 원글 삭제 시 댓글까지 같이 삭제
         const commentDelQuery = query(
-          collection(db, "comments"),
-          where("postId", "==", postId)
+          collection(db, "posts"),
+          where("originPostId", "==", postId)
         );
         const commentSnapshot = await getDocs(commentDelQuery);
         commentSnapshot.docs.map((doc) => {
@@ -60,7 +91,7 @@ export const MenuButton = ({
             for (let i = 0; i < doc.data().photoLeng; i++) {
               const storageRef = ref(
                 storage,
-                `comments/${user?.uid}-${user?.displayName}/${doc.ref.id}-${i}`
+                `posts/${user?.uid}-${user?.displayName}/${postId}-${doc.ref.id}-${i}`
               );
 
               deleteObject(storageRef)
@@ -84,9 +115,9 @@ export const MenuButton = ({
         for (let i = 0; i < photoLeng; i++) {
           const storageRef = ref(
             storage,
-            `${!isComment ? "posts" : "comments"}/${user?.uid}-${
-              user?.displayName
-            }/${postId}-${i}`
+            isComment
+              ? `posts/${user?.uid}-${user?.displayName}/${originPostId}-${postId}-${i}`
+              : `posts/${user?.uid}-${user?.displayName}/${postId}-${i}`
           );
 
           deleteObject(storageRef)
@@ -102,15 +133,6 @@ export const MenuButton = ({
         }
       }
 
-      // 댓글 삭제 시
-      if (isComment) {
-        // 원글 댓글 수 감소
-        await updateDoc(doc(db, "posts", postId.split("-")[0]), {
-          commentNum: increment(-1),
-        });
-        // 알림 삭제
-        await deleteDoc(doc(db, "alerts", postId));
-      }
       openNotification("글 삭제");
 
       // 원글 삭제 시 홈으로 이동

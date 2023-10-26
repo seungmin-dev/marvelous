@@ -26,7 +26,7 @@ export default function Bookmarks() {
           setDoc(
             userRef,
             {
-              bookmarks: arrayRemove(bookmarks[i]),
+              bookmark: arrayRemove(bookmarks[i]),
             },
             { merge: true }
           );

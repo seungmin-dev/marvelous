@@ -42,11 +42,13 @@ export const WriteForm = () => {
         .split(" ")
         .filter((text) => text.length > 0);
       const doc = await addDoc(collection(db, "posts"), {
-        post: filteredPost,
-        createdAt: Date.now(),
-        username: user?.displayName,
         userId: user?.uid,
-        userphoto: user?.photoURL,
+        content: filteredPost,
+        heartNum: 0,
+        commentNum: 0,
+        isComment: false,
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
       });
       if (fileList && fileList?.length > 0) {
         const urlList = [];
@@ -60,7 +62,10 @@ export const WriteForm = () => {
           const url = await getDownloadURL(result.ref);
           urlList.push(url);
         }
-        await updateDoc(doc, { photo: urlList, photoLeng: urlList.length });
+        await updateDoc(doc, {
+          photo: urlList,
+          photoLeng: urlList.length,
+        });
       }
       textareaRef.current!.value = "";
       setFileList(null);

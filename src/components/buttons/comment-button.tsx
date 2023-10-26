@@ -9,8 +9,7 @@ interface CommentButtonProps {
   props: {
     postId: string;
     writerId: string;
-    writerName: string;
-    postContent: string;
+    postContent: string[];
   };
 }
 export const CommentButton = ({ props }: CommentButtonProps) => {
@@ -23,7 +22,6 @@ export const CommentButton = ({ props }: CommentButtonProps) => {
       state: {
         postId: props.postId,
         writerId: props.writerId,
-        writerName: props.writerName,
         originContent: props.postContent,
         commentNum: await fetchCommentNum(props.postId.split("-")[0]),
       },

@@ -47,9 +47,11 @@ export const SignupForm = (props: ISignupFormProps) => {
         // db에 user 정보 생성
         const userRef = doc(db, "users", user.uid);
         await setDoc(userRef, {
-          username: user.displayName,
+          userName: user.displayName,
           userId: user.uid,
-          userphoto: user.photoURL,
+          userPhoto: user.photoURL,
+          userBgImg: "/src/assets/emptyBgImg.png",
+          createdAt: Date.now(),
         });
         routeTo("/");
       });

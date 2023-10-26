@@ -2,15 +2,35 @@ import { UseFormRegisterReturn } from "react-hook-form";
 
 export interface Post {
   id: string;
-  post: string[];
+  userId: string;
+  content: string[];
   photo: string[];
   photoLeng: number;
-  createdAt: number;
-  userId: string;
-  username: string;
-  userphoto: string;
-  heartedNum: number;
+  isComment: boolean;
+  originPostId?: string;
+  originPostContent?: string;
+  heartNum: number;
   commentNum: number;
+  createdAt: number;
+  updatedAt: number;
+}
+
+export interface User {
+  userId: string;
+  userName: string;
+  userPhoto: string;
+  userBgImg: string;
+  createdAt: number;
+}
+
+export interface Noti {
+  id: string;
+  sendId: string;
+  sendName: string;
+  type: "heart" | "bookmark" | "comment" | "follow";
+  postId?: string;
+  postContent?: string;
+  createdAt: number;
 }
 
 export interface InputUIProps {
@@ -19,13 +39,4 @@ export interface InputUIProps {
   placeholder: string;
   register?: UseFormRegisterReturn;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}
-
-export interface User {
-  username: string;
-  userId: string;
-  userphoto: string;
-  userBgImg: string;
-  follow?: string[];
-  bookmarks?: string[];
 }

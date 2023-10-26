@@ -7,13 +7,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ButtonUI2 } from "../components/ui/button-ui-2";
 import { faImage } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useRef, useState } from "react";
-import { doc, setDoc, updateDoc } from "firebase/firestore";
+import { addDoc, collection, doc, setDoc, updateDoc } from "firebase/firestore";
 import { auth, db, storage } from "../../firebase";
 import { FirebaseError } from "firebase/app";
 import { Modal } from "antd";
 import { useNoti } from "../commons/hooks/useNoti";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { v4 as uuidv4 } from "uuid";
+import { useUserInfo } from "../commons/hooks/useUserInfo";
+import { User } from "../types/type";
 
 export const CommentWrapper = styled.div`
   width: 100%;
@@ -40,6 +41,7 @@ export const Textarea = styled.textarea`
 
 export default function CommentForm() {
   const user = auth.currentUser;
+  const [userInfo, setUserInfo] = useState<User>();
   const location = useLocation();
   const navigate = useNavigate();
   const { contextHolder, openNotification } = useNoti();
@@ -56,19 +58,25 @@ export default function CommentForm() {
   });
   const { fileList, setFileList, tempUrlList, setTempUrlList, onChangeFiles } =
     useFile();
+  const { fetchUserInfo } = useUserInfo();
 
+  useEffect(() => {
+    fetchUserInfo(location.state.writerId).then((result) =>
+      setUserInfo(result)
+    );
+  }, [location]);
   useEffect(() => {
     setCommentInfo({
       postId: location.state.postId,
       writerId: location.state.writerId,
-      writerName: location.state.writerName,
-      atWriterName: `@${location.state.writerName} `,
+      writerName: userInfo?.userName as string,
+      atWriterName: `@${userInfo?.userName as string} `,
       commentNum:
         location.state.commentNum === undefined
           ? 0
           : Number(location.state.commentNum),
     });
-  }, [location]);
+  }, [userInfo]);
 
   const onChangeTextarea = () => {
     if ((textareaRef.current?.value.length as number) > 0) setComplete(true);
@@ -81,28 +89,22 @@ export default function CommentForm() {
 
     setLoading(true);
     try {
-      const commentRef = doc(
-        db,
-        "comments",
-        `${commentInfo.postId}-${uuidv4()}`
-      );
-      const splittedStr = textareaRef.current?.value.split(
-        commentInfo.atWriterName
-      )[1];
+      const splittedStr = textareaRef.current?.value
+        .split(commentInfo.atWriterName)[1]
+        .split(" ");
 
-      if (splittedStr === "") return;
+      if (splittedStr!.length < 0) return;
 
-      await setDoc(commentRef, {
-        postId: commentInfo.postId,
-        writerId: commentInfo.writerId,
-        writerName: commentInfo.writerName,
-        commentWriterId: user?.uid,
-        commentWriterName: user?.displayName,
-        commentWriterPhoto: user?.photoURL,
-        comment: splittedStr,
-        heartedNum: 0,
+      const docResult = await addDoc(collection(db, "posts"), {
+        userId: user?.uid,
+        content: splittedStr,
+        heartNum: 0,
         commentNum: 0,
+        isComment: true,
+        originPostId: commentInfo.postId,
+        originUserId: commentInfo.writerId,
         createdAt: Date.now(),
+        updatedAt: Date.now(),
       });
       if (fileList && fileList?.length > 0) {
         const urlList = [];
@@ -110,17 +112,18 @@ export default function CommentForm() {
           const file = fileList[i];
           const locationRef = ref(
             storage,
-            `comments/${user?.uid}-${user?.displayName}/${commentRef.id}-${i}`
+            `posts/${user?.uid}-${user?.displayName}/${commentInfo.postId}-${docResult.id}-${i}`
           );
           const result = await uploadBytes(locationRef, file);
           const url = await getDownloadURL(result.ref);
           urlList.push(url);
         }
-        await updateDoc(commentRef, {
+        await updateDoc(docResult, {
           photo: urlList,
           photoLeng: urlList.length,
         });
       }
+
       setFileList(null);
       setTempUrlList([]);
 
@@ -134,17 +137,18 @@ export default function CommentForm() {
 
       // 글 작성자에게 알림 보내기
       if (user?.uid !== commentInfo.writerId) {
-        const alertRef = doc(
+        const notiRef = doc(
           db,
-          "alerts",
-          `${commentInfo.postId}-${user?.uid}-comment-${uuidv4()}`
+          "noti",
+          `${user?.uid}-${commentInfo.writerId}-comment`
         );
-        await setDoc(alertRef, {
+        await setDoc(notiRef, {
           userId: commentInfo.writerId,
-          personId: user?.uid,
-          personName: user?.displayName,
+          sendId: user?.uid,
+          sendName: user?.displayName,
           type: "comment",
-          content: location.state.originContent.slice(0, 10),
+          poseId: commentInfo.postId,
+          postContent: location.state.originContent.slice(0, 10),
           createdAt: Date.now(),
         });
       }

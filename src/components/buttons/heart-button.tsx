@@ -18,7 +18,7 @@ import { useEffect, useState } from "react";
 import { useFetchPostInfo } from "../../commons/hooks/useFetchPostInfo";
 
 interface HeartButtonProps {
-  props: { postId: string; writerId: string; postContent: string };
+  props: { postId: string; writerId: string; postContent: string[] };
 }
 
 export const HeartButton = ({ props }: HeartButtonProps) => {
@@ -37,13 +37,18 @@ export const HeartButton = ({ props }: HeartButtonProps) => {
     }
   };
   const onClickHeart =
-    (heartNum: number, postId: string, writerId: string, postContent: string) =>
+    (
+      heartNum: number,
+      postId: string,
+      writerId: string,
+      postContent: string[]
+    ) =>
     async () => {
       setHearted((prev) => !prev);
 
       try {
         // 유저 하트 목록에 추가
-        const heartRef = doc(db, "users", user?.uid as string);
+        const heartRef = doc(db, "heart", user?.uid as string);
         await setDoc(
           heartRef,
           { heart: hearted ? arrayRemove(postId) : arrayUnion(postId) },
@@ -53,7 +58,7 @@ export const HeartButton = ({ props }: HeartButtonProps) => {
         // 게시글에 하트 수 증감
         const docRef = doc(db, "posts", postId);
         await updateDoc(docRef, {
-          heartedNum: hearted ? --heartNum : ++heartNum,
+          heartNum: hearted ? --heartNum : ++heartNum,
         });
 
         if (!hearted) setHeartNum((prev) => ++prev);
@@ -64,14 +69,15 @@ export const HeartButton = ({ props }: HeartButtonProps) => {
         // 글 작성자에게 알림
         if (user?.uid === writerId) return;
 
-        const alertRef = doc(db, "alerts", `${postId}-${user?.uid}-heart`);
+        const alertRef = doc(db, "noti", `${user?.uid}-${writerId}-heart`);
         if (!hearted) {
           await setDoc(alertRef, {
             userId: writerId,
-            personId: user?.uid,
-            personName: user?.displayName,
+            sendId: user?.uid,
+            sendName: user?.displayName,
             type: "heart",
-            content: postContent.slice(0, 10),
+            postId: postId,
+            postContent: postContent.slice(0, 10),
             createdAt: Date.now(),
           });
         } else {

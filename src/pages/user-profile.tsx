@@ -52,8 +52,8 @@ export default function UserProfile() {
       <S.InnerWrapper>
         <S.UserBox isObject>
           <S.UserHeader isObject>
-            <S.UserProfilePic src={objectUserInfo?.userphoto as string} />
-            <S.UserName>{objectUserInfo?.username}</S.UserName>
+            <S.UserProfilePic src={objectUserInfo?.userPhoto as string} />
+            <S.UserName>{objectUserInfo?.userName}</S.UserName>
             <S.FollowingButton onClick={onClickFollow(objectUserId)}>
               {following ? "언팔로우" : "팔로우"}
             </S.FollowingButton>
@@ -66,7 +66,7 @@ export default function UserProfile() {
                 <PostUI key={uuidv4()} post={post} isObject />
               ))
             ) : (
-              <BlankUI text={`${objectUserInfo?.username}님이 작성한 글`} />
+              <BlankUI text={`${objectUserInfo?.userName}님이 작성한 글`} />
             )}
           </S.PostList>
         </S.PostBox>

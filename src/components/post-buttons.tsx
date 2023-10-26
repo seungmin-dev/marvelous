@@ -10,19 +10,20 @@ import { Post } from "../types/type";
 interface IPostButtonsProps {
   post: Post;
   setEditPostId: React.Dispatch<React.SetStateAction<string>>;
-  isComment?: boolean;
+  isComment: boolean;
+  originPostId?: string;
 }
 
 export const PostButtons = ({
   post,
   setEditPostId,
   isComment = false,
+  originPostId,
 }: IPostButtonsProps) => {
   const [propsObj, setPropsObj] = useState({
     postId: "",
     writerId: "",
-    writerName: "",
-    postContent: "",
+    postContent: [""],
   });
 
   const { contextHolder } = useNoti();
@@ -32,8 +33,7 @@ export const PostButtons = ({
       setPropsObj({
         postId: post.id,
         writerId: post.userId,
-        writerName: post.username,
-        postContent: post.post,
+        postContent: post.content,
       });
   }, []);
 
@@ -59,6 +59,7 @@ export const PostButtons = ({
           props={propsObj}
           setEditPostId={setEditPostId}
           photoLeng={post ? post.photoLeng : 0}
+          originPostId={originPostId}
         />
       </S.PostButtonWrapper>
     </>

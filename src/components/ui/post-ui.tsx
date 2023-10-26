@@ -1,7 +1,7 @@
 import * as S from "../../styles/post-list.style";
 import { timeAgo } from "../../commons/time-ago";
 import { PostButtons } from "../post-buttons";
-import type { Post } from "../../types/type";
+import { User, type Post } from "../../types/type";
 import { useEffect, useRef, useState } from "react";
 import { ButtonUI2 } from "./button-ui-2";
 import { doc, updateDoc } from "firebase/firestore";
@@ -11,6 +11,7 @@ import { Modal } from "antd";
 import { useNoti } from "../../commons/hooks/useNoti";
 import { useFollow } from "../../commons/hooks/useFollow";
 import { Link, useNavigate } from "react-router-dom";
+import { useUserInfo } from "../../commons/hooks/useUserInfo";
 
 interface IPostUI {
   post: Post;
@@ -22,6 +23,8 @@ export const PostUI = ({ post, isObject, isSearch = false }: IPostUI) => {
   const user = auth.currentUser;
   const navigate = useNavigate();
 
+  const [userInfo, setUserInfo] = useState<User>();
+  const [objectUserInfo, setObjectUserInfo] = useState<User>();
   const [editPostId, setEditPostId] = useState("");
   const [originContent, setOriginContent] = useState("");
   const [edittedContent, setContent] = useState("");
@@ -32,13 +35,17 @@ export const PostUI = ({ post, isObject, isSearch = false }: IPostUI) => {
   };
   const { contextHolder, openNotification } = useNoti();
   const { following, fetchFollowYn, onClickFollow } = useFollow();
+  const { fetchUserInfo, fetchObjectUserInfo } = useUserInfo();
 
   const onSubmitEdit = (postId: string) => async () => {
     if (textareaRef.current?.value === "") return;
     setLoading(true);
     try {
       const docRef = doc(db, "posts", postId);
-      await updateDoc(docRef, { post: textareaRef.current?.value });
+      await updateDoc(docRef, {
+        content: textareaRef.current?.value.split(" "),
+        updatedAt: Date.now(),
+      });
 
       openNotification("글 수정");
     } catch (error) {
@@ -52,7 +59,9 @@ export const PostUI = ({ post, isObject, isSearch = false }: IPostUI) => {
 
   const onClickPost = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target !== e.currentTarget) return;
-    navigate("/post", { state: { postId: post.id } });
+    navigate("/post", {
+      state: { postId: !post.isComment ? post.id : post.originPostId },
+    });
   };
 
   useEffect(() => {
@@ -61,13 +70,17 @@ export const PostUI = ({ post, isObject, isSearch = false }: IPostUI) => {
 
   useEffect(() => {
     if (post.userId !== user?.uid) fetchFollowYn(post.userId);
+    fetchUserInfo(post.userId).then((result) => setUserInfo(result));
+    if (post.isComment)
+      fetchObjectUserInfo(post.originPostId as string).then((result) =>
+        setObjectUserInfo(result)
+      );
   }, []);
-
   return (
     <S.Post key={post.id} onClick={onClickPost}>
       {contextHolder}
       <S.PostHeader>
-        <S.PostProfileImg src={post.userphoto} />
+        <S.PostProfileImg src={userInfo?.userPhoto} />
         <S.PostUsername myDoc={user?.uid === post.userId}>
           <Link
             to={
@@ -76,7 +89,7 @@ export const PostUI = ({ post, isObject, isSearch = false }: IPostUI) => {
                 : `/user-profile?${post.userId}`
             }
           >
-            {post.username}
+            {userInfo?.userName}
           </Link>
         </S.PostUsername>
         {!isObject && user?.uid !== post.userId ? (
@@ -100,10 +113,13 @@ export const PostUI = ({ post, isObject, isSearch = false }: IPostUI) => {
         )}
       </S.PostHeader>
       {editPostId !== post.id ? (
-        <S.PostContent>{post.post.join(" ")}</S.PostContent>
+        <S.PostContent>
+          {post.isComment ? <b>@{objectUserInfo?.userName} </b> : null}
+          {post.content?.join(" ")}
+        </S.PostContent>
       ) : (
         <S.Textarea
-          defaultValue={post.post}
+          defaultValue={post.content}
           onChange={onChangeText}
           ref={textareaRef}
         />
@@ -122,7 +138,12 @@ export const PostUI = ({ post, isObject, isSearch = false }: IPostUI) => {
         </S.PostImgWrapper>
       ) : null}
       {editPostId !== post.id && !isSearch ? (
-        <PostButtons post={post} setEditPostId={setEditPostId} />
+        <PostButtons
+          post={post}
+          isComment={post.isComment}
+          setEditPostId={setEditPostId}
+          originPostId={post.originPostId}
+        />
       ) : null}
     </S.Post>
   );

@@ -22,12 +22,14 @@ import {
 import { BlankUI } from "../components/ui/blank";
 import { Link } from "react-router-dom";
 
-interface Alert {
+interface Noti {
   id: string;
-  personId: string;
-  personName: string;
+  userId: string;
+  sendId: string;
+  sendName: string;
   type: "comment" | "bookmark" | "heart" | "follow";
-  content: string;
+  postId: string;
+  postContent: string;
   createdAt: number;
 }
 
@@ -76,94 +78,104 @@ const Text = styled.span`
 `;
 
 export default function Notifications() {
-  const [alerts, setAlerts] = useState<Alert[]>([]);
+  const [notis, setNotis] = useState<Noti[]>([]);
 
-  const fetchAlerts = async () => {
+  const fetchNotis = async () => {
     const user = auth.currentUser;
     const alertQuery = query(
-      collection(db, "alerts"),
+      collection(db, "noti"),
       where("userId", "==", user?.uid),
       orderBy("createdAt", "desc")
     );
     const snapshot = await getDocs(alertQuery);
-    const alertDocs = snapshot.docs.map((doc) => {
-      const { personId, personName, type, content, createdAt } = doc.data();
-      return { personId, personName, type, content, createdAt, id: doc.id };
+    const notiDocs = snapshot.docs.map((doc) => {
+      const { userId, sendId, sendName, type, postId, postContent, createdAt } =
+        doc.data();
+      return {
+        userId,
+        sendId,
+        sendName,
+        type,
+        postId,
+        postContent,
+        createdAt,
+        id: doc.id,
+      };
     });
 
-    setAlerts(alertDocs);
+    setNotis(notiDocs);
   };
 
   const onClickDelete = (docId: string) => async () => {
-    const alertRef = doc(db, "alerts", docId);
-    await deleteDoc(alertRef);
+    const notiRef = doc(db, "noti", docId);
+    await deleteDoc(notiRef);
 
-    const filteredAlerts = alerts.filter((alert) => alert.id !== docId);
-    setAlerts(filteredAlerts);
+    const filteredAlerts = notis.filter((noti) => noti.id !== docId);
+    setNotis(filteredAlerts);
   };
 
   useEffect(() => {
-    fetchAlerts();
+    fetchNotis();
   }, []);
 
   return (
     <WrapperUI title="Notifications">
-      {alerts && alerts.length > 0 ? (
+      {notis && notis.length > 0 ? (
         <AlertList>
-          {alerts.map((alert) => (
-            <Alert key={alert.id} type={alert.type}>
+          {notis.map((noti) => (
+            <Alert key={noti.id} type={noti.type}>
               <AlertHeader>
-                {alert.type === "bookmark" ? (
+                {noti.type === "bookmark" ? (
                   <FontAwesomeIcon icon={faBookmark} />
-                ) : alert.type === "heart" ? (
+                ) : noti.type === "heart" ? (
                   <FontAwesomeIcon icon={faHeart} />
-                ) : alert.type === "follow" ? (
+                ) : noti.type === "follow" ? (
                   <FontAwesomeIcon icon={faUserGroup} />
                 ) : (
                   <FontAwesomeIcon icon={faComment} />
                 )}
-                <Icon onClick={onClickDelete(alert.id)}>
+                <Icon onClick={onClickDelete(noti.id)}>
                   <FontAwesomeIcon icon={faCircleXmark} />
                 </Icon>
               </AlertHeader>
-              {alert.type === "follow" ? (
+              {noti.type === "follow" ? (
                 <Content>
-                  <Link to={`/user-profile?${alert.personId}`}>
+                  <Link to={`/user-profile?${noti.sendId}`}>
                     <Text>
-                      <b>{alert.personName}</b>
+                      <b>{noti.sendName}</b>
                     </Text>
                   </Link>
                   님이 나를 <b>팔로우</b>하기 시작했어요
                 </Content>
-              ) : alert.type === "comment" ? (
+              ) : noti.type === "comment" ? (
                 <Content>
-                  <Link to={`/user-profile?${alert.personId}`}>
+                  <Link to={`/user-profile?${noti.sendId}`}>
                     <Text>
-                      <b>{alert.personName}</b>
+                      <b>{noti.sendName}</b>
                     </Text>
                   </Link>
                   님이 나의 글{" "}
-                  <Link to={`/post`} state={{ postId: alert.id.split("-")[0] }}>
+                  <Link to={`/post`} state={{ postId: noti.id.split("-")[0] }}>
                     <Text>
-                      <b>{alert.content}...</b>
+                      <b>{noti.postContent}...</b>
                     </Text>
                   </Link>
                   에 <b>댓글</b>을 달았어요
                 </Content>
               ) : (
                 <Content>
-                  <Link to={`/user-profile?${alert.personId}`}>
+                  <Link to={`/user-profile?${noti.sendId}`}>
                     <Text>
-                      <b>{alert.personName}</b>
+                      <b>{noti.sendName}</b>
                     </Text>
                   </Link>
                   님이 나의 글{" "}
-                  <Link to={`/post`} state={{ postId: alert.id.split("-")[0] }}>
+                  <Link to={`/post`} state={{ postId: noti.id.split("-")[0] }}>
                     <Text>
-                      <b>{alert.content}...</b>
+                      <b>{noti.postContent}...</b>
                     </Text>
                   </Link>
-                  에 <b>{alert.type === "bookmark" ? "북마크" : "하트"}</b>를
+                  에 <b>{noti.type === "bookmark" ? "북마크" : "하트"}</b>를
                   했어요
                 </Content>
               )}

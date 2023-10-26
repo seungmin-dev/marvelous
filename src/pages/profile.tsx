@@ -39,17 +39,16 @@ export default function Profile() {
     const ref = doc(db, "users", objectUserId);
     const snapshot = await getDoc(ref);
     const result = {
-      username: snapshot.data()?.username,
       userId: snapshot.data()?.userId,
-      userphoto: snapshot.data()?.userphoto,
+      userName: snapshot.data()?.userName,
+      userPhoto: snapshot.data()?.userPhoto,
     };
-
     return result;
   };
   const fetchFollowingList = async () => {
-    const ref = doc(db, "users", user?.uid as string);
+    const ref = doc(db, "follow", user?.uid as string);
     const snapshot = await getDoc(ref);
-    const result = snapshot.data()?.follow;
+    const result = snapshot.data()?.userId;
 
     const tempArr: Following[] = [];
     for (const i in result) {

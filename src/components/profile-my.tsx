@@ -74,7 +74,7 @@ export const ProfileMy = ({
           await updateDoc(userRef, { userBgImg: url });
           setBgImg(url);
         } else if (type === "profile") {
-          await updateDoc(userRef, { userphoto: url });
+          await updateDoc(userRef, { userPhoto: url });
           await updateProfile(user!, { photoURL: url });
 
           setProfilePic(url);
@@ -105,7 +105,7 @@ export const ProfileMy = ({
     const userRef = doc(db, "users", user?.uid as string);
 
     try {
-      await updateDoc(userRef, { username: changedName });
+      await updateDoc(userRef, { userName: changedName });
       await updateProfile(user!, { displayName: changedName });
 
       openNotification("닉네임 변경");
@@ -234,10 +234,10 @@ export const ProfileMy = ({
               (followings.length > 0 ? (
                 followings.map((following) => (
                   <S.FollowItem>
-                    <S.FollowingUserImg src={following.userphoto} />
+                    <S.FollowingUserImg src={following.userPhoto} />
                     <Link to={`/user-profile?${following.userId}`}>
                       <S.FollowingUserName>
-                        {following.username}
+                        {following.userName}
                       </S.FollowingUserName>
                     </Link>
                     <S.FollowingButton

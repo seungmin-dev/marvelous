@@ -17,7 +17,7 @@ import { useEffect, useState } from "react";
 import { useFetchPostInfo } from "../../commons/hooks/useFetchPostInfo";
 
 interface BookmarkButtonProps {
-  props: { postId: string; writerId: string; postContent: string };
+  props: { postId: string; writerId: string; postContent: string[] };
 }
 
 export const BookmarkButton = ({ props }: BookmarkButtonProps) => {
@@ -27,47 +27,43 @@ export const BookmarkButton = ({ props }: BookmarkButtonProps) => {
   const { fetchBookmarksOfUser } = useFetchPostInfo();
 
   const onClickBookmark =
-    (bookmarkId: string, writerId: string, postContent: string) => async () => {
+    (bookmarkId: string, writerId: string, postContent: string[]) =>
+    async () => {
       // UI상 북마크 아이콘 변경
       setBookmarked((prev) => !prev);
 
       try {
         // 유저 북마크 목록에 추가
-        const userRef = doc(db, "users", user?.uid as string);
+        const userRef = doc(db, "bookmark", user?.uid as string);
         await setDoc(
           userRef,
           {
-            userId: user?.uid,
-            username: user?.displayName,
-            bookmarks: bookmarked
+            bookmark: bookmarked
               ? arrayRemove(bookmarkId)
               : arrayUnion(bookmarkId),
           },
           { merge: true }
         );
+        openNotification(bookmarked ? "북마크 해제" : "북마크 등록");
 
         // 글 작성자에게 알림 보내기(자기 글을 북마크할 시 알림 X)
         if (user?.uid === writerId) return;
 
-        const writerRef = doc(
-          db,
-          "alerts",
-          `${bookmarkId}-${user?.uid}-bookmark`
-        );
+        const writerRef = doc(db, "noti", `${user?.uid}-${writerId}-bookmark`);
 
         if (!bookmarked) {
           await setDoc(writerRef, {
             userId: writerId,
-            personId: user?.uid,
-            personName: user?.displayName,
+            sendId: user?.uid,
+            sendName: user?.displayName,
             type: "bookmark",
-            content: postContent.slice(0, 10),
+            postId: bookmarkId,
+            postContent: postContent.slice(0, 10),
             createdAt: Date.now(),
           });
         } else {
           await deleteDoc(writerRef);
         }
-        openNotification(bookmarked ? "북마크 해제" : "북마크 등록");
       } catch (error) {
         if (error instanceof FirebaseError)
           Modal.error({ content: "북마크에 실패했어요 😵‍💫" });
