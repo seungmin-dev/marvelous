@@ -64,7 +64,5 @@ export const ProfileName = styled.span`
 `;
 export const Icon = styled.span`
   cursor: pointer;
-  svg {
-    width: 30px;
-  }
+  font-size: 20px;
 `;

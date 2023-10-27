@@ -4,12 +4,18 @@ import {
   faCircleXmark,
   faGear,
   faMagnifyingGlass,
+  faRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import SearchBar from "./search-bar";
 import { useMobile } from "../commons/hooks/useMobile";
 import { useNavigate } from "react-router-dom";
 import Settings from "../pages/settings";
+import { ModalUI } from "./ui/modal-ui";
+import { auth } from "../../firebase";
+import { useModal } from "../commons/hooks/useModal";
+import { signOut } from "firebase/auth";
+import { Modal } from "antd";
 
 const Wrapper = styled.div`
   display: none;
@@ -47,6 +53,7 @@ export const MobileHeader = () => {
   const [clickSettings, setClickSettings] = useState(false);
   const { isMobile } = useMobile();
   const navigate = useNavigate();
+  const { modalOpen, onClickOpenModal } = useModal();
 
   const onClickSearch = () => {
     setClickSearch((prev) => !prev);
@@ -54,9 +61,20 @@ export const MobileHeader = () => {
   const onClickSettings = () => {
     setClickSettings((prev) => !prev);
   };
+  const onClickLogout = () => {
+    signOut(auth)
+      .then(() => {
+        navigate("/login");
+      })
+      .catch((error) => {
+        if (error instanceof Error)
+          Modal.error({ content: "로그아웃에 실패했어요 🫥" });
+      });
+  };
 
   useEffect(() => {
     setClickSearch(false);
+    setClickSettings(false);
   }, [navigate]);
 
   return (
@@ -74,6 +92,15 @@ export const MobileHeader = () => {
           <Icon onClick={onClickSettings}>
             <FontAwesomeIcon icon={faGear} />
           </Icon>
+          <Icon onClick={onClickOpenModal}>
+            <FontAwesomeIcon icon={faRightFromBracket} />
+          </Icon>
+          <ModalUI
+            modalOpen={modalOpen}
+            title="로그아웃 할까요? 🫨"
+            onOkFn={onClickLogout}
+            onCancelFn={onClickOpenModal}
+          />
         </IconWrapper>
       </Wrapper>
       {isMobile ? clickSearch ? <SearchBar /> : null : null}
