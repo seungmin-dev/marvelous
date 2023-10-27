@@ -39,7 +39,7 @@ export const SignupForm = (props: ISignupFormProps) => {
         const user = userCredential.user;
         await updateProfile(user, {
           displayName: data.name,
-          photoURL: `/src/assets/symbols/symbol${
+          photoURL: `/assets/symbols/symbol${
             Math.floor(Math.random() * 21) + 1
           }.png`,
         });
@@ -50,7 +50,7 @@ export const SignupForm = (props: ISignupFormProps) => {
           userName: user.displayName,
           userId: user.uid,
           userPhoto: user.photoURL,
-          userBgImg: "/src/assets/emptyBgImg.png",
+          userBgImg: "/assets/emptyBgImg.png",
           createdAt: Date.now(),
         });
         routeTo("/");

@@ -62,7 +62,7 @@ export const MobileHeader = () => {
   return (
     <>
       <Wrapper>
-        <Logo src="/src/assets/logo.png" />
+        <Logo src="/assets/logo.png" />
         <IconWrapper>
           <Icon onClick={onClickSearch}>
             {clickSearch ? (

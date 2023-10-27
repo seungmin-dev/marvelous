@@ -134,7 +134,7 @@ export const ProfileMy = ({
         <S.ProfileBgEditButton htmlFor="bgImg">
           <FontAwesomeIcon icon={faRotate} />
         </S.ProfileBgEditButton>
-        <S.ProfileBgImg src={bgImg ? bgImg : "/src/assets/emptyBgImg.png"} />
+        <S.ProfileBgImg src={bgImg ? bgImg : "/assets/emptyBgImg.png"} />
         <input
           type="file"
           id="bgImg"

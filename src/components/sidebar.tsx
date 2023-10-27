@@ -28,7 +28,7 @@ export default function Sidebar() {
   };
   return (
     <S.Wrapper>
-      <S.Logo src="/src/assets/logo.png" />
+      <S.Logo src="/assets/logo.png" />
       <S.MenuWrapper>
         <S.TabWrapper>
           <S.Tab>

@@ -45,7 +45,7 @@ export default function UserProfile() {
           src={
             objectUserInfo?.userBgImg
               ? objectUserInfo?.userBgImg
-              : "/src/assets/emptyBgImg.png"
+              : "/assets/emptyBgImg.png"
           }
         />
       </S.ProfileBox>

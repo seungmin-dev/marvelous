@@ -35,7 +35,7 @@ export default function NotFound() {
       <TitleWrapper>
         <Title>오류가 발생했어요 🤯</Title>
       </TitleWrapper>
-      <Img src="/src/assets/error.jpg" />
+      <Img src="/assets/error.jpg" />
     </Wrapper>
   );
 }

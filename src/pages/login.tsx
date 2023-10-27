@@ -34,7 +34,7 @@ export default function LoginPage() {
   return (
     <S.Wrapper>
       <S.LeftBox>
-        <S.Video src="/src/assets/marvel_intro.mp4" autoPlay={true} loop />
+        <S.Video src="/assets/marvel_intro.mp4" autoPlay={true} loop />
       </S.LeftBox>
       <S.RightBox>
         <S.InnerWrapper>
