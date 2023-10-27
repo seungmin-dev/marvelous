@@ -37,38 +37,51 @@ export default function LoginPage() {
         <S.Video src="/src/assets/marvel_intro.mp4" autoPlay={true} loop />
       </S.LeftBox>
       <S.RightBox>
-        {signup ? (
-          <SignupForm onClickSetSignup={onClickSetSignup} />
-        ) : (
-          <>
-            <S.TextWrapper>
-              <S.Title>Join Now</S.Title>
-              <S.Text>
-                Communicate with thousands of people
-                <br />
-                who love Marvel just like{" "}
-                <span style={{ fontWeight: "bold" }}>YOU</span>
-              </S.Text>
-            </S.TextWrapper>
-            <S.LoginWrapper>
-              {loginWithPassword ? (
-                <LoginForm
-                  onClickSetSignup={onClickSetSignup}
-                  onClickSetLoginWithPassword={onClickSetLoginWithPassword}
-                />
-              ) : (
-                <>
-                  <ButtonUI
-                    onClick={onClickSetLoginWithPassword}
-                    text="login with Password"
-                    onComplete
+        <S.InnerWrapper>
+          {signup ? (
+            <>
+              <S.TextWrapper>
+                <S.Title>Join Now</S.Title>
+                <S.Text>
+                  Communicate with thousands of people
+                  <br />
+                  who love Marvel just like{" "}
+                  <span style={{ fontWeight: "bold" }}>YOU</span>
+                </S.Text>
+              </S.TextWrapper>
+              <SignupForm onClickSetSignup={onClickSetSignup} />
+            </>
+          ) : (
+            <>
+              <S.TextWrapper>
+                <S.Title>Join Now</S.Title>
+                <S.Text>
+                  Communicate with thousands of people
+                  <br />
+                  who love Marvel just like{" "}
+                  <span style={{ fontWeight: "bold" }}>YOU</span>
+                </S.Text>
+              </S.TextWrapper>
+              <S.LoginWrapper>
+                {loginWithPassword ? (
+                  <LoginForm
+                    onClickSetSignup={onClickSetSignup}
+                    onClickSetLoginWithPassword={onClickSetLoginWithPassword}
                   />
-                  <GithubLogin />
-                </>
-              )}
-            </S.LoginWrapper>
-          </>
-        )}
+                ) : (
+                  <>
+                    <ButtonUI
+                      onClick={onClickSetLoginWithPassword}
+                      text="login with Password"
+                      onComplete
+                    />
+                    <GithubLogin />
+                  </>
+                )}
+              </S.LoginWrapper>
+            </>
+          )}
+        </S.InnerWrapper>
       </S.RightBox>
     </S.Wrapper>
   );

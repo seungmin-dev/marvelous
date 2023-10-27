@@ -26,14 +26,22 @@ export const RightBox = styled.div`
   width: 100%;
   height: 100%;
   background-color: black;
-  padding: 0 40px;
-  padding-top: 40%;
+  display: flex;
+  align-items: center;
+`;
+export const InnerWrapper = styled.div`
+  width: 100%;
+  height: auto;
+  box-sizing: border-box;
+  padding-left: 30px;
 `;
 export const SignupWrapper = styled.div`
   width: 100%;
+  margin-top: 40px;
 `;
 export const TextWrapper = styled.div`
   width: 100%;
+  height: auto;
 `;
 export const Title = styled.h1`
   color: white;

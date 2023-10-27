@@ -68,7 +68,6 @@ export const SignupForm = (props: ISignupFormProps) => {
   }, [reset]);
   return (
     <S.SignupWrapper>
-      <S.Title>Sign up</S.Title>
       <S.Form onSubmit={handleSubmit(onValidSignup)}>
         <S.Icon onClick={props.onClickSetSignup}>
           <svg
