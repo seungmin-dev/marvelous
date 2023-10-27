@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 
 export const WriteFormWrapper = styled.div`
   width: 100%;
-  height: auto;
+  height: 20%;
   padding: 20px;
   box-sizing: border-box;
   border-bottom: ${({ theme }) => `1px solid ${theme.grayColor}`};
