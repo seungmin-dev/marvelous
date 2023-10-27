@@ -92,7 +92,7 @@ export default function SearchBar() {
             <HelpText>검색 결과가 없어요 👻</HelpText>
           )
         ) : (
-          <HelpText>현재 검색 기능은 한 단어로만 가능합니다.</HelpText>
+          <HelpText>현재 검색 기능은 단어 단위로만 가능해요 👀</HelpText>
         )}
       </SearchResultWrapper>
       <TrailerWrapper>
