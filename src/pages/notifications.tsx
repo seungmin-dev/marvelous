@@ -21,6 +21,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { BlankUI } from "../components/ui/blank";
 import { Link } from "react-router-dom";
+import { Theme, useTheme } from "@emotion/react";
 
 interface Noti {
   id: string;
@@ -47,7 +48,7 @@ const AlertList = styled.div`
 const Alert = styled.div`
   width: 100%;
   box-sizing: border-box;
-  background-color: ${({ theme, type }: { type: string }) =>
+  background-color: ${({ theme, type }: { type: string; theme: Theme }) =>
     type === "comment"
       ? theme.alert.comment
       : type === "bookmark"
@@ -79,6 +80,7 @@ const Text = styled.span`
 
 export default function Notifications() {
   const [notis, setNotis] = useState<Noti[]>([]);
+  const theme = useTheme();
 
   const fetchNotis = async () => {
     const user = auth.currentUser;
@@ -123,7 +125,7 @@ export default function Notifications() {
       {notis && notis.length > 0 ? (
         <AlertList>
           {notis.map((noti) => (
-            <Alert key={noti.id} type={noti.type}>
+            <Alert key={noti.id} type={noti.type} theme={theme}>
               <AlertHeader>
                 {noti.type === "bookmark" ? (
                   <FontAwesomeIcon icon={faBookmark} />

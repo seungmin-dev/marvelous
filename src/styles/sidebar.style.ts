@@ -1,3 +1,4 @@
+import { Theme } from "@emotion/react";
 import styled from "@emotion/styled";
 
 export const Wrapper = styled.div`
@@ -29,7 +30,7 @@ export const Item = styled.li`
   gap: 5px;
 `;
 export const ItemLink = styled.span`
-  color: ${({ theme, isActive }: { isActive: boolean }) =>
+  color: ${({ theme, isActive }: { isActive: boolean; theme: Theme }) =>
     isActive ? theme.activeColor : theme.textColor};
   transition: 0.2s all ease 0s;
   :hover {

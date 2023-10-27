@@ -7,12 +7,14 @@ import { Link, useLocation } from "react-router-dom";
 import { ModalUI } from "./ui/modal-ui";
 import { useModal } from "../commons/hooks/useModal";
 import { Modal } from "antd";
+import { useTheme } from "@emotion/react";
 
 export default function Sidebar() {
   const user = auth.currentUser;
   const { routeTo, currentPath } = useRouter();
   const location = useLocation();
   const { modalOpen, onClickOpenModal } = useModal();
+  const theme = useTheme();
 
   const onClickLogout = () => {
     signOut(auth)
@@ -34,7 +36,10 @@ export default function Sidebar() {
               sidebar.id < 4 ? (
                 <S.Item key={i}>
                   <Link to={sidebar.path}>
-                    <S.ItemLink isActive={currentPath === sidebar.path}>
+                    <S.ItemLink
+                      isActive={currentPath === sidebar.path}
+                      theme={theme}
+                    >
                       <S.MenuIcon>{sidebar.icon}</S.MenuIcon>
                       <S.MenuTitle>{sidebar.label}</S.MenuTitle>
                     </S.ItemLink>
@@ -51,6 +56,7 @@ export default function Sidebar() {
                     isActive={
                       hashtag.path === location.pathname + location.search
                     }
+                    theme={theme}
                   >
                     {hashtag.label}
                   </S.ItemLink>
@@ -63,7 +69,10 @@ export default function Sidebar() {
               sidebar.id > 3 && sidebar.id < 7 ? (
                 <S.Item key={i}>
                   <Link to={sidebar.path}>
-                    <S.ItemLink isActive={currentPath === sidebar.path}>
+                    <S.ItemLink
+                      isActive={currentPath === sidebar.path}
+                      theme={theme}
+                    >
                       <S.MenuIcon>{sidebar.icon}</S.MenuIcon>
                       <S.MenuTitle>{sidebar.label}</S.MenuTitle>
                     </S.ItemLink>

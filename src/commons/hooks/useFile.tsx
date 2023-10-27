@@ -38,7 +38,7 @@ export const useFile = () => {
       fileReader.readAsDataURL(file);
       fileReader.onload = (event) => {
         if (typeof event.target?.result === "string") {
-          setTempUrlList((prev) => [...prev, event.target?.result]);
+          setTempUrlList((prev) => [...prev, event.target?.result as string]);
         }
       };
     });

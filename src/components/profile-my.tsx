@@ -17,6 +17,7 @@ import { InputUI2 } from "./ui/input-ui-2";
 import { ButtonUI3 } from "./ui/button-ui-3";
 import { updateProfile } from "firebase/auth";
 import { v4 as uuidv4 } from "uuid";
+import { useTheme } from "@emotion/react";
 
 interface ProfileProps {
   onClickMenu: (menu: string) => () => void;
@@ -45,6 +46,7 @@ export const ProfileMy = ({
 
   const { onClickFollowInProfile } = useFollow();
   const { contextHolder, openNotification } = useNoti();
+  const theme = useTheme();
 
   const getBgImg = async () => {
     const userRef = doc(db, "users", user?.uid as string);
@@ -185,24 +187,28 @@ export const ProfileMy = ({
             <S.Menu
               onClick={onClickMenu("posts")}
               isActive={curMenu === "posts"}
+              theme={theme}
             >
               내가 쓴 글
             </S.Menu>
             <S.Menu
               onClick={onClickMenu("hearts")}
               isActive={curMenu === "hearts"}
+              theme={theme}
             >
               하트 모음
             </S.Menu>
             <S.Menu
               onClick={onClickMenu("bookmarks")}
               isActive={curMenu === "bookmarks"}
+              theme={theme}
             >
               북마크 모음
             </S.Menu>
             <S.Menu
               onClick={onClickMenu("following")}
               isActive={curMenu === "following"}
+              theme={theme}
             >
               팔로잉
             </S.Menu>

@@ -1,3 +1,4 @@
+import { Theme } from "@emotion/react";
 import styled from "@emotion/styled";
 
 export const Wrapper = styled.div`
@@ -119,7 +120,7 @@ export const Menu = styled.li`
   font-weight: bold;
   font-size: 18px;
   cursor: pointer;
-  color: ${({ theme, isActive }: { isActive: boolean }) =>
+  color: ${({ theme, isActive }: { isActive: boolean; theme: Theme }) =>
     isActive ? theme.textColor : theme.grayColor};
 `;
 export const PostList = styled.div`

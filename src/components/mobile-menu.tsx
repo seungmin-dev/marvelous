@@ -3,6 +3,7 @@ import { SidebarContent } from "../router";
 import { useRouter } from "../commons/hooks/useRouter";
 import { Link } from "react-router-dom";
 import { auth } from "../../firebase";
+import { Theme, useTheme } from "@emotion/react";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -27,7 +28,7 @@ const ItemLink = styled.span`
   display: block;
   width: 100%;
   height: 100%;
-  color: ${({ isActive, theme }: { isActive: boolean }) =>
+  color: ${({ isActive, theme }: { isActive: boolean; theme: Theme }) =>
     isActive ? theme.activeColor : theme.textColor};
 `;
 const Img = styled.img`
@@ -41,13 +42,14 @@ const Img = styled.img`
 export const MobileMenu = () => {
   const user = auth.currentUser;
   const { currentPath } = useRouter();
+  const theme = useTheme();
   return (
     <Wrapper>
       {SidebarContent.map((sidebar, i) =>
         sidebar.id < 5 || sidebar.id === 8 ? (
           <Item key={i}>
             <Link to={sidebar.path}>
-              <ItemLink isActive={currentPath === sidebar.path}>
+              <ItemLink isActive={currentPath === sidebar.path} theme={theme}>
                 {sidebar.id !== 8 ? (
                   sidebar.icon
                 ) : (
