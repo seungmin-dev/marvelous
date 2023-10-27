@@ -12,6 +12,7 @@ interface IPostButtonsProps {
   setEditPostId: React.Dispatch<React.SetStateAction<string>>;
   isComment: boolean;
   originPostId?: string;
+  isSearch?: boolean;
 }
 
 export const PostButtons = ({
@@ -19,6 +20,7 @@ export const PostButtons = ({
   setEditPostId,
   isComment = false,
   originPostId,
+  isSearch = false,
 }: IPostButtonsProps) => {
   const [propsObj, setPropsObj] = useState({
     postId: "",
@@ -40,28 +42,22 @@ export const PostButtons = ({
   return (
     <>
       {contextHolder}
-      <S.PostButtonWrapper>
-        {!isComment ? (
+      {!isSearch ? (
+        <S.PostButtonWrapper>
           <>
             <CommentButton props={propsObj} />
             <HeartButton props={propsObj} />
             <BookmarkButton props={propsObj} />
+            <MenuButton
+              isComment={isComment}
+              props={propsObj}
+              setEditPostId={setEditPostId}
+              photoLeng={post ? post.photoLeng : 0}
+              originPostId={originPostId}
+            />
           </>
-        ) : (
-          <>
-            <div />
-            <div />
-            <div />
-          </>
-        )}
-        <MenuButton
-          isComment={isComment}
-          props={propsObj}
-          setEditPostId={setEditPostId}
-          photoLeng={post ? post.photoLeng : 0}
-          originPostId={originPostId}
-        />
-      </S.PostButtonWrapper>
+        </S.PostButtonWrapper>
+      ) : null}
     </>
   );
 };

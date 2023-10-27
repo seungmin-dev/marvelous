@@ -32,6 +32,7 @@ interface MenuButtonProps {
   props: { postId: string; writerId: string };
   photoLeng?: number;
   originPostId?: string;
+  isSearch?: boolean;
 }
 export const MenuButton = ({
   isComment,
@@ -39,6 +40,7 @@ export const MenuButton = ({
   props,
   photoLeng,
   originPostId,
+  isSearch = false,
 }: MenuButtonProps) => {
   const user = auth.currentUser;
   const [pickedId, setPickedId] = useState("");
@@ -137,6 +139,8 @@ export const MenuButton = ({
 
       // 원글 삭제 시 홈으로 이동
       if (!isComment) navigate("/");
+      // 서치바에서 삭제 시 페이지 이동
+      if (isSearch) navigate(location.pathname);
     } catch (error) {
       if (error instanceof FirebaseError)
         Modal.error({ content: "글 삭제에 실패했어요 😥" });

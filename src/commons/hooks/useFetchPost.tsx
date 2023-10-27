@@ -114,7 +114,7 @@ export const useFetchPost = () => {
   const fetchPostsByKeyword = async (keyword: string) => {
     const keywordQuery = query(
       collection(db, "posts"),
-      where("post", "array-contains-any", keyword.split(" ")),
+      where("content", "array-contains-any", keyword.split(" ")),
       orderBy("createdAt", "desc")
     );
     const snapshot = await getDocs(keywordQuery);

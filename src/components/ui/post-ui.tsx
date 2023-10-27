@@ -92,7 +92,7 @@ export const PostUI = ({ post, isObject, isSearch = false }: IPostUI) => {
             {userInfo?.userName}
           </Link>
         </S.PostUsername>
-        {!isObject && user?.uid !== post.userId ? (
+        {!isObject && user?.uid !== post.userId && !isSearch ? (
           <S.ButtonWrapper myDoc={user?.uid === post.userId}>
             <S.Button onClick={onClickFollow(post.userId)}>
               {following ? "언팔로우" : "팔로우"}
@@ -137,10 +137,11 @@ export const PostUI = ({ post, isObject, isSearch = false }: IPostUI) => {
             ))}
         </S.PostImgWrapper>
       ) : null}
-      {editPostId !== post.id && !isSearch ? (
+      {editPostId !== post.id ? (
         <PostButtons
           post={post}
           isComment={post.isComment}
+          isSearch={isSearch}
           setEditPostId={setEditPostId}
           originPostId={post.originPostId}
         />
