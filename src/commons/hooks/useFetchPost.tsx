@@ -75,7 +75,7 @@ export const useFetchPost = () => {
   const fetchPostsByHashtag = async (hashtag: string) => {
     const keywordQuery = query(
       collection(db, "posts"),
-      where("post", "array-contains", hashtag),
+      where("content", "array-contains", hashtag),
       orderBy("createdAt", "desc")
     );
     const snapshot = await getDocs(keywordQuery);
