@@ -24,13 +24,14 @@ const Item = styled.div`
   text-align: center;
 `;
 const ItemLink = styled.span`
+  display: block;
   width: 100%;
   height: 100%;
   color: ${({ isActive, theme }: { isActive: boolean }) =>
     isActive ? theme.activeColor : theme.textColor};
 `;
 const Img = styled.img`
-  width: 60%;
+  width: 60px;
   aspect-ratio: 1/1;
   border-radius: 100%;
   box-sizing: border-box;

@@ -84,6 +84,7 @@ export const HeartButton = ({ props }: HeartButtonProps) => {
           await deleteDoc(alertRef);
         }
       } catch (error) {
+        console.log(error);
         if (error instanceof FirebaseError)
           Modal.error({ content: "하트에 실패했어요 😫" });
         setHearted((prev) => !prev);
