@@ -47,6 +47,15 @@ const Icon = styled.span`
   color: #ccc;
   font-size: 24px;
 `;
+const ComponentWrapper = styled.div`
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 90;
+  background-color: ${({ theme }) => theme.backgroundColor};
+`;
 
 export const MobileHeader = () => {
   const [clickSearch, setClickSearch] = useState(false);
@@ -56,9 +65,11 @@ export const MobileHeader = () => {
   const { modalOpen, onClickOpenModal } = useModal();
 
   const onClickSearch = () => {
+    setClickSettings(false);
     setClickSearch((prev) => !prev);
   };
   const onClickSettings = () => {
+    setClickSearch(false);
     setClickSettings((prev) => !prev);
   };
   const onClickLogout = () => {
@@ -103,8 +114,12 @@ export const MobileHeader = () => {
           />
         </IconWrapper>
       </Wrapper>
-      {isMobile ? clickSearch ? <SearchBar /> : null : null}
-      {isMobile ? clickSettings ? <Settings /> : null : null}
+      {isMobile && (clickSearch || clickSettings) ? (
+        <ComponentWrapper>
+          {clickSearch ? <SearchBar /> : null}
+          {clickSettings ? <Settings /> : null}
+        </ComponentWrapper>
+      ) : null}
     </>
   );
 };
