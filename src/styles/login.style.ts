@@ -11,8 +11,9 @@ export const Wrapper = styled.div`
 `;
 export const LeftBox = styled.div`
   width: 100%;
-  height: 100%;
+  height: 100vh;
   background-color: black;
+  display: flex;
   @media (max-width: 800px) {
     display: none;
   }
