@@ -128,7 +128,7 @@ export const PostUI = ({ post, isObject, isSearch = false }: IPostUI) => {
           </S.PostContent>
         ) : (
           <S.Textarea
-            defaultValue={post.content}
+            defaultValue={post.content.join(" ")}
             onChange={onChangeText}
             ref={textareaRef}
           />
