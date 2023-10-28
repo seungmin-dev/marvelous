@@ -30,7 +30,7 @@
 
 ### 소셜로그인
 <p align="center">
-   <img src="https://github.com/seungmin-dev/marvelous/assets/67530394/757c3178-3bc2-4203-9451-bb0af8a42a04" width="500" />
+   <img src="https://github.com/seungmin-dev/marvelous/assets/67530394/4e522e34-efe5-47ea-b03a-e5e6e96d0843" width="500" />
    <img src="https://github.com/seungmin-dev/marvelous/assets/67530394/0a1ddbb4-ec0e-4976-8ddd-8f49f285f16f" width="500" />
 </p>
 
@@ -130,3 +130,10 @@
 <br />
 
 ## 📱 Responsive design
+<p align="center">
+  <img src="https://github.com/seungmin-dev/marvelous/assets/67530394/929938e3-9d10-4cbd-97a2-30e084d85dc9" width="400" />
+</p>
+
+<br />
+<br />
+<br />
