@@ -1,4 +1,4 @@
-# 🛒 Second hand market
+# 🧑‍🤝‍🧑 Marvelous
 
 <div style="width: 100%; height: 500px; display: flex; justify-content: space-between;">
   <p align="center">
