@@ -40,6 +40,7 @@ export const Comment = () => {
             isComment,
             originPostId,
             originPostContent,
+            isEditted,
             createdAt,
             updatedAt,
           } = doc.data();
@@ -53,6 +54,7 @@ export const Comment = () => {
             isComment,
             originPostId,
             originPostContent,
+            isEditted,
             createdAt,
             updatedAt,
             id: doc.id,

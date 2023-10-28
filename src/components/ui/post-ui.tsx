@@ -47,6 +47,7 @@ export const PostUI = ({ post, isObject, isSearch = false }: IPostUI) => {
       const docRef = doc(db, "posts", postId);
       await updateDoc(docRef, {
         content: textareaRef.current?.value.split(" "),
+        isEditted: true,
         updatedAt: Date.now(),
       });
 
@@ -113,7 +114,11 @@ export const PostUI = ({ post, isObject, isSearch = false }: IPostUI) => {
               onClick={onSubmitEdit(post.id)}
             />
           ) : (
-            <S.PostCreatedAt>{timeAgo(post.createdAt)}</S.PostCreatedAt>
+            <S.PostCreatedAt>
+              {post.isEditted
+                ? `(수정됨) ${timeAgo(post.updatedAt)}`
+                : timeAgo(post.createdAt)}
+            </S.PostCreatedAt>
           )}
         </S.PostHeader>
         {editPostId !== post.id ? (

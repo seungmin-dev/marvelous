@@ -11,6 +11,7 @@ export interface Post {
   originPostContent?: string;
   heartNum: number;
   commentNum: number;
+  isEditted?: boolean;
   createdAt: number;
   updatedAt: number;
 }

@@ -35,6 +35,7 @@ export const PostList = () => {
             isComment,
             originPostId,
             originPostContent,
+            isEditted,
             createdAt,
             updatedAt,
           } = doc.data();
@@ -48,6 +49,7 @@ export const PostList = () => {
             isComment,
             originPostId,
             originPostContent,
+            isEditted,
             createdAt,
             updatedAt,
             id: doc.id,
