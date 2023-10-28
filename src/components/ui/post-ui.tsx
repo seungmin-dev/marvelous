@@ -12,6 +12,8 @@ import { useNoti } from "../../commons/hooks/useNoti";
 import { useFollow } from "../../commons/hooks/useFollow";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserInfo } from "../../commons/hooks/useUserInfo";
+import { useImage } from "../../commons/hooks/useImage";
+import { ImageModal } from "./image-modal";
 
 interface IPostUI {
   post: Post;
@@ -36,6 +38,7 @@ export const PostUI = ({ post, isObject, isSearch = false }: IPostUI) => {
   const { contextHolder, openNotification } = useNoti();
   const { following, fetchFollowYn, onClickFollow } = useFollow();
   const { fetchUserInfo, fetchObjectUserInfo } = useUserInfo();
+  const { url, imageModal, onClickImage, onClickWrapper } = useImage();
 
   const onSubmitEdit = (postId: string) => async () => {
     if (textareaRef.current?.value === "") return;
@@ -77,75 +80,83 @@ export const PostUI = ({ post, isObject, isSearch = false }: IPostUI) => {
       );
   }, []);
   return (
-    <S.Post key={post.id} onClick={onClickPost}>
-      {contextHolder}
-      <S.PostHeader>
-        <S.PostProfileImg src={userInfo?.userPhoto} />
-        <S.PostUsername myDoc={user?.uid === post.userId}>
-          <Link
-            to={
-              post.userId === user?.uid
-                ? "/profile"
-                : `/user-profile?${post.userId}`
-            }
-          >
-            {userInfo?.userName}
-          </Link>
-        </S.PostUsername>
-        {!isObject && user?.uid !== post.userId && !isSearch ? (
-          <S.ButtonWrapper myDoc={user?.uid === post.userId}>
-            <S.Button onClick={onClickFollow(post.userId)}>
-              {following ? "언팔로우" : "팔로우"}
-            </S.Button>
-          </S.ButtonWrapper>
-        ) : null}
-        {editPostId === post.id ? (
-          <ButtonUI2
-            text={loading ? "Loading" : "Save"}
-            type="button"
-            onComplete={
-              edittedContent !== "" || originContent === edittedContent
-            }
-            onClick={onSubmitEdit(post.id)}
-          />
+    <>
+      <S.Post key={post.id} onClick={onClickPost}>
+        {contextHolder}
+        <S.PostHeader>
+          <S.PostProfileImg src={userInfo?.userPhoto} />
+          <S.PostUsername myDoc={user?.uid === post.userId}>
+            <Link
+              to={
+                post.userId === user?.uid
+                  ? "/profile"
+                  : `/user-profile?${post.userId}`
+              }
+            >
+              {userInfo?.userName}
+            </Link>
+          </S.PostUsername>
+          {!isObject && user?.uid !== post.userId && !isSearch ? (
+            <S.ButtonWrapper myDoc={user?.uid === post.userId}>
+              <S.Button onClick={onClickFollow(post.userId)}>
+                {following ? "언팔로우" : "팔로우"}
+              </S.Button>
+            </S.ButtonWrapper>
+          ) : null}
+          {editPostId === post.id ? (
+            <ButtonUI2
+              text={loading ? "Loading" : "Save"}
+              type="button"
+              onComplete={
+                edittedContent !== "" || originContent === edittedContent
+              }
+              onClick={onSubmitEdit(post.id)}
+            />
+          ) : (
+            <S.PostCreatedAt>{timeAgo(post.createdAt)}</S.PostCreatedAt>
+          )}
+        </S.PostHeader>
+        {editPostId !== post.id ? (
+          <S.PostContent>
+            {post.isComment ? <b>@{objectUserInfo?.userName} </b> : null}
+            {post.content?.join(" ")}
+          </S.PostContent>
         ) : (
-          <S.PostCreatedAt>{timeAgo(post.createdAt)}</S.PostCreatedAt>
+          <S.Textarea
+            defaultValue={post.content}
+            onChange={onChangeText}
+            ref={textareaRef}
+          />
         )}
-      </S.PostHeader>
-      {editPostId !== post.id ? (
-        <S.PostContent>
-          {post.isComment ? <b>@{objectUserInfo?.userName} </b> : null}
-          {post.content?.join(" ")}
-        </S.PostContent>
-      ) : (
-        <S.Textarea
-          defaultValue={post.content}
-          onChange={onChangeText}
-          ref={textareaRef}
-        />
-      )}
-      {post.photo ? (
-        <S.PostImgWrapper length={post.photo && post.photo.length}>
-          {post.photo &&
-            post.photo.length > 0 &&
-            post.photo.map((pic, i) => (
-              <S.PostImg
-                src={pic}
-                isEven={(i + 1) % 2 === 0}
-                isLast={post.photo.length === i + 1}
-              />
-            ))}
-        </S.PostImgWrapper>
-      ) : null}
-      {editPostId !== post.id ? (
-        <PostButtons
-          post={post}
-          isComment={post.isComment}
-          isSearch={isSearch}
-          setEditPostId={setEditPostId}
-          originPostId={post.originPostId}
-        />
-      ) : null}
-    </S.Post>
+        {post.photo ? (
+          <S.PostImgWrapper length={post.photo && post.photo.length}>
+            {post.photo &&
+              post.photo.length > 0 &&
+              post.photo.map((pic, i) => (
+                <S.PostImg
+                  src={pic}
+                  isEven={(i + 1) % 2 === 0}
+                  isLast={post.photo.length === i + 1}
+                  onClick={onClickImage(pic)}
+                />
+              ))}
+          </S.PostImgWrapper>
+        ) : null}
+        {editPostId !== post.id ? (
+          <PostButtons
+            post={post}
+            isComment={post.isComment}
+            isSearch={isSearch}
+            setEditPostId={setEditPostId}
+            originPostId={post.originPostId}
+          />
+        ) : null}
+      </S.Post>
+      <ImageModal
+        url={url}
+        openModal={imageModal}
+        onClickWrapper={onClickWrapper}
+      />
+    </>
   );
 };
