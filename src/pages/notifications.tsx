@@ -30,7 +30,7 @@ interface Noti {
   sendName: string;
   type: "comment" | "bookmark" | "heart" | "follow";
   postId: string;
-  postContent: string;
+  postContent: string[];
   createdAt: number;
 }
 
@@ -159,7 +159,7 @@ export default function Notifications() {
                   님이 나의 글{" "}
                   <Link to={`/post`} state={{ postId: noti.id.split("-")[0] }}>
                     <Text>
-                      <b>{noti.postContent}...</b>
+                      <b>{noti.postContent.join(" ")}...</b>
                     </Text>
                   </Link>
                   에 <b>댓글</b>을 달았어요
@@ -174,7 +174,7 @@ export default function Notifications() {
                   님이 나의 글{" "}
                   <Link to={`/post`} state={{ postId: noti.id.split("-")[0] }}>
                     <Text>
-                      <b>{noti.postContent}...</b>
+                      <b>{noti.postContent.join(" ")}...</b>
                     </Text>
                   </Link>
                   에 <b>{noti.type === "bookmark" ? "북마크" : "하트"}</b>를
