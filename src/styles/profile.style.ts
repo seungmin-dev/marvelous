@@ -69,16 +69,17 @@ export const UserBox = styled.div`
   position: sticky;
   top: 0;
   left: 0;
-  @media (max-width: 800px) {
-    top: 80px;
-  }
   display: flex;
   flex-direction: column;
   gap: 25px;
   box-sizing: border-box;
-  padding: 10px 30px;
+  padding: 10px 50px;
   background-color: ${({ theme }) => theme.backgroundColor};
   border-bottom: ${({ theme }) => `1px solid ${theme.grayColor}`};
+  @media (max-width: 800px) {
+    top: 80px;
+    padding: 10px 20px;
+  }
 `;
 export const UserHeader = styled.div`
   width: 100%;
@@ -126,7 +127,10 @@ export const Menu = styled.li`
 export const PostList = styled.div`
   width: 100%;
   box-sizing: border-box;
-  padding: 10px 20px 80px;
+  padding: 10px 50px 80px;
+  @media (max-width: 800px) {
+    padding: 10px 20px 80px;
+  }
 `;
 export const FollowItem = styled.div`
   width: 100%;

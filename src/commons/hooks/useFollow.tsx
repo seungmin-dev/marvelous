@@ -84,7 +84,7 @@ export const useFollow = () => {
       await setDoc(
         userRef,
         {
-          follow: arrayRemove(objectUserId),
+          userId: arrayRemove(objectUserId),
         },
         { merge: true }
       );
