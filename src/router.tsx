@@ -187,13 +187,13 @@ export const SidebarContent = routerData.reduce((prev, router) => {
 export const HashtagContent: HashtagElement[] = [
   {
     id: 0,
-    label: "#loki2",
-    path: "/hashtaging?loki2",
+    label: "#themarvels",
+    path: "/hashtaging?themarvels",
   },
   {
     id: 1,
-    label: "#themarvels",
-    path: "/hashtaging?themarvels",
+    label: "#loki2",
+    path: "/hashtaging?loki2",
   },
   {
     id: 2,

@@ -97,7 +97,7 @@ export default function SearchBar() {
       </SearchResultWrapper>
       <TrailerWrapper>
         <ReactPlayer
-          url={"https://youtu.be/dug56u8NN7g?si=50No8BlqnVBydXua"}
+          url={"https://youtu.be/wS_qbDztgVY?si=Vg1jviV_gKY013U1"}
           playing={playing}
           loop
           width="100%"
